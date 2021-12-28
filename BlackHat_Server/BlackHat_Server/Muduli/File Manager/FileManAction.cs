@@ -474,7 +474,7 @@ namespace BlackHat_Server
                 t.IsBackground = true;
                 t.Start();
             }
-            catch (Exception ex)
+            catch 
             {
 
             }
