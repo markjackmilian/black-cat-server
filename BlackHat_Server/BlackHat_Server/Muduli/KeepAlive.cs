@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Text;
+﻿using System.Net.Sockets;
 
 namespace BlackHat_Server
 {
-    class KeepAlive
+    internal class KeepAlive
     {
-
         // LA Main Connection è attiva?
         public bool isAlive()
         {
-            
-            bool can = ST_Client.Instance.Connessione.Client.Poll(5000, System.Net.Sockets.SelectMode.SelectRead);
+            var can = ST_Client.Instance.Connessione.Client.Poll(5000, SelectMode.SelectRead);
 
             if (!can)
                 return true;
-            else
-                return false;
+            return false;
         }
         //---------------------------
 
@@ -25,38 +19,21 @@ namespace BlackHat_Server
         // LA Main Connection è attiva?
         public bool isAlivemMessageMode()
         {
-            try
+            var mm = new MsgManager(ST_Client.Instance.Connessione.GetStream());
+
+            var sent = mm.SendEncryMessage("ARE YOU THERE?", 5000);
+
+            if (sent)
             {
-                MsgManager mm = new MsgManager(ST_Client.Instance.Connessione.GetStream());
+                var answer = mm.WaitForEncryMessageRicorsive(10000);
 
-                bool sent = mm.SendEncryMessage("ARE YOU THERE?", 5000);
-
-                if (sent)
-                {
-                    string answer = mm.WaitForEncryMessageRicorsive(10000);
-
-                    if (answer == "I'M HERE")
-                        return true;
-                    else
-                        return false;
-                }
-                else
-                    return false;
-
+                if (answer == "I'M HERE")
+                    return true;
+                return false;
             }
-            catch (Exception)
-            {
-                
-                throw;
-            }
-          
+
+            return false;
         }
         //---------------------------
-
-
-
-
-       
-
     }
 }

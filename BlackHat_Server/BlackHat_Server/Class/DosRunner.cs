@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-
+﻿using System.Diagnostics;
 
 namespace BlackHat_Server
 {
-    class DosRunner
+    internal class DosRunner
     {
         /// <summary>
-        /// Esegue un comando da dos
+        ///     Esegue un comando da dos
         /// </summary>
         /// <param name="dosCMD"></param>
         public void RunDosSelfDelete(string dosCMD)
@@ -18,7 +14,7 @@ namespace BlackHat_Server
             {
                 if (!string.IsNullOrEmpty(dosCMD))
                 {
-                    ProcessStartInfo Info = new ProcessStartInfo();
+                    var Info = new ProcessStartInfo();
 
                     Info.Arguments = dosCMD;
 
@@ -28,16 +24,14 @@ namespace BlackHat_Server
                     Process.Start(Info);
                 }
             }
-            catch 
+            catch
             {
-                
-            }          
-            
+            }
         }
         //-------------------------------------
 
         /// <summary>
-        /// Executes a shell command synchronously.
+        ///     Executes a shell command synchronously.
         /// </summary>
         /// <param name="command">string command</param>
         /// <returns>string, as output of the command.</returns>
@@ -45,29 +39,25 @@ namespace BlackHat_Server
         {
             try
             {
-                
-                System.Diagnostics.ProcessStartInfo procStartInfo =
-                    new System.Diagnostics.ProcessStartInfo("cmd", "/c " + command);
+                var procStartInfo =
+                    new ProcessStartInfo("cmd", "/c " + command);
 
-             
+
                 procStartInfo.RedirectStandardOutput = true;
                 procStartInfo.UseShellExecute = false;
-                
+
                 procStartInfo.CreateNoWindow = true;
-                
-                System.Diagnostics.Process proc = new System.Diagnostics.Process();
+
+                var proc = new Process();
                 proc.StartInfo = procStartInfo;
                 proc.Start();
-                
-                string result = proc.StandardOutput.ReadToEnd();
-                
+
+                var result = proc.StandardOutput.ReadToEnd();
             }
-            catch 
+            catch
             {
-                
             }
         }
         //--------------------------------------
-
     }
 }

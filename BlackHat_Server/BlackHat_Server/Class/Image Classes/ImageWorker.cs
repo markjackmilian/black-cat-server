@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using System.IO;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
+using System.IO;
 
 namespace BlackHat_Server
 {
-    class ImageWorker
+    internal class ImageWorker
     {
         /// <summary>
-        /// Passo un file immagine e torno un'immagine thumb
+        ///     Passo un file immagine e torno un'immagine thumb
         /// </summary>
         /// <param name="par_FileImage"></param>
         /// <param name="height"></param>
@@ -22,104 +19,96 @@ namespace BlackHat_Server
         {
             try
             {
-                Image image = Image.FromFile(par_FileImage);
-                Image imageThumb = image.GetThumbnailImage(width, height, null, new IntPtr());
+                var image = Image.FromFile(par_FileImage);
+                var imageThumb = image.GetThumbnailImage(width, height, null, new IntPtr());
 
                 return imageThumb;
             }
-            catch 
+            catch
             {
                 return null;
             }
-            
         }
 
 
         /// <summary>
-        /// Image top Byte Array
+        ///     Image top Byte Array
         /// </summary>
         /// <param name="imageIn"></param>
         /// <returns></returns>
-        public byte[] imageToByteArray(System.Drawing.Image imageIn)
+        public byte[] imageToByteArray(Image imageIn)
         {
-            MemoryStream ms = new MemoryStream();
+            var ms = new MemoryStream();
 
-            imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+            imageIn.Save(ms, ImageFormat.Gif);
 
-            byte[] res = ms.ToArray();
+            var res = ms.ToArray();
 
             ms.Dispose();
 
             return res;
-
-
-
         }
 
 
         /// <summary>
-        /// Resize Image Con Mantenimento Proporzioni
+        ///     Resize Image Con Mantenimento Proporzioni
         /// </summary>
         /// <param name="imgToResize"></param>
         /// <param name="size"></param>
         /// <returns></returns>
         public Image resizeImage(Image imgToResize, Size size)
         {
-            int sourceWidth = imgToResize.Width;
-            int sourceHeight = imgToResize.Height;
+            var sourceWidth = imgToResize.Width;
+            var sourceHeight = imgToResize.Height;
 
             float nPercent = 0;
             float nPercentW = 0;
             float nPercentH = 0;
 
-            nPercentW = ((float)size.Width / (float)sourceWidth);
-            nPercentH = ((float)size.Height / (float)sourceHeight);
+            nPercentW = size.Width / (float) sourceWidth;
+            nPercentH = size.Height / (float) sourceHeight;
 
             if (nPercentH < nPercentW)
                 nPercent = nPercentH;
             else
                 nPercent = nPercentW;
 
-            int destWidth = (int)(sourceWidth * nPercent);
-            int destHeight = (int)(sourceHeight * nPercent);
+            var destWidth = (int) (sourceWidth * nPercent);
+            var destHeight = (int) (sourceHeight * nPercent);
 
-            Bitmap b = new Bitmap(destWidth, destHeight);
-            Graphics g = Graphics.FromImage((Image)b);
+            var b = new Bitmap(destWidth, destHeight);
+            var g = Graphics.FromImage(b);
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
             g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
-           
+
             g.Dispose();
 
 
-            return (Image)b;
+            return b;
         }
 
 
-     
-
-
         /// <summary>
-        /// Desktop Resizzato
+        ///     Desktop Resizzato
         /// </summary>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
         public byte[] DesktopImage(int width, int height, int qual)
         {
-            ScreenCapture sc = new ScreenCapture();
+            var sc = new ScreenCapture();
 
             Image dk = sc.ScreenShot();
             Image dkResized = null;
 
             if (dk != null)
             {
-
-                Size sz = new Size(width, height);
+                var sz = new Size(width, height);
 
                 dkResized = resizeImage(dk, sz);
 
-                byte[] res = ImgToJpg(dkResized, qual);
+                var res = ImgToJpg(dkResized, qual);
 
 
                 dk.Dispose();
@@ -127,31 +116,25 @@ namespace BlackHat_Server
 
                 return res;
             }
-            else
-            {
-                if (dk != null)
-                    dk.Dispose();
 
-                if (dkResized != null)
-                    dkResized.Dispose();
+            if (dk != null)
+                dk.Dispose();
 
-                return null;
-            }
+            if (dkResized != null)
+                dkResized.Dispose();
 
-
+            return null;
         }
 
 
-
-
         /// <summary>
-        /// Resize di un Image e trasformazione in jpg
-        /// NULL in caso di errore
+        ///     Resize di un Image e trasformazione in jpg
+        ///     NULL in caso di errore
         /// </summary>
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        public byte[] ImageResizeToJpg(Image immagine ,int width, int height, int qual)
+        public byte[] ImageResizeToJpg(Image immagine, int width, int height, int qual)
         {
             try
             {
@@ -159,12 +142,11 @@ namespace BlackHat_Server
 
                 if (immagine != null)
                 {
-
-                    Size sz = new Size(width, height);
+                    var sz = new Size(width, height);
 
                     imResized = resizeImage(immagine, sz);
 
-                    byte[] res = ImgToJpg(imResized, qual);
+                    var res = ImgToJpg(imResized, qual);
 
 
                     immagine.Dispose();
@@ -172,51 +154,42 @@ namespace BlackHat_Server
 
                     return res;
                 }
-                else
-                {
-                    if (immagine != null)
-                        immagine.Dispose();
 
-                    if (imResized != null)
-                        imResized.Dispose();
+                if (immagine != null)
+                    immagine.Dispose();
 
-                    return null;
-                }
-            }
-            catch 
-            {
+                if (imResized != null)
+                    imResized.Dispose();
 
                 return null;
-            }        
-           
-
-
+            }
+            catch
+            {
+                return null;
+            }
         }
         //----------------------------------------------------------
 
 
-
-
-
         /// <summary>
-        /// Da Img a jpg
+        ///     Da Img a jpg
         /// </summary>
         /// <param name="originalImage"></param>
         /// <param name="quality"></param>
         /// <returns></returns>
         public byte[] ImgToJpg(Image originalImage, long quality)
         {
-            MemoryStream ms = new MemoryStream();
-            
+            var ms = new MemoryStream();
+
             // Encoder parameter for image quality
-            EncoderParameter qualityParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
+            var qualityParam = new EncoderParameter(Encoder.Quality, quality);
 
             // Jpeg image codec
-            ImageCodecInfo jpegCodec = this.getEncoderInfo("image/jpeg");
+            var jpegCodec = getEncoderInfo("image/jpeg");
             if (jpegCodec == null)
                 return null;
 
-            EncoderParameters encoderParams = new EncoderParameters(1);
+            var encoderParams = new EncoderParameters(1);
             encoderParams.Param[0] = qualityParam;
 
             originalImage.Save(ms, jpegCodec, encoderParams);
@@ -227,23 +200,13 @@ namespace BlackHat_Server
         private ImageCodecInfo getEncoderInfo(string mimeType)
         {
             // Get image codecs for all image formats
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+            var codecs = ImageCodecInfo.GetImageEncoders();
 
             // Find the correct image codec
-            for (int i = 0; i < codecs.Length; i++)
+            for (var i = 0; i < codecs.Length; i++)
                 if (codecs[i].MimeType == mimeType)
                     return codecs[i];
             return null;
         }
-
-     
-
-
-
-
-
-
-
-
     }
 }

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
 using System.Management;
-using System.IO;
 
 namespace BlackHat_Server
 {
-    class UnivoqueID
+    internal class UnivoqueID
     {
-
         /// <summary>
-        /// Crea codice univoco. Seriale HardDisk + Mutex Da risorse
+        ///     Crea codice univoco. Seriale HardDisk + Mutex Da risorse
         /// </summary>
         /// <returns></returns>
         public string GetUnivoqueID()
@@ -18,20 +14,19 @@ namespace BlackHat_Server
             //Random ran = new Random(DateTime.Now.Millisecond);
             //int r = ran.Next(10000);
 
-            string res = "";
+            var res = "";
 
-            string tmp = Path.GetTempPath();
+            var tmp = Path.GetTempPath();
             tmp = Directory.GetDirectoryRoot(tmp);
             tmp = tmp.Trim('\\');
 
-            ManagementObject dsk = new ManagementObject(@"win32_logicaldisk.deviceid=""" + tmp + @"""");
+            var dsk = new ManagementObject(@"win32_logicaldisk.deviceid=""" + tmp + @"""");
             dsk.Get();
-            res =  dsk["VolumeSerialNumber"].ToString();           
+            res = dsk["VolumeSerialNumber"].ToString();
             dsk.Dispose();
 
             return res;
         }
         //---------------------------------------------------------
-
     }
 }

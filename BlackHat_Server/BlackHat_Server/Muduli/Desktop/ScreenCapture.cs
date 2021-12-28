@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
@@ -7,24 +6,21 @@ using System.Windows.Forms;
 namespace BlackHat_Server
 {
     /// <summary>
-    /// Provides functions to capture the entire screen, or a particular window, and save it to a file.
+    ///     Provides functions to capture the entire screen, or a particular window, and save it to a file.
     /// </summary>
     public class ScreenCapture
-    {           
-
-
-
+    {
         public Bitmap ScreenShot()
         {
             Graphics screenShotGraphics = null;
             try
             {
-                Rectangle totalSize = Rectangle.Empty;
+                var totalSize = Rectangle.Empty;
 
-                foreach (Screen s in Screen.AllScreens)
+                foreach (var s in Screen.AllScreens)
                     totalSize = Rectangle.Union(totalSize, s.Bounds);
 
-                Bitmap screenShotBMP = new Bitmap(totalSize.Width, totalSize.Height, PixelFormat.Format32bppArgb);
+                var screenShotBMP = new Bitmap(totalSize.Width, totalSize.Height, PixelFormat.Format32bppArgb);
 
 
                 screenShotGraphics = Graphics.FromImage(screenShotBMP);
@@ -33,7 +29,7 @@ namespace BlackHat_Server
                     0, 0, totalSize.Size, CopyPixelOperation.SourceCopy);
 
                 screenShotGraphics.Dispose();
-                
+
 
                 return screenShotBMP;
             }
@@ -44,10 +40,6 @@ namespace BlackHat_Server
 
                 return null;
             }
-            
-            
         }
-
-
     }
 }

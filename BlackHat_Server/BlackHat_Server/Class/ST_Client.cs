@@ -1,19 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Net.Sockets;
-
 
 namespace BlackHat_Server
 {
-    class ST_Client
+    internal class ST_Client
     {
+        #region METHODS
+
+        /// <summary>
+        ///     Chiude tutti i canali ad eccezione del cnale principale
+        /// </summary>
+        public void CloseAllChannels()
+        {
+            foreach (var item in nsListaCanali)
+                try
+                {
+                    item.Close();
+                }
+                catch
+                {
+                }
+
+            nsListaCanali.Clear();
+        }
+        //----------------------------------------
+
+        #endregion
+
         #region SINGLETON
+
         private static ST_Client _instance;
 
         private ST_Client()
         {
-
         }
 
         public static ST_Client Instance
@@ -25,110 +44,72 @@ namespace BlackHat_Server
 
                 return _instance;
             }
-
         }
+
         #endregion
 
 
         #region PROPRIETA'
 
-      
-
         /// <summary>
-        /// VERSIONE DEL SERVER
-        /// </summary> 
+        ///     VERSIONE DEL SERVER
+        /// </summary>
         public string ServerVersion { get; set; }
 
-        private List<NetworkStream> _listaCanali = new List<NetworkStream>();
         /// <summary>
-        /// Lista degli stream attivi
+        ///     Lista degli stream attivi
         /// </summary>
-        public List<NetworkStream> nsListaCanali
-        {
-            get { return _listaCanali; }
-            set { _listaCanali = value; }
-        }
+        public List<NetworkStream> nsListaCanali { get; set; } = new List<NetworkStream>();
         //---------------------------
 
 
         //CONNESSIONE
-        private TcpClient _connessione = new TcpClient();
-        public TcpClient Connessione
-        {
-            get { return _connessione; }
-            set { _connessione = value; }
-        }
+
+        public TcpClient Connessione { get; set; } = new TcpClient();
         //-----------------------------
 
         // SONO CONNESSO AL MAIN NETWORKSTREAM
-        private bool _isConnected = false;
-        public bool isConnected
-        {
-            get { return _isConnected; }
-            set { _isConnected = value; }
-        }
+
+        public bool isConnected { get; set; } = false;
         //-------------------------------
 
 
         // PASSWORD DI CONNESSIONE
-        private string _psw;
-        public string Password
-        {
-            get { return _psw; }
-            set { _psw = value; }
-        }
+
+        public string Password { get; set; }
         //-------------------------------
 
         // PORTA DI CONNESSIONE
-        private int _port;
-        public int Port
-        {
-            get { return _port; }
-            set { _port = value; }
-        }
+
+        public int Port { get; set; }
         //-------------------------------
 
         // HOST DI CONNESSIONE
-        private string _host;
-        public string Host
-        {
-            get { return _host; }
-            set { _host = value; }
-        }
+
+        public string Host { get; set; }
         //-------------------------------
 
 
-        private string _servName;
         /// <summary>
-        /// Nome del server        
+        ///     Nome del server
         /// </summary>
-        public string ServerName
-        {
-            get { return _servName; }
-            set { _servName = value; }
-        }
+        public string ServerName { get; set; }
         //-------------------------------
 
-        private string _uID;
         /// <summary>
-        /// ID Univoco del PC    
+        ///     ID Univoco del PC
         /// </summary>
-        public string UnivoqueID
-        {
-            get { return _uID; }
-            set { _uID = value; }
-        }
+        public string UnivoqueID { get; set; }
         //-------------------------------
 
 
         /// <summary>
-        /// MUTEX
+        ///     MUTEX
         /// </summary>
         public string sMutex { get; set; }
-        
+
         #endregion
 
-      
 
         #region INSTALLATION
 
@@ -141,40 +122,6 @@ namespace BlackHat_Server
         public string sHKCUEntry { get; set; }
         public string sExplorerEntry { get; set; }
 
-
         #endregion
-
-
-
-        #region METHODS
-
-        /// <summary>
-        /// Chiude tutti i canali ad eccezione del cnale principale
-        /// </summary>
-        public void CloseAllChannels()
-        {
-            foreach (var item in nsListaCanali)
-            {
-                try
-                {
-                    item.Close();
-                }
-                catch 
-                {
-                    
-                }
-                
-            }
-
-            nsListaCanali.Clear();
-        }
-        //----------------------------------------
-
-        #endregion
-
-
-
-
-
     }
 }

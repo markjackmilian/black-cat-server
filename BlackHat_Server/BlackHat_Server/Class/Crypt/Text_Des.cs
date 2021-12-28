@@ -1,35 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-
-using System.Text;
 using System.Security.Cryptography;
-using System.IO;
+using System.Text;
 
 namespace BlackHat_Server
 {
-    class Text_Des
+    internal class Text_Des
     {
         public string Encrypt(string toEncrypt, bool useHashing)
         {
-            string key = "BlackHat2011_EncryPsW!";
+            var key = "BlackHat2011_EncryPsW!";
 
             byte[] keyArray;
-            byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(toEncrypt);
+            var toEncryptArray = Encoding.UTF8.GetBytes(toEncrypt);
 
             //If hashing use get hashcode regards to your key
             if (useHashing)
             {
-                MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
-                keyArray = hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
+                var hashmd5 = new MD5CryptoServiceProvider();
+                keyArray = hashmd5.ComputeHash(Encoding.UTF8.GetBytes(key));
                 //Always release the resources and flush data
                 // of the Cryptographic service provide. Best Practice
 
                 hashmd5.Clear();
             }
             else
-                keyArray = UTF8Encoding.UTF8.GetBytes(key);
+            {
+                keyArray = Encoding.UTF8.GetBytes(key);
+            }
 
-            TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider();
+            var tdes = new TripleDESCryptoServiceProvider();
             //set the secret key for the tripleDES algorithm
             tdes.Key = keyArray;
             //mode of operation. there are other 4 modes.
@@ -39,11 +38,11 @@ namespace BlackHat_Server
 
             tdes.Padding = PaddingMode.PKCS7;
 
-            ICryptoTransform cTransform = tdes.CreateEncryptor();
+            var cTransform = tdes.CreateEncryptor();
             //transform the specified region of bytes array to resultArray
-            byte[] resultArray =
-              cTransform.TransformFinalBlock(toEncryptArray, 0,
-              toEncryptArray.Length);
+            var resultArray =
+                cTransform.TransformFinalBlock(toEncryptArray, 0,
+                    toEncryptArray.Length);
             //Release resources held by TripleDes Encryptor
             tdes.Clear();
             //Return the encrypted data into unreadable string format
@@ -52,18 +51,18 @@ namespace BlackHat_Server
 
         public string Decrypt(string cipherString, bool useHashing)
         {
-            string key = "BlackHat2011_EncryPsW!";
+            var key = "BlackHat2011_EncryPsW!";
             byte[] keyArray;
             //get the byte code of the string
 
-            byte[] toEncryptArray = Convert.FromBase64String(cipherString);
+            var toEncryptArray = Convert.FromBase64String(cipherString);
 
 
             if (useHashing)
             {
                 //if hashing was used get the hash code with regards to your key
-                MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
-                keyArray = hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
+                var hashmd5 = new MD5CryptoServiceProvider();
+                keyArray = hashmd5.ComputeHash(Encoding.UTF8.GetBytes(key));
                 //release any resource held by the MD5CryptoServiceProvider
 
                 hashmd5.Clear();
@@ -71,10 +70,10 @@ namespace BlackHat_Server
             else
             {
                 //if hashing was not implemented get the byte code of the key
-                keyArray = UTF8Encoding.UTF8.GetBytes(key);
+                keyArray = Encoding.UTF8.GetBytes(key);
             }
 
-            TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider();
+            var tdes = new TripleDESCryptoServiceProvider();
             //set the secret key for the tripleDES algorithm
             tdes.Key = keyArray;
             //mode of operation. there are other 4 modes. 
@@ -84,14 +83,13 @@ namespace BlackHat_Server
             //padding mode(if any extra byte added)
             tdes.Padding = PaddingMode.PKCS7;
 
-            ICryptoTransform cTransform = tdes.CreateDecryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(
-                                 toEncryptArray, 0, toEncryptArray.Length);
+            var cTransform = tdes.CreateDecryptor();
+            var resultArray = cTransform.TransformFinalBlock(
+                toEncryptArray, 0, toEncryptArray.Length);
             //Release resources held by TripleDes Encryptor                
             tdes.Clear();
             //return the Clear decrypted TEXT
-            return UTF8Encoding.UTF8.GetString(resultArray);
+            return Encoding.UTF8.GetString(resultArray);
         }
     }
-    
 }
