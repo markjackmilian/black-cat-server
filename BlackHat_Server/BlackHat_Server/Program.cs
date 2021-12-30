@@ -15,7 +15,15 @@ namespace BlackHat_Server
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            Start();
 
+        }
+
+        /// <summary>
+        /// External exec
+        /// </summary>
+        public static void Start()
+        {
             Application.ThreadException += Application_ThreadException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
