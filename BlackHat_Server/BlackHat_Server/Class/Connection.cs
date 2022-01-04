@@ -10,7 +10,7 @@ namespace BlackHat_Server.Class
         public void StartServer()
         {
             // PRIMA CONNESSIONE
-            tryConnect();
+            TryConnect();
             // RIMANGO SOPRA FINO A CHE NN SONO CONNESSO
 
             // ORA SONO CONNESSO CREO THREAD GUARDIAN E THREAD KEEP ALIVE
@@ -24,7 +24,7 @@ namespace BlackHat_Server.Class
         /// </summary>
         /// <param name="ip"></param>
         /// <param name="port"></param>
-        private void tryConnect()
+        private void TryConnect()
         {
             var host = ST_Client.Instance.Host;
             var port = ST_Client.Instance.Port;

