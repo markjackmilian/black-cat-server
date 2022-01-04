@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Win32;
 
-namespace BlackHat_Server
+namespace BlackHat_Server.Class
 {
     internal class RegistryManager
     {

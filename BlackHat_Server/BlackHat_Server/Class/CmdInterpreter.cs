@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using BlackHat_Server.Class.Comunicator;
+using BlackHat_Server.Class.Crypt;
+using BlackHat_Server.Muduli.Server_Manager;
 
-namespace BlackHat_Server
+namespace BlackHat_Server.Class
 {
     // OGGETTO CHE AVVIA IL THREAD RELATIVO AD UN COMANDO DA CLIENT (RICEVUTO DA GUARDIAN)
     internal class CmdInterpreter

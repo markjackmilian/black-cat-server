@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading;
+using BlackHat_Server.Class;
+using BlackHat_Server.Class.Comunicator;
 
-namespace BlackHat_Server
+namespace BlackHat_Server.Muduli.File_Manager
 {
     internal class FileManager
     {

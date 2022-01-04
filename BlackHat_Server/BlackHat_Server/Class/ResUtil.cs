@@ -2,8 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using BlackHat_Server.Class.Crypt;
 
-namespace BlackHat_Server
+namespace BlackHat_Server.Class
 {
     internal class ResUtile
     {

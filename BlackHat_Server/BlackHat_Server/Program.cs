@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using BlackHat_Server.Class;
 
 namespace BlackHat_Server
 {

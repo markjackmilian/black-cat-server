@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using BlackHat_Server.Class.Comunicator;
 
-namespace BlackHat_Server
+namespace BlackHat_Server.Muduli.File_Manager
 {
     internal class Search
     {

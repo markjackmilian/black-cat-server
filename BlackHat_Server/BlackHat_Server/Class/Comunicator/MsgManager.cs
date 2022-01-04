@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using BlackHat_Server.Class.Crypt;
 
-namespace BlackHat_Server
+namespace BlackHat_Server.Class.Comunicator
 {
     public class MsgManager
     {

