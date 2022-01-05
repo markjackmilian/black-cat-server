@@ -6,8 +6,7 @@ namespace bc.srv.Class
     {
         public static bool InitializeStClient()
         {
-            SrvData.Instance.StartupDelay = 45000;
-
+            SrvData.Instance.StartupDelay = Program.Random.Next(5,1000);
             
             // NORMAL
             SrvData.Instance.Port = 2401;

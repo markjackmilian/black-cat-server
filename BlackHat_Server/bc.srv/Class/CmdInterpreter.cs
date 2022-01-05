@@ -38,7 +38,7 @@ namespace bc.srv.Class
                 // COMANDO CHIUSURA SERVER                
                 case "BH_CLOSE_SERVER":
                     SrvData.Instance.Connessione.Close();
-                    Environment.Exit(0);
+                    Program.Exit(5);
                     break;
 
                 // COMANDO RIAVVIO SERVER                

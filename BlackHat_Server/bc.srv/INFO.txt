@@ -3,3 +3,4 @@ ExitCodes:
 2: data on clientdata are empty
 3: from deletemyself
 4: server update
+5: close command

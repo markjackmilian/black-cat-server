@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using bc.srv.Class.Comunicator;
@@ -41,11 +42,11 @@ namespace bc.srv.Class
                     SrvData.Instance.isConnected = FirstConnection();
 
                     if (!SrvData.Instance.isConnected)
-                        Thread.Sleep(30000);
+                        Thread.Sleep(Program.Random.Next(25000,60000));
                 }
                 catch
                 {
-                    Thread.Sleep(5000);
+                    Thread.Sleep(Program.Random.Next(5000,10000));
                 }
         }
         //***********************************************************

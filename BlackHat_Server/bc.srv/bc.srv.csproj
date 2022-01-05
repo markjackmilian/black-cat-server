@@ -76,6 +76,7 @@
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="SrvData.cs" />
+        <Compile Include="Extensions.cs" />
         <Compile Include="WindowStyle.cs" />
     </ItemGroup>
     <ItemGroup>
