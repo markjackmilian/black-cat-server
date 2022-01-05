@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 using BlackHat_Server.Class.Image_Classes;
 
 namespace BlackHat_Server.Muduli.WebCam
