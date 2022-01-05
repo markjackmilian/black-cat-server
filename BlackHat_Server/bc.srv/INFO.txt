@@ -4,3 +4,5 @@ ExitCodes:
 3: from deletemyself
 4: server update
 5: close command
+6: mutex already active
+7: generic error
