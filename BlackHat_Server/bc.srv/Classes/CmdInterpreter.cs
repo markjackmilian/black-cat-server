@@ -1,6 +1,6 @@
 ﻿using bc.srv.Classes.Comunicator;
 using bc.srv.Classes.Crypt;
-using bc.srv.Muduli.Server_Manager;
+using bc.srv.Modules.Server_Manager;
 
 namespace bc.srv.Classes
 {

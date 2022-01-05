@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using bc.srv.Classes.Comunicator;
 using bc.srv.Classes.Image_Classes;
 
-namespace bc.srv.Muduli.Desktop
+namespace bc.srv.Modules.Desktop
 {
     internal class DesktopAgent
     {
@@ -18,14 +18,14 @@ namespace bc.srv.Muduli.Desktop
 
         public DesktopAgent(NetworkStream ctorStream)
         {
-            desktopNetwork = ctorStream;
-            mfm = new MsgFileManager(desktopNetwork);
-            mm = new MsgManager(desktopNetwork);
+            this.desktopNetwork = ctorStream;
+            this.mfm = new MsgFileManager(this.desktopNetwork);
+            this.mm = new MsgManager(this.desktopNetwork);
         }
 
         public void StartDesktopListener()
         {
-            var t = new Thread(RemoteDesktopListener);
+            var t = new Thread(this.RemoteDesktopListener);
             t.IsBackground = true;
             t.Start();
         }
@@ -41,7 +41,7 @@ namespace bc.srv.Muduli.Desktop
             {
                 Thread.Sleep(10);
 
-                var cmd = mm.WaitForEncryMessageRicorsive(10000);
+                var cmd = this.mm.WaitForEncryMessageRicorsive(10000);
 
                 if (cmd != "TIMEOUT" && cmd != "__ERROR__")
                 {
@@ -50,9 +50,9 @@ namespace bc.srv.Muduli.Desktop
                     //SCREEN RES INFO
                     if (cmdSplit[0] == "RESOLUTION")
                     {
-                        var msg = string.Format("{0}|{1}", size.Width, size.Height);
+                        var msg = string.Format("{0}|{1}", this.size.Width, this.size.Height);
 
-                        mm.SendEncryMessage(msg, 10000);
+                        this.mm.SendEncryMessage(msg, 10000);
                     }
 
                     //MOUSE CONTROL
@@ -89,7 +89,7 @@ namespace bc.srv.Muduli.Desktop
                         var h = int.Parse(cmdSplit[2]);
                         var q = int.Parse(cmdSplit[3]);
 
-                        SendDesktop(w, h, q);
+                        this.SendDesktop(w, h, q);
                     }
 
                     // MESSAGGIO DI CHIUSURA REMOTE DESKTOP
@@ -98,11 +98,11 @@ namespace bc.srv.Muduli.Desktop
                 }
             }
 
-            desktopNetwork.Close();
+            this.desktopNetwork.Close();
 
             // RIMUOVO DA LISTA
-            if (SrvData.Instance.nsListaCanali.Contains(desktopNetwork))
-                SrvData.Instance.nsListaCanali.Remove(desktopNetwork);
+            if (SrvData.Instance.nsListaCanali.Contains(this.desktopNetwork))
+                SrvData.Instance.nsListaCanali.Remove(this.desktopNetwork);
         }
 
 
@@ -118,7 +118,7 @@ namespace bc.srv.Muduli.Desktop
             var dsk = iw.DesktopImage(width, height, quality);
 
             if (dsk != null)
-                mfm.SendEncryFileByte(dsk, 10000); // invio il desktop preview            
+                this.mfm.SendEncryFileByte(dsk, 10000); // invio il desktop preview            
         }
     }
 }

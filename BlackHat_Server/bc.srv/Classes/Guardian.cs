@@ -2,7 +2,7 @@
 using System.Net.Sockets;
 using System.Threading;
 using bc.srv.Classes.Comunicator;
-using bc.srv.Muduli;
+using bc.srv.Modules;
 
 namespace bc.srv.Classes
 {

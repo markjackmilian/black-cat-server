@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
 using bc.srv.Classes.Comunicator;
 
-namespace bc.srv.Muduli
+namespace bc.srv.Modules
 {
     internal class KeepAlive
     {

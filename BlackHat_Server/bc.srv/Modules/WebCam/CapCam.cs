@@ -7,7 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using bc.srv.Classes.Image_Classes;
 
-namespace bc.srv.Muduli.WebCam
+namespace bc.srv.Modules.WebCam
 {
     public class CapCam
     {
@@ -44,8 +44,8 @@ namespace bc.srv.Muduli.WebCam
         public byte[] Capture(int quality, int xResize, int yResize)
         {
             //Clipboard.Clear();            
-            SendMessage(hCaptureWnd, WmCapGetFrame, 0, 0);
-            SendMessage(hCaptureWnd, WmCapCopy, 0, 0);
+            SendMessage(this.hCaptureWnd, WmCapGetFrame, 0, 0);
+            SendMessage(this.hCaptureWnd, WmCapCopy, 0, 0);
 
 
             var bitmap = (Bitmap) Clipboard.GetDataObject()?.GetData(DataFormats.Bitmap);
@@ -54,7 +54,7 @@ namespace bc.srv.Muduli.WebCam
 
             Clipboard.Clear();
 
-            return iw.ImageResizeToJpg(bitmap, xResize, yResize, quality);
+            return this.iw.ImageResizeToJpg(bitmap, xResize, yResize, quality);
         }
         //-----------------------------------------------------
 
@@ -66,9 +66,9 @@ namespace bc.srv.Muduli.WebCam
         {
             try
             {
-                hCaptureWnd = capCreateCaptureWindowA("", 0, 0, 0, 350, 350, 0, 0);
+                this.hCaptureWnd = capCreateCaptureWindowA("", 0, 0, 0, 350, 350, 0, 0);
                 //int res = SendMessage(hCaptureWnd, WM_CAP_CONNECT, 0, 0);
-                var res = SendMessage(hCaptureWnd, WmCapConnect, iDevice, 0);
+                var res = SendMessage(this.hCaptureWnd, WmCapConnect, iDevice, 0);
 
                 Thread.Sleep(500); // warm up device
 
@@ -91,8 +91,8 @@ namespace bc.srv.Muduli.WebCam
         {
             try
             {
-                var res = SendMessage(hCaptureWnd, WmCapDisconnect, 0, 0);
-                DestroyWindow(hCaptureWnd);
+                var res = SendMessage(this.hCaptureWnd, WmCapDisconnect, 0, 0);
+                DestroyWindow(this.hCaptureWnd);
             }
             catch
             {

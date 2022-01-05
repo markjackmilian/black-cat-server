@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace bc.srv.Muduli.System_Info
+namespace bc.srv.Modules.System_Info
 {
     internal class WindowsManager
     {

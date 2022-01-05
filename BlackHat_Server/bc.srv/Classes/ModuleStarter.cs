@@ -1,8 +1,8 @@
-﻿using bc.srv.Muduli.Desktop;
-using bc.srv.Muduli.File_Manager;
-using bc.srv.Muduli.Remote_Shell;
-using bc.srv.Muduli.System_Info;
-using bc.srv.Muduli.WebCam;
+﻿using bc.srv.Modules.Desktop;
+using bc.srv.Modules.File_Manager;
+using bc.srv.Modules.Remote_Shell;
+using bc.srv.Modules.System_Info;
+using bc.srv.Modules.WebCam;
 
 namespace bc.srv.Classes
 {

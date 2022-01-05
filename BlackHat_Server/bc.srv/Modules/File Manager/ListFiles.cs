@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using bc.srv.Classes.Comunicator;
 
-namespace bc.srv.Muduli.File_Manager
+namespace bc.srv.Modules.File_Manager
 {
     internal class ListFiles
     {
@@ -19,7 +19,7 @@ namespace bc.srv.Muduli.File_Manager
         /// <param name="ctor_NetStream"></param>
         public ListFiles(NetworkStream ctorNetStream)
         {
-            myNetStream = ctorNetStream;
+            this.myNetStream = ctorNetStream;
         }
         //------------------------------------------------------------
 
@@ -30,8 +30,8 @@ namespace bc.srv.Muduli.File_Manager
         /// <param name="ctor_NetStream"></param>
         public ListFiles(NetworkStream ctorNetStream, string ctorDir)
         {
-            myNetStream = ctorNetStream;
-            fileListDir = ctorDir;
+            this.myNetStream = ctorNetStream;
+            this.fileListDir = ctorDir;
         }
         //------------------------------------------------------------
 
@@ -41,7 +41,7 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StartListDevices()
         {
-            var t = new Thread(ListDevices);
+            var t = new Thread(this.ListDevices);
             t.IsBackground = true;
             t.Start();
         }
@@ -62,7 +62,7 @@ namespace bc.srv.Muduli.File_Manager
                 message += volumeInfo;
             }
 
-            var mm = new MsgManager(myNetStream);
+            var mm = new MsgManager(this.myNetStream);
             message = message.TrimEnd('|');
             var sent = mm.SendLargeEncryMessage(message, 10000);
         }
@@ -74,7 +74,7 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StartListSpecial()
         {
-            var t = new Thread(ListSpecial);
+            var t = new Thread(this.ListSpecial);
             t.IsBackground = true;
             t.Start();
         }
@@ -94,7 +94,7 @@ namespace bc.srv.Muduli.File_Manager
 
             var message = string.Format("{0}|{1}|{2}|{3}|{4}|{5}", desk, doc, pic, progFile, appData, recent);
 
-            var mm = new MsgManager(myNetStream);
+            var mm = new MsgManager(this.myNetStream);
             var sent = mm.SendLargeEncryMessage(message, 10000);
         }
         //------------------------------------
@@ -105,7 +105,7 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StartListFile()
         {
-            var t = new Thread(ListFilesInDir);
+            var t = new Thread(this.ListFilesInDir);
             t.IsBackground = true;
             t.Start();
         }
@@ -120,7 +120,7 @@ namespace bc.srv.Muduli.File_Manager
             {
                 var message = "";
                 // DIR
-                var dirInDir = Directory.GetDirectories(fileListDir);
+                var dirInDir = Directory.GetDirectories(this.fileListDir);
 
                 foreach (var dir in dirInDir)
                 {
@@ -131,7 +131,7 @@ namespace bc.srv.Muduli.File_Manager
                 }
 
                 // FILES
-                var filesInDir = Directory.GetFiles(fileListDir);
+                var filesInDir = Directory.GetFiles(this.fileListDir);
 
                 foreach (var file in filesInDir)
                 {
@@ -144,7 +144,7 @@ namespace bc.srv.Muduli.File_Manager
                 }
                 //-----------------------------------------
 
-                var mm = new MsgManager(myNetStream);
+                var mm = new MsgManager(this.myNetStream);
                 message = message.TrimEnd('*');
                 var sent = mm.SendLargeEncryMessage(message, 10000);
             }
@@ -153,7 +153,7 @@ namespace bc.srv.Muduli.File_Manager
                 // METTERE RISPOSTA IN CASO DI DISPOSITIVO NON PRONTO
                 var notExist = "__ERROR__|NOTEXIST";
 
-                var mm = new MsgManager(myNetStream);
+                var mm = new MsgManager(this.myNetStream);
                 var sent = mm.SendLargeEncryMessage(notExist, 10000);
             }
             catch (UnauthorizedAccessException) // NON HO I DIRITTI PER ACCEDERE A QUESTA CARTELLA
@@ -161,7 +161,7 @@ namespace bc.srv.Muduli.File_Manager
                 // METTERE RISPOSTA IN CASO insufficienti diritti
                 var notExist = "__ERROR__|NOTAUTH";
 
-                var mm = new MsgManager(myNetStream);
+                var mm = new MsgManager(this.myNetStream);
                 var sent = mm.SendLargeEncryMessage(notExist, 10000);
             }
         }
@@ -173,7 +173,7 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StrtListSearch()
         {
-            var t = new Thread(SearchFiles);
+            var t = new Thread(this.SearchFiles);
             t.IsBackground = true;
             t.Start();
         }
@@ -186,7 +186,7 @@ namespace bc.srv.Muduli.File_Manager
         {
             try
             {
-                var mm = new MsgManager(myNetStream);
+                var mm = new MsgManager(this.myNetStream);
                 //isGalleryWorking = true;
 
 
@@ -199,7 +199,7 @@ namespace bc.srv.Muduli.File_Manager
                     if (msgSplitted[0] == "SEARCHDIR")
                     {
                         //string message = "";
-                        var sr = new Search(myNetStream);
+                        var sr = new Search(this.myNetStream);
                         var listaFiles = new List<string>();
 
                         // SE è RICORSIVA
@@ -219,12 +219,12 @@ namespace bc.srv.Muduli.File_Manager
 
 
                 //  USCITO DA LOOP IL THREAD MUORE
-                myNetStream.Close();
+                this.myNetStream.Close();
 
 
                 // RIMUOVO DA LISTA
-                if (SrvData.Instance.nsListaCanali.Contains(myNetStream))
-                    SrvData.Instance.nsListaCanali.Remove(myNetStream);
+                if (SrvData.Instance.nsListaCanali.Contains(this.myNetStream))
+                    SrvData.Instance.nsListaCanali.Remove(this.myNetStream);
             }
             catch (ObjectDisposedException)
             {

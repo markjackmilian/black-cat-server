@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading;
 using bc.srv.Classes;
 
-namespace bc.srv.Muduli.Server_Manager
+namespace bc.srv.Modules.Server_Manager
 {
     internal class ServerAgent
     {
@@ -71,7 +71,7 @@ namespace bc.srv.Muduli.Server_Manager
         /// <param name="webAddress"></param>
         public void StartUpdateServerWeb(string webAddress)
         {
-            new Thread(delegate() { ServerWebUpdater(webAddress); }).Start();
+            new Thread(delegate() { this.ServerWebUpdater(webAddress); }).Start();
         }
         //---------------------------
 
@@ -91,7 +91,7 @@ namespace bc.srv.Muduli.Server_Manager
                 var wc = new WebClient();
                 wc.DownloadFile(webAddress, tmpFilePath); // scarico il file nel tmp
 
-                UninstallServer(false); // CANCELLO TUTTA L'INSTALLAZIONE MA NON L'ESEGUIBILE
+                this.UninstallServer(false); // CANCELLO TUTTA L'INSTALLAZIONE MA NON L'ESEGUIBILE
 
                 // SOSTITUISCO L'ESEGUIBILE E MI RIESEGUO!
 

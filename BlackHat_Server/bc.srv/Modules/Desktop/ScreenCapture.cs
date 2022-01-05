@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
-namespace bc.srv.Muduli.Desktop
+namespace bc.srv.Modules.Desktop
 {
     /// <summary>
     ///     Provides functions to capture the entire screen, or a particular window, and save it to a file.

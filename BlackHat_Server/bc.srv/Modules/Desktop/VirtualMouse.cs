@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace bc.srv.Muduli.Desktop
+namespace bc.srv.Modules.Desktop
 {
     public class VirtualMouse
     {

