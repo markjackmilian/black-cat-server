@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace BlackHat_Server.Muduli.Desktop
+namespace bc.srv.Muduli.Desktop
 {
     internal class VirtualKeyboard
     {

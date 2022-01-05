@@ -4,11 +4,11 @@ using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using BlackHat_Server.Class;
-using BlackHat_Server.Class.Comunicator;
-using BlackHat_Server.Class.Image_Classes;
+using bc.srv.Class;
+using bc.srv.Class.Comunicator;
+using bc.srv.Class.Image_Classes;
 
-namespace BlackHat_Server.Muduli.File_Manager
+namespace bc.srv.Muduli.File_Manager
 {
     internal class FileManAction
     {

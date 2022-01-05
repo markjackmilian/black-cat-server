@@ -1,10 +1,9 @@
 ﻿using System;
-using bc.srv;
-using BlackHat_Server.Class.Comunicator;
-using BlackHat_Server.Class.Crypt;
-using BlackHat_Server.Muduli.Server_Manager;
+using bc.srv.Class.Comunicator;
+using bc.srv.Class.Crypt;
+using bc.srv.Muduli.Server_Manager;
 
-namespace BlackHat_Server.Class
+namespace bc.srv.Class
 {
     // OGGETTO CHE AVVIA IL THREAD RELATIVO AD UN COMANDO DA CLIENT (RICEVUTO DA GUARDIAN)
     internal class CmdInterpreter

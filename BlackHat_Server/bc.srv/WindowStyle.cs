@@ -1,4 +1,4 @@
-﻿namespace BlackHat_Server
+﻿namespace bc.srv
 {
     public enum WindowStyle
     {

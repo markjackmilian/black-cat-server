@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace BlackHat_Server.Muduli.Remote_Shell
+namespace bc.srv.Muduli.Remote_Shell
 {
     internal class ShellWorker
     {

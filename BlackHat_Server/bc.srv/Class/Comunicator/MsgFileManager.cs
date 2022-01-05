@@ -3,9 +3,9 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using BlackHat_Server.Class.Crypt;
+using bc.srv.Class.Crypt;
 
-namespace BlackHat_Server.Class.Comunicator
+namespace bc.srv.Class.Comunicator
 {
     public class MsgFileManager
     {

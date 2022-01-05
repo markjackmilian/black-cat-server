@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Sockets;
 
-namespace BlackHat_Server.Class
+namespace bc.srv.Class
 {
     internal class ST_Client
     {

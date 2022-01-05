@@ -3,10 +3,9 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Threading;
-using bc.srv;
-using BlackHat_Server.Class;
+using bc.srv.Class;
 
-namespace BlackHat_Server.Muduli.Server_Manager
+namespace bc.srv.Muduli.Server_Manager
 {
     internal class ServerAgent
     {

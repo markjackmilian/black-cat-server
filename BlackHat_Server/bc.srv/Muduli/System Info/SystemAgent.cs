@@ -2,10 +2,10 @@
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using BlackHat_Server.Class;
-using BlackHat_Server.Class.Comunicator;
+using bc.srv.Class;
+using bc.srv.Class.Comunicator;
 
-namespace BlackHat_Server.Muduli.System_Info
+namespace bc.srv.Muduli.System_Info
 {
     internal class SystemAgent
     {

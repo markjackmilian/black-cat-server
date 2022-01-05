@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace BlackHat_Server.Class
+namespace bc.srv.Class
 {
     internal class DosRunner
     {

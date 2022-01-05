@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace BlackHat_Server.Class.Crypt
+namespace bc.srv.Class.Crypt
 {
     internal class File_Des
     {

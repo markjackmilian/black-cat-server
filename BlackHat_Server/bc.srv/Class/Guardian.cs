@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading;
-using BlackHat_Server.Class.Comunicator;
-using BlackHat_Server.Muduli;
+using bc.srv.Class.Comunicator;
+using bc.srv.Muduli;
 
-namespace BlackHat_Server.Class
+namespace bc.srv.Class
 {
     // OGGETTO GUARDIAN ASPETTA UN MESSAGGIO E PASSA IL MESSAGGIO A CMDINTERPRETER
     internal class Guardian

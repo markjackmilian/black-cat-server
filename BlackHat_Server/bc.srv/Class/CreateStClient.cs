@@ -1,7 +1,6 @@
-﻿using bc.srv;
-using BlackHat_Server.Class.Crypt;
+﻿using bc.srv.Class.Crypt;
 
-namespace BlackHat_Server.Class
+namespace bc.srv.Class
 {
     internal class CreateStClient
     {

@@ -2,9 +2,8 @@
 using System.IO;
 using System.Reflection;
 using System.Threading;
-using bc.srv;
 
-namespace BlackHat_Server.Class
+namespace bc.srv.Class
 {
 
 

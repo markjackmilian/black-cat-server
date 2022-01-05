@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using BlackHat_Server.Class.Comunicator;
+using bc.srv.Class.Comunicator;
 
-namespace BlackHat_Server.Class
+namespace bc.srv.Class
 {
     internal class Connection
     {

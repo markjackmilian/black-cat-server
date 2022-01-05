@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace BlackHat_Server.Muduli.Desktop
+namespace bc.srv.Muduli.Desktop
 {
     public class VirtualMouse
     {

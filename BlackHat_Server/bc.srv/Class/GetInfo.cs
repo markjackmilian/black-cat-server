@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlackHat_Server.Class
+namespace bc.srv.Class
 {
     internal class GetInfo
     {

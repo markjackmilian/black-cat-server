@@ -1,8 +1,8 @@
 ﻿using System.Net.Sockets;
-using BlackHat_Server.Class;
-using BlackHat_Server.Class.Comunicator;
+using bc.srv.Class;
+using bc.srv.Class.Comunicator;
 
-namespace BlackHat_Server.Muduli
+namespace bc.srv.Muduli
 {
     internal class KeepAlive
     {

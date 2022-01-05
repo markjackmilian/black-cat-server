@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace BlackHat_Server.Muduli.System_Info
+namespace bc.srv.Muduli.System_Info
 {
     internal class WindowsManager
     {
