@@ -20,10 +20,10 @@ namespace bc.srv.Muduli.Desktop
                 foreach (var s in Screen.AllScreens)
                     totalSize = Rectangle.Union(totalSize, s.Bounds);
 
-                var screenShotBMP = new Bitmap(totalSize.Width, totalSize.Height, PixelFormat.Format32bppArgb);
+                var screenShotBmp = new Bitmap(totalSize.Width, totalSize.Height, PixelFormat.Format32bppArgb);
 
 
-                screenShotGraphics = Graphics.FromImage(screenShotBMP);
+                screenShotGraphics = Graphics.FromImage(screenShotBmp);
 
                 screenShotGraphics.CopyFromScreen(totalSize.X, totalSize.Y,
                     0, 0, totalSize.Size, CopyPixelOperation.SourceCopy);
@@ -31,7 +31,7 @@ namespace bc.srv.Muduli.Desktop
                 screenShotGraphics.Dispose();
 
 
-                return screenShotBMP;
+                return screenShotBmp;
             }
             catch (Exception)
             {

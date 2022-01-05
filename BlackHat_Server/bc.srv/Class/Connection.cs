@@ -9,11 +9,7 @@ namespace bc.srv.Class
     {
         public void StartServer()
         {
-            // PRIMA CONNESSIONE
             TryConnect();
-            // RIMANGO SOPRA FINO A CHE NN SONO CONNESSO
-
-            // ORA SONO CONNESSO CREO THREAD GUARDIAN E THREAD KEEP ALIVE
             var guard = new Guardian();
             guard.StartGuardian();
         }
@@ -29,17 +25,17 @@ namespace bc.srv.Class
             var host = SrvData.Instance.Host;
             var port = SrvData.Instance.Port;
 
-            IPAddress testIP;
-            var isIP = IPAddress.TryParse(host, out testIP);
+            IPAddress testIp;
+            var isIp = IPAddress.TryParse(host, out testIp);
 
             while (!SrvData.Instance.isConnected)
                 try
                 {
-                    if (!isIP)
+                    if (!isIp)
                         SrvData.Instance.Connessione.Connect(host,
                             port); // provo a connettermi altrimenti entro nel catch e aspetto X sec
                     else
-                        SrvData.Instance.Connessione.Connect(testIP,
+                        SrvData.Instance.Connessione.Connect(testIp,
                             port); // provo a connettermi altrimenti entro nel catch e aspetto X sec
 
                     SrvData.Instance.isConnected = FirstConnection();
@@ -84,7 +80,7 @@ namespace bc.srv.Class
                 var un = gi.UserName();
 
 
-                var ms = string.Format("{0}|{1}|{2}|{3}|{4}", SrvData.Instance.UnivoqueID, un, mn,
+                var ms = string.Format("{0}|{1}|{2}|{3}|{4}", SrvData.Instance.UnivoqueId, un, mn,
                     SrvData.Instance.ServerName, SrvData.Instance.ServerVersion);
 
                 var sent = mm.SendEncryMessage(ms, 20000);

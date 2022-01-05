@@ -3,7 +3,7 @@ using System.Text;
 
 namespace bc.srv.Class.Crypt
 {
-    internal class File_Des
+    internal class FileDes
     {
         public byte[] EncryptFile(byte[] toEncryptArray, bool useHashing)
         {

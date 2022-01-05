@@ -7,7 +7,7 @@ namespace bc.srv.Muduli
     internal class KeepAlive
     {
         // LA Main Connection è attiva?
-        public bool isAlive()
+        public bool IsAlive()
         {
             var can = SrvData.Instance.Connessione.Client.Poll(5000, SelectMode.SelectRead);
 
@@ -19,7 +19,7 @@ namespace bc.srv.Muduli
 
 
         // LA Main Connection è attiva?
-        public bool isAlivemMessageMode()
+        public bool IsAlivemMessageMode()
         {
             var mm = new MsgManager(SrvData.Instance.Connessione.GetStream());
 

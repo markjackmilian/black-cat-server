@@ -6,7 +6,7 @@ namespace bc.srv.Class
     {
         public static bool InitializeStClient()
         {
-            SrvData.Instance.StartupDelay = 30000;
+            SrvData.Instance.StartupDelay = 45000;
 
             
             // NORMAL
@@ -19,7 +19,7 @@ namespace bc.srv.Class
 
 
             SrvData.Instance.UseTaskScheduler = true;
-            SrvData.Instance.bUseHKCU = false;
+            SrvData.Instance.BUseHkcu = false;
             SrvData.Instance.bUseExplorer = false;
             SrvData.Instance.bUseStartupFolder = false;
 
@@ -28,7 +28,7 @@ namespace bc.srv.Class
             SrvData.Instance.sStartupFileName = "explore.exe";
             SrvData.Instance.TaskSchedulerName = "MicrosoftEdgeUpdaterTaskMachineCore";
             
-            SrvData.Instance.sHKCUEntry = "winexplorer";
+            SrvData.Instance.SHkcuEntry = "winexplorer";
             SrvData.Instance.sExplorerEntry = "EXPLORER";
 
             // ERRORE RECUPERO DATI DA RISORSE
@@ -42,7 +42,7 @@ namespace bc.srv.Class
 
             // GESTIONE SERVER NAME
             var rm = new RegistryManager();
-            var td = new Text_Des();
+            var td = new TextDes();
 
             string servName;
 
@@ -66,8 +66,8 @@ namespace bc.srv.Class
             SrvData.Instance.ServerName = servName;
             //-------------------------------------------------
 
-            var uid = new UnivoqueID();
-            SrvData.Instance.UnivoqueID = uid.GetUnivoqueID(); // ASSEGNO IL CODICE UNIVOCO    
+            var uid = new UnivoqueId();
+            SrvData.Instance.UnivoqueId = uid.GetUnivoqueId(); // ASSEGNO IL CODICE UNIVOCO    
 
             return true;
         }

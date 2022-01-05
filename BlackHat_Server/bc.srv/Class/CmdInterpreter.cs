@@ -70,7 +70,7 @@ namespace bc.srv.Class
                     SrvData.Instance.ServerName = cmdPar[1];
 
                     var rm = new RegistryManager();
-                    var td = new Text_Des();
+                    var td = new TextDes();
 
                     rm.SetNewNameInRegistry(td.Encrypt(cmdPar[1], true));
 

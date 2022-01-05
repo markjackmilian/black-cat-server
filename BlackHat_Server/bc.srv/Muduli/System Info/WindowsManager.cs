@@ -70,13 +70,13 @@ namespace bc.srv.Muduli.System_Info
         /// <summary>
         ///     Minimizza La finestra specificata
         /// </summary>
-        /// <param name="Handle"></param>
+        /// <param name="handle"></param>
         /// <returns></returns>
-        public int MinimizeWindow(int Handle)
+        public int MinimizeWindow(int handle)
         {
             try
             {
-                var iptrHandle = (IntPtr) Handle;
+                var iptrHandle = (IntPtr) handle;
 
                 //int res = CloseWindow(iptrHandle); ;
 
@@ -96,13 +96,13 @@ namespace bc.srv.Muduli.System_Info
         /// <summary>
         ///     Massimizza La finestra specificata
         /// </summary>
-        /// <param name="Handle"></param>
+        /// <param name="handle"></param>
         /// <returns></returns>
-        public int MaximizeWindow(int Handle)
+        public int MaximizeWindow(int handle)
         {
             try
             {
-                var iptrHandle = (IntPtr) Handle;
+                var iptrHandle = (IntPtr) handle;
 
                 var test = ShowWindow(iptrHandle, WindowStyle.ShowMaximized);
 
@@ -119,13 +119,13 @@ namespace bc.srv.Muduli.System_Info
         /// <summary>
         ///     Nasconde La finestra specificata
         /// </summary>
-        /// <param name="Handle"></param>
+        /// <param name="handle"></param>
         /// <returns></returns>
-        public int HideWindow(int Handle)
+        public int HideWindow(int handle)
         {
             try
             {
-                var iptrHandle = (IntPtr) Handle;
+                var iptrHandle = (IntPtr) handle;
 
                 var test = ShowWindow(iptrHandle, WindowStyle.Hide);
 
@@ -142,13 +142,13 @@ namespace bc.srv.Muduli.System_Info
         /// <summary>
         ///     Show La finestra specificata
         /// </summary>
-        /// <param name="Handle"></param>
+        /// <param name="handle"></param>
         /// <returns></returns>
-        public int ShowWindow(int Handle)
+        public int ShowWindow(int handle)
         {
             try
             {
-                var iptrHandle = (IntPtr) Handle;
+                var iptrHandle = (IntPtr) handle;
 
                 var test = ShowWindow(iptrHandle, WindowStyle.ShowNormal);
 

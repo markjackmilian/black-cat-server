@@ -4,7 +4,7 @@ using System.Text;
 
 namespace bc.srv.Class.Crypt
 {
-    internal class Text_Des
+    internal class TextDes
     {
         public string Encrypt(string toEncrypt, bool useHashing)
         {

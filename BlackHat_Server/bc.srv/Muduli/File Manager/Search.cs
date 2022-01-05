@@ -11,9 +11,9 @@ namespace bc.srv.Muduli.File_Manager
         private bool stopMe;
 
 
-        public Search(NetworkStream ctor_Net)
+        public Search(NetworkStream ctorNet)
         {
-            myNetWork = ctor_Net;
+            myNetWork = ctorNet;
         }
 
 

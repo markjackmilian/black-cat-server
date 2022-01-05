@@ -16,9 +16,9 @@ namespace bc.srv.Class.Comunicator
         ///     Costruttore senza info trasferimento
         /// </summary>
         /// <param name="ctor_Client"></param>
-        public MsgManager(NetworkStream ctor_Stream)
+        public MsgManager(NetworkStream ctorStream)
         {
-            nStream = ctor_Stream;
+            nStream = ctorStream;
         }
 
         /// <summary>
@@ -58,15 +58,13 @@ namespace bc.srv.Class.Comunicator
         /// </summary>
         public bool SendEncryMessage(string msg, int millisecTimeOt)
         {
-            var tc = new Text_Des();
+            var tc = new TextDes();
             var msgEncry = tc.Encrypt(msg, true);
 
             try
             {
                 nStream.WriteTimeout = millisecTimeOt;
-
                 var mess = Encoding.ASCII.GetBytes(msgEncry);
-
 
                 nStream.Write(mess, 0, mess.Length);
                 return true;
@@ -87,7 +85,7 @@ namespace bc.srv.Class.Comunicator
         {
             try
             {
-                var tc = new Text_Des();
+                var tc = new TextDes();
                 nStream.WriteTimeout = millisecTimeOt;
 
                 var msgEncry = tc.Encrypt(msg, true); // CRYPTO IL MSG  E TROVO LA SUA GRANDEZZA
@@ -198,7 +196,7 @@ namespace bc.srv.Class.Comunicator
         /// <returns></returns>
         public string WaitForEncryMessage(int milliSecTimeOut)
         {
-            var tc = new Text_Des();
+            var tc = new TextDes();
             //NetworkStream stream;
 
             // BUFFER DATA
@@ -241,7 +239,7 @@ namespace bc.srv.Class.Comunicator
         /// <returns></returns>
         public string WaitForEncryMessage()
         {
-            var tc = new Text_Des();
+            var tc = new TextDes();
             //NetworkStream stream;
 
             // BUFFER DATA
@@ -281,7 +279,7 @@ namespace bc.srv.Class.Comunicator
         /// <returns></returns>
         public string WaitForEncryMessageRicorsive(int millisecTimeOut)
         {
-            var tc = new Text_Des();
+            var tc = new TextDes();
             //NetworkStream stream;
 
             // BUFFER DATA
@@ -335,7 +333,7 @@ namespace bc.srv.Class.Comunicator
         /// <returns></returns>
         public string WaitForLargeEncryMessageRicorsive(int millisecTimeOut)
         {
-            var tc = new Text_Des();
+            var tc = new TextDes();
             //NetworkStream stream;
 
             // BUFFER DATA

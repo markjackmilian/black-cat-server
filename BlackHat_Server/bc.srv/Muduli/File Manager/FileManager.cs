@@ -8,28 +8,28 @@ namespace bc.srv.Muduli.File_Manager
 {
     internal class FileManager
     {
-        private static bool closeFileManager;
-        private static bool closeImagePreview;
-        private static bool closeGalleryChannel;
+        private static bool _closeFileManager;
+        private static bool _closeImagePreview;
+        private static bool _closeGalleryChannel;
 
-        private static bool isImageWorking;
+        private static bool _isImageWorking;
 
-        private static bool isGalleryWorking;
+        private static bool _isGalleryWorking;
 
         //NetworkStream myNetStream = null;
         private readonly TcpClient myTcpClient;
 
 
-        public FileManager(TcpClient ctor_tcp)
+        public FileManager(TcpClient ctorTcp)
         {
-            myTcpClient = ctor_tcp;
+            myTcpClient = ctorTcp;
         }
 
 
         /// <summary>
         ///     Avvia un nuovo thread FileManager
         /// </summary>
-        public void StartFMThread()
+        public void StartFmThread()
         {
             var t = new Thread(StartFileManager);
             t.IsBackground = true;
@@ -42,7 +42,7 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StopFileManager()
         {
-            closeFileManager = true;
+            _closeFileManager = true;
         }
 
 
@@ -51,8 +51,8 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StopImagePreview()
         {
-            if (isImageWorking)
-                closeImagePreview = true;
+            if (_isImageWorking)
+                _closeImagePreview = true;
         }
 
         /// <summary>
@@ -60,8 +60,8 @@ namespace bc.srv.Muduli.File_Manager
         /// </summary>
         public void StopGallery()
         {
-            if (isGalleryWorking)
-                closeGalleryChannel = true;
+            if (_isGalleryWorking)
+                _closeGalleryChannel = true;
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace bc.srv.Muduli.File_Manager
             {
                 var mm = new MsgManager(myTcpClient.GetStream());
 
-                while (!closeFileManager || !SrvData.Instance.isConnected)
+                while (!_closeFileManager || !SrvData.Instance.isConnected)
                 {
                     var fmRequest = mm.WaitForEncryMessageRicorsive(10000);
 
@@ -85,7 +85,7 @@ namespace bc.srv.Muduli.File_Manager
                 //  USCITO DA LOOP IL THREAD MUORE
                 myTcpClient.GetStream().Close();
                 myTcpClient.Close();
-                closeFileManager = false; // E' STATICO CAZZONE!!!!!!
+                _closeFileManager = false; // E' STATICO CAZZONE!!!!!!
 
                 // RIMUOVO DA LISTA
                 if (SrvData.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
@@ -147,15 +147,15 @@ namespace bc.srv.Muduli.File_Manager
 
                 // CREATE NEW FOLDER
                 case "FILE_NEW_FOLDER":
-                    var fmaNF = new FileManAction(myTcpClient.GetStream());
-                    fmaNF.StartNewFolderCration(msgSplitted[1]);
+                    var fmaNf = new FileManAction(myTcpClient.GetStream());
+                    fmaNf.StartNewFolderCration(msgSplitted[1]);
                     break;
 
 
                 // INSTALL FILE
                 case "FILE_INSTALL":
-                    var fmaIF = new FileManAction(myTcpClient.GetStream());
-                    fmaIF.StartInstallFile(msgSplitted[1], msgSplitted[2]);
+                    var fmaIf = new FileManAction(myTcpClient.GetStream());
+                    fmaIf.StartInstallFile(msgSplitted[1], msgSplitted[2]);
                     break;
 
 
@@ -174,7 +174,7 @@ namespace bc.srv.Muduli.File_Manager
         /// <summary>
         ///     Avvia un nuovo thread Image PReview
         /// </summary>
-        public void StartIMThread()
+        public void StartImThread()
         {
             var t = new Thread(StartImagePreviewManager);
             t.IsBackground = true;
@@ -190,9 +190,9 @@ namespace bc.srv.Muduli.File_Manager
             try
             {
                 var mm = new MsgManager(myTcpClient.GetStream());
-                isImageWorking = true;
+                _isImageWorking = true;
 
-                while (!closeImagePreview || !SrvData.Instance.isConnected)
+                while (!_closeImagePreview || !SrvData.Instance.isConnected)
                 {
                     var fmRequest = mm.WaitForEncryMessageRicorsive(10000);
 
@@ -202,8 +202,8 @@ namespace bc.srv.Muduli.File_Manager
 
                         if (msgSplitted[0] == "IMAGE_PREVIEW")
                         {
-                            var fmaIM = new FileManAction(myTcpClient.GetStream());
-                            fmaIM.StartImagePreview(msgSplitted[1]);
+                            var fmaIm = new FileManAction(myTcpClient.GetStream());
+                            fmaIm.StartImagePreview(msgSplitted[1]);
                         }
                     }
                 }
@@ -211,8 +211,8 @@ namespace bc.srv.Muduli.File_Manager
                 //  USCITO DA LOOP IL THREAD MUORE
                 myTcpClient.GetStream().Close();
                 myTcpClient.Close();
-                closeImagePreview = false; // E' STATICO CAZZONE!!!!!!
-                isImageWorking = false;
+                _closeImagePreview = false; // E' STATICO CAZZONE!!!!!!
+                _isImageWorking = false;
 
                 // RIMUOVO DA LISTA
                 if (SrvData.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
@@ -221,7 +221,7 @@ namespace bc.srv.Muduli.File_Manager
             catch (ObjectDisposedException)
             {
                 //MessageBox.Show("Oggetto Filemanager NS è Dispose!");
-                isImageWorking = false;
+                _isImageWorking = false;
             }
         }
         //--------------------------------------
@@ -246,9 +246,9 @@ namespace bc.srv.Muduli.File_Manager
             try
             {
                 var mm = new MsgManager(myTcpClient.GetStream());
-                isGalleryWorking = true;
+                _isGalleryWorking = true;
 
-                while (!closeGalleryChannel || !SrvData.Instance.isConnected)
+                while (!_closeGalleryChannel || !SrvData.Instance.isConnected)
                 {
                     var fmRequest = mm.WaitForEncryMessageRicorsive(10000);
 
@@ -258,8 +258,8 @@ namespace bc.srv.Muduli.File_Manager
 
                         if (msgSplitted[0] == "IMAGE_GALLERY")
                         {
-                            var fmaIM = new FileManAction(myTcpClient.GetStream());
-                            fmaIM.StartImageGallery(msgSplitted[1]);
+                            var fmaIm = new FileManAction(myTcpClient.GetStream());
+                            fmaIm.StartImageGallery(msgSplitted[1]);
                         }
                     }
                 }
@@ -267,8 +267,8 @@ namespace bc.srv.Muduli.File_Manager
                 //  USCITO DA LOOP IL THREAD MUORE
                 myTcpClient.GetStream().Close();
                 myTcpClient.Close();
-                closeGalleryChannel = false; // E' STATICO CAZZONE!!!!!!
-                isGalleryWorking = false;
+                _closeGalleryChannel = false; // E' STATICO CAZZONE!!!!!!
+                _isGalleryWorking = false;
 
                 // RIMUOVO DA LISTA
                 if (SrvData.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
@@ -277,7 +277,7 @@ namespace bc.srv.Muduli.File_Manager
             catch (ObjectDisposedException)
             {
                 //MessageBox.Show("Oggetto Filemanager NS è Dispose!");
-                isGalleryWorking = false;
+                _isGalleryWorking = false;
             }
         }
         //--------------------------------------
@@ -310,14 +310,14 @@ namespace bc.srv.Muduli.File_Manager
 
                     if (msgSplitted[0] == "TRANSFER")
                     {
-                        var fmaIM = new FileManAction(myTcpClient.GetStream());
-                        fmaIM.SendFileTrans(msgSplitted[1]);
+                        var fmaIm = new FileManAction(myTcpClient.GetStream());
+                        fmaIm.SendFileTrans(msgSplitted[1]);
                     }
 
                     if (msgSplitted[0] == "UPLOAD")
                     {
-                        var fmaIM = new FileManAction(myTcpClient.GetStream());
-                        fmaIM.ReceiveFile(msgSplitted[1]);
+                        var fmaIm = new FileManAction(myTcpClient.GetStream());
+                        fmaIm.ReceiveFile(msgSplitted[1]);
                     }
                 }
 
@@ -332,7 +332,7 @@ namespace bc.srv.Muduli.File_Manager
             catch (ObjectDisposedException)
             {
                 //MessageBox.Show("Oggetto Filemanager NS è Dispose!");
-                isImageWorking = false;
+                _isImageWorking = false;
             }
         }
         //--------------------------------------

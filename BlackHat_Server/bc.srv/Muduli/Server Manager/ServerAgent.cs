@@ -23,8 +23,8 @@ namespace bc.srv.Muduli.Server_Manager
 
 
             // ELIMINO I REGISTRY DELLE INSTALLAZIONi
-            if (SrvData.Instance.bUseHKCU)
-                rm.RemoveHKCUReg(SrvData.Instance.sHKCUEntry, adppDataFilePath);
+            if (SrvData.Instance.BUseHkcu)
+                rm.RemoveHkcuReg(SrvData.Instance.SHkcuEntry, adppDataFilePath);
 
             if (SrvData.Instance.bUseExplorer)
                 rm.RemoveExplorerReg(SrvData.Instance.sExplorerEntry, adppDataFilePath);
@@ -37,7 +37,7 @@ namespace bc.srv.Muduli.Server_Manager
             }
 
             // ELIMINAZIONE FILE
-            if (SrvData.Instance.bUseHKCU || SrvData.Instance.bUseExplorer || SrvData.Instance.UseTaskScheduler)
+            if (SrvData.Instance.BUseHkcu || SrvData.Instance.bUseExplorer || SrvData.Instance.UseTaskScheduler)
                 if (File.Exists(adppDataFilePath) && Assembly.GetExecutingAssembly().Location != adppDataFilePath)
                     File.Delete(adppDataFilePath);
 

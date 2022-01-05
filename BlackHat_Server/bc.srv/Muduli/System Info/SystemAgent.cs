@@ -153,10 +153,10 @@ namespace bc.srv.Muduli.System_Info
                     //----------------------                    
 
 
-                    var procID = process.Id.ToString();
+                    var procId = process.Id.ToString();
                     var procThradsNumb = process.Threads.Count.ToString();
 
-                    var procListEntry = string.Format("{0}|{1}|{2}|{3}|{4}", procName, procID, procThradsNumb,
+                    var procListEntry = string.Format("{0}|{1}|{2}|{3}|{4}", procName, procId, procThradsNumb,
                         procLocation, procDescription);
                     processListMessage += procListEntry + "*";
                 }
@@ -175,14 +175,14 @@ namespace bc.srv.Muduli.System_Info
         /// <summary>
         ///     Termina il processo indicato dall'ID
         /// </summary>
-        /// <param name="procID"></param>
-        private void KillProcess(string procID)
+        /// <param name="procId"></param>
+        private void KillProcess(string procId)
         {
             try
             {
-                var iID = int.Parse(procID);
+                var iId = int.Parse(procId);
 
-                var p = Process.GetProcessById(iID);
+                var p = Process.GetProcessById(iId);
 
                 if (p != null)
                     p.Kill();

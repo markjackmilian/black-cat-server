@@ -46,7 +46,7 @@ namespace bc.srv.Class
 
                     // SE LA CONNESSIONE DEL SERVER NON P STATA CHIUSA MANUALMENTE CONTROLLO IS ALIVE
                     if (SrvData.Instance.isConnected)
-                        SrvData.Instance.isConnected = ka.isAlivemMessageMode();
+                        SrvData.Instance.isConnected = ka.IsAlivemMessageMode();
                 }
                 catch (InvalidOperationException)
                 {

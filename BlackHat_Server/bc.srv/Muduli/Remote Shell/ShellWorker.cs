@@ -5,8 +5,8 @@ namespace bc.srv.Muduli.Remote_Shell
 {
     internal class ShellWorker
     {
-        private Process _process;
-        public string sCmdComplete = "BC_Shell_End"; // QUESTA LINEA MI INDICA CHE IL COMANDO è STATO CONCLUSO
+        private Process process;
+        public string SCmdComplete = "BC_Shell_End"; // QUESTA LINEA MI INDICA CHE IL COMANDO è STATO CONCLUSO
         public event DataReceivedEventHandler StdOut;
         public event DataReceivedEventHandler StdError;
 
@@ -33,7 +33,7 @@ namespace bc.srv.Muduli.Remote_Shell
                 if (string.IsNullOrEmpty(comspec))
                     return false;
 
-                _process = new Process
+                process = new Process
                 {
                     StartInfo =
                     {
@@ -47,15 +47,15 @@ namespace bc.srv.Muduli.Remote_Shell
                     EnableRaisingEvents = true
                 };
 
-                _process.ErrorDataReceived += StdError;
-                _process.OutputDataReceived += StdOut;
-                _process.Start();
+                process.ErrorDataReceived += StdError;
+                process.OutputDataReceived += StdOut;
+                process.Start();
 
                 if (StdError != null)
-                    _process.BeginErrorReadLine();
+                    process.BeginErrorReadLine();
 
                 if (StdOut != null)
-                    _process.BeginOutputReadLine();
+                    process.BeginOutputReadLine();
 
                 return true;
             }
@@ -74,19 +74,19 @@ namespace bc.srv.Muduli.Remote_Shell
         {
             try
             {
-                if (_process == null || StdOut == null && StdError == null || _process.HasExited)
+                if (process == null || StdOut == null && StdError == null || process.HasExited)
                 {
-                    if (_process != null)
+                    if (process != null)
                         Terminate();
 
                     Initialize();
                 }
 
-                if (_process != null)
+                if (process != null)
                 {
-                    _process.StandardInput.WriteLine(command);
-                    _process.StandardInput.WriteLine(""); // chiedo localizzazione
-                    _process.StandardInput.WriteLine("@echo " + sCmdComplete); // fine comandi
+                    process.StandardInput.WriteLine(command);
+                    process.StandardInput.WriteLine(""); // chiedo localizzazione
+                    process.StandardInput.WriteLine("@echo " + SCmdComplete); // fine comandi
                 }
             }
             catch
@@ -101,7 +101,7 @@ namespace bc.srv.Muduli.Remote_Shell
         {
             try
             {
-                if (_process == null || _process.HasExited)
+                if (process == null || process.HasExited)
                     return;
 
                 var processes = Process.GetProcesses();
@@ -109,16 +109,16 @@ namespace bc.srv.Muduli.Remote_Shell
                     try
                     {
                         var pfc = new PerformanceCounter("Process", "Creating Process Id", process.ProcessName);
-                        if ((int) pfc.RawValue == _process.Id)
+                        if ((int) pfc.RawValue == this.process.Id)
                             process.Kill();
                     }
                     catch
                     {
                     }
 
-                _process.Kill();
-                _process.Close();
-                _process = null;
+                process.Kill();
+                process.Close();
+                process = null;
             }
             catch
             {

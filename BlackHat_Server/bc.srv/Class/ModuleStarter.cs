@@ -12,12 +12,12 @@ namespace bc.srv.Class
         ///     Salvo il nuovo stream tra la lista stream in ST e avvio il thread FM
         /// </summary>
         /// <param name="servizio"></param>
-        /// <param name="reqID"></param>
-        public void StartSlotService(string servizio, string reqID)
+        /// <param name="reqId"></param>
+        public void StartSlotService(string servizio, string reqId)
         {
             var con = new Connection();
 
-            var ns = con.NewSlotRequest(servizio, reqID);
+            var ns = con.NewSlotRequest(servizio, reqId);
 
             SrvData.Instance.nsListaCanali.Add(ns.GetStream());
 
@@ -26,12 +26,12 @@ namespace bc.srv.Class
                 {
                     case "FILEMANAGER":
                         var fm = new FileManager(ns);
-                        fm.StartFMThread();
+                        fm.StartFmThread();
                         break;
 
                     case "IMAGESLOT":
                         var fmIm = new FileManager(ns);
-                        fmIm.StartIMThread();
+                        fmIm.StartImThread();
                         break;
 
                     case "GALLERYSLOT":

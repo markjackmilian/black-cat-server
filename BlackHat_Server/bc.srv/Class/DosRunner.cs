@@ -7,21 +7,21 @@ namespace bc.srv.Class
         /// <summary>
         ///     Esegue un comando da dos
         /// </summary>
-        /// <param name="dosCMD"></param>
-        public void RunDosSelfDelete(string dosCMD)
+        /// <param name="dosCmd"></param>
+        public void RunDosSelfDelete(string dosCmd)
         {
             try
             {
-                if (!string.IsNullOrEmpty(dosCMD))
+                if (!string.IsNullOrEmpty(dosCmd))
                 {
-                    var Info = new ProcessStartInfo();
+                    var info = new ProcessStartInfo();
 
-                    Info.Arguments = dosCMD;
+                    info.Arguments = dosCmd;
 
-                    Info.WindowStyle = ProcessWindowStyle.Hidden;
-                    Info.CreateNoWindow = true;
-                    Info.FileName = "cmd.exe";
-                    Process.Start(Info);
+                    info.WindowStyle = ProcessWindowStyle.Hidden;
+                    info.CreateNoWindow = true;
+                    info.FileName = "cmd.exe";
+                    Process.Start(info);
                 }
             }
             catch

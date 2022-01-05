@@ -15,7 +15,7 @@ namespace bc.srv.Muduli.WebCam
         ///     Trovo i drivers presenti per la webcam
         /// </summary>
         /// <returns></returns>
-        public List<string> GetWCDrivers()
+        public List<string> GetWcDrivers()
         {
             var listaDrivers = new List<string>();
 
@@ -44,24 +44,17 @@ namespace bc.srv.Muduli.WebCam
         public byte[] Capture(int quality, int xResize, int yResize)
         {
             //Clipboard.Clear();            
-            SendMessage(hCaptureWnd, WM_CAP_GET_FRAME, 0, 0);
-            SendMessage(hCaptureWnd, WM_CAP_COPY, 0, 0);
+            SendMessage(hCaptureWnd, WmCapGetFrame, 0, 0);
+            SendMessage(hCaptureWnd, WmCapCopy, 0, 0);
 
 
-            var bitmap = (Bitmap) Clipboard.GetDataObject().GetData(DataFormats.Bitmap);
+            var bitmap = (Bitmap) Clipboard.GetDataObject()?.GetData(DataFormats.Bitmap);
             if (bitmap == null)
                 return null;
 
             Clipboard.Clear();
 
             return iw.ImageResizeToJpg(bitmap, xResize, yResize, quality);
-
-
-            //using (MemoryStream stream = new MemoryStream())
-            //{
-            //    bitmap.Save(stream, ImageFormat.Jpeg);
-            //    return stream.ToArray();
-            //}
         }
         //-----------------------------------------------------
 
@@ -75,7 +68,7 @@ namespace bc.srv.Muduli.WebCam
             {
                 hCaptureWnd = capCreateCaptureWindowA("", 0, 0, 0, 350, 350, 0, 0);
                 //int res = SendMessage(hCaptureWnd, WM_CAP_CONNECT, 0, 0);
-                var res = SendMessage(hCaptureWnd, WM_CAP_CONNECT, iDevice, 0);
+                var res = SendMessage(hCaptureWnd, WmCapConnect, iDevice, 0);
 
                 Thread.Sleep(500); // warm up device
 
@@ -98,7 +91,7 @@ namespace bc.srv.Muduli.WebCam
         {
             try
             {
-                var res = SendMessage(hCaptureWnd, WM_CAP_DISCONNECT, 0, 0);
+                var res = SendMessage(hCaptureWnd, WmCapDisconnect, 0, 0);
                 DestroyWindow(hCaptureWnd);
             }
             catch
@@ -109,11 +102,11 @@ namespace bc.srv.Muduli.WebCam
         #region PINVOKE
 
         [DllImport("user32", EntryPoint = "SendMessage")]
-        private static extern int SendMessage(int hWnd, uint Msg, int wParam, int lParam);
+        private static extern int SendMessage(int hWnd, uint msg, int wParam, int lParam);
 
         [DllImport("avicap32.dll", EntryPoint = "capCreateCaptureWindowA")]
         private static extern int capCreateCaptureWindowA(string lpszWindowName, int dwStyle,
-            int X, int Y, int nWidth, int nHeight, int hwndParent, int nID);
+            int x, int y, int nWidth, int nHeight, int hwndParent, int nId);
 
         [DllImport("avicap32.dll")]
         private static extern IntPtr capGetDriverDescription(
@@ -133,10 +126,10 @@ namespace bc.srv.Muduli.WebCam
 
         #region COSTANTI
 
-        private const int WM_CAP_CONNECT = 1034;
-        private const int WM_CAP_DISCONNECT = 1035;
-        private const int WM_CAP_COPY = 1054;
-        private const int WM_CAP_GET_FRAME = 1084;
+        private const int WmCapConnect = 1034;
+        private const int WmCapDisconnect = 1035;
+        private const int WmCapCopy = 1054;
+        private const int WmCapGetFrame = 1084;
 
         #endregion
 

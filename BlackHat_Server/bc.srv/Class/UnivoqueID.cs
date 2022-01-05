@@ -3,13 +3,13 @@ using System.Management;
 
 namespace bc.srv.Class
 {
-    internal class UnivoqueID
+    internal class UnivoqueId
     {
         /// <summary>
         ///     Crea codice univoco. Seriale HardDisk + Mutex Da risorse
         /// </summary>
         /// <returns></returns>
-        public string GetUnivoqueID()
+        public string GetUnivoqueId()
         {
             //Random ran = new Random(DateTime.Now.Millisecond);
             //int r = ran.Next(10000);

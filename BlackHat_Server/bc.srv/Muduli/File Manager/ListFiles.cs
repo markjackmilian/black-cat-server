@@ -18,9 +18,9 @@ namespace bc.srv.Muduli.File_Manager
         ///     Ctor solo stream [Devices]
         /// </summary>
         /// <param name="ctor_NetStream"></param>
-        public ListFiles(NetworkStream ctor_NetStream)
+        public ListFiles(NetworkStream ctorNetStream)
         {
-            myNetStream = ctor_NetStream;
+            myNetStream = ctorNetStream;
         }
         //------------------------------------------------------------
 
@@ -29,10 +29,10 @@ namespace bc.srv.Muduli.File_Manager
         ///     Ctor stream e dir [filelist]
         /// </summary>
         /// <param name="ctor_NetStream"></param>
-        public ListFiles(NetworkStream ctor_NetStream, string ctor_Dir)
+        public ListFiles(NetworkStream ctorNetStream, string ctorDir)
         {
-            myNetStream = ctor_NetStream;
-            fileListDir = ctor_Dir;
+            myNetStream = ctorNetStream;
+            fileListDir = ctorDir;
         }
         //------------------------------------------------------------
 

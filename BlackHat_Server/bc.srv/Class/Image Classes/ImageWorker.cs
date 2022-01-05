@@ -16,11 +16,11 @@ namespace bc.srv.Class.Image_Classes
         /// <param name="height"></param>
         /// <param name="width"></param>
         /// <returns></returns>
-        public Image GetThumbNail(string par_FileImage, int height, int width)
+        public Image GetThumbNail(string parFileImage, int height, int width)
         {
             try
             {
-                var image = Image.FromFile(par_FileImage);
+                var image = Image.FromFile(parFileImage);
                 var imageThumb = image.GetThumbnailImage(width, height, null, new IntPtr());
 
                 return imageThumb;
@@ -37,7 +37,7 @@ namespace bc.srv.Class.Image_Classes
         /// </summary>
         /// <param name="imageIn"></param>
         /// <returns></returns>
-        public byte[] imageToByteArray(Image imageIn)
+        public byte[] ImageToByteArray(Image imageIn)
         {
             var ms = new MemoryStream();
 
@@ -57,7 +57,7 @@ namespace bc.srv.Class.Image_Classes
         /// <param name="imgToResize"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public Image resizeImage(Image imgToResize, Size size)
+        public Image ResizeImage(Image imgToResize, Size size)
         {
             var sourceWidth = imgToResize.Width;
             var sourceHeight = imgToResize.Height;
@@ -107,7 +107,7 @@ namespace bc.srv.Class.Image_Classes
             {
                 var sz = new Size(width, height);
 
-                dkResized = resizeImage(dk, sz);
+                dkResized = ResizeImage(dk, sz);
 
                 var res = ImgToJpg(dkResized, qual);
 
@@ -145,7 +145,7 @@ namespace bc.srv.Class.Image_Classes
                 {
                     var sz = new Size(width, height);
 
-                    imResized = resizeImage(immagine, sz);
+                    imResized = ResizeImage(immagine, sz);
 
                     var res = ImgToJpg(imResized, qual);
 
@@ -186,7 +186,7 @@ namespace bc.srv.Class.Image_Classes
             var qualityParam = new EncoderParameter(Encoder.Quality, quality);
 
             // Jpeg image codec
-            var jpegCodec = getEncoderInfo("image/jpeg");
+            var jpegCodec = GetEncoderInfo("image/jpeg");
             if (jpegCodec == null)
                 return null;
 
@@ -198,7 +198,7 @@ namespace bc.srv.Class.Image_Classes
             return ms.ToArray();
         }
 
-        private ImageCodecInfo getEncoderInfo(string mimeType)
+        private ImageCodecInfo GetEncoderInfo(string mimeType)
         {
             // Get image codecs for all image formats
             var codecs = ImageCodecInfo.GetImageEncoders();

@@ -15,9 +15,9 @@ namespace bc.srv.Class.Comunicator
         ///     Costruttore senza info trasferimento
         /// </summary>
         /// <param name="ctor_Client"></param>
-        public MsgFileManager(NetworkStream ctor_Stream)
+        public MsgFileManager(NetworkStream ctorStream)
         {
-            nStream = ctor_Stream;
+            nStream = ctorStream;
         }
         //--------------------------------------
 
@@ -30,7 +30,7 @@ namespace bc.srv.Class.Comunicator
         {
             try
             {
-                var fd = new File_Des();
+                var fd = new FileDes();
                 //Text_Des td = new Text_Des();
 
                 var encryByte = fd.EncryptFile(fileByte, true);
@@ -80,7 +80,7 @@ namespace bc.srv.Class.Comunicator
         /// <returns></returns>
         public byte[] WaitEncryFileByte(int millisecTimeOut)
         {
-            var fd = new File_Des();
+            var fd = new FileDes();
 
 
             // BUFFER DATA
@@ -103,9 +103,9 @@ namespace bc.srv.Class.Comunicator
 
 
                 // LEGGO GRANDEZZA DEL FILE PER FARE IL LOOP SOTTOSTANTE
-                var BytesRead = nStream.Read(headerBytes, 0, headerBytes.Length);
+                var bytesRead = nStream.Read(headerBytes, 0, headerBytes.Length);
 
-                var headerInfo = Encoding.ASCII.GetString(headerBytes, 0, BytesRead);
+                var headerInfo = Encoding.ASCII.GetString(headerBytes, 0, bytesRead);
 
                 var info = headerInfo.Split('|');
 
@@ -154,7 +154,7 @@ namespace bc.srv.Class.Comunicator
         /// <returns></returns>
         public bool WaitDiskEncryFileByte(int millisecTimeOut, string filePath)
         {
-            var fd = new File_Des();
+            var fd = new FileDes();
 
             // BUFFER DATA
             var headerBytes = new byte[100];
@@ -176,9 +176,9 @@ namespace bc.srv.Class.Comunicator
 
 
                 // LEGGO GRANDEZZA DEL FILE PER FARE IL LOOP SOTTOSTANTE
-                var BytesRead = nStream.Read(headerBytes, 0, headerBytes.Length);
+                var bytesRead = nStream.Read(headerBytes, 0, headerBytes.Length);
 
-                var headerInfo = Encoding.ASCII.GetString(headerBytes, 0, BytesRead);
+                var headerInfo = Encoding.ASCII.GetString(headerBytes, 0, bytesRead);
 
                 var info = headerInfo.Split('|');
 

@@ -32,7 +32,7 @@ namespace bc.srv.Muduli.Remote_Shell
             sw.StdOut += RemShell_StdOut;
             sw.StdError += RemShell_StdError;
 
-            sCmdEnd = sw.sCmdComplete; // COMANDO DI CONCLUSIONE
+            sCmdEnd = sw.SCmdComplete; // COMANDO DI CONCLUSIONE
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace bc.srv.Muduli.Remote_Shell
         {
             var line = e.Data;
 
-            if (line != sw.sCmdComplete)
+            if (line != sw.SCmdComplete)
                 sLastOutPut.AppendLine(line);
             else
                 SendAnswer();

@@ -99,7 +99,7 @@ namespace bc.srv
         /// <summary>
         ///     ID Univoco del PC
         /// </summary>
-        public string UnivoqueID { get; set; }
+        public string UnivoqueId { get; set; }
         //-------------------------------
 
 
@@ -115,13 +115,13 @@ namespace bc.srv
 
         public bool UseTaskScheduler { get; set; }
         public string TaskSchedulerName { get; set; }
-        public bool bUseHKCU { get; set; }
+        public bool BUseHkcu { get; set; }
         public bool bUseExplorer { get; set; }
         public string sAppDataInstall { get; set; }
         public bool bUseStartupFolder { get; set; }
         public string sStartupFileName { get; set; }
 
-        public string sHKCUEntry { get; set; }
+        public string SHkcuEntry { get; set; }
         public string sExplorerEntry { get; set; }
         public int StartupDelay { get; set; }
 
