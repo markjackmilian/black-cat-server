@@ -1,2 +1,4 @@
 ExitCodes:
 1: restart
+2: data on clientdata are empty
+3: from deletemyself

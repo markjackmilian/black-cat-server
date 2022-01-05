@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+﻿using bc.srv;
 using BlackHat_Server.Class.Crypt;
 
 namespace BlackHat_Server.Class
@@ -7,7 +7,6 @@ namespace BlackHat_Server.Class
     {
         public bool InitializeStClient()
         {
-            var ru = new ResUtile();
             
 //             #if DEBUG
 //             //TEST
@@ -61,12 +60,8 @@ namespace BlackHat_Server.Class
             ST_Client.Instance.sExplorerEntry = "EXPLORER";
 
             // ERRORE RECUPERO DATI DA RISORSE
-            if (ST_Client.Instance.Port == -1)
-                Application.Exit();
-            if (ST_Client.Instance.Password == null)
-                Application.Exit();
-            if (ST_Client.Instance.Host == null)
-                Application.Exit();
+            if (ST_Client.Instance.Port == -1 || ST_Client.Instance.Password == null || ST_Client.Instance.Host == null)
+                Program.Exit(2);
             //-----------------------------------
 
             // END NORMAL
@@ -87,7 +82,7 @@ namespace BlackHat_Server.Class
             }
             else
             {
-                servName = ru.GetServerName(); // LO PRENDO DALLE RISORSE LA PRIMA VOLTA
+                servName = ST_Client.Instance.ServerName;
 
                 if (servName == null)
                     servName = "NO NAME";

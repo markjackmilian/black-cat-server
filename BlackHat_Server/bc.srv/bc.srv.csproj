@@ -36,6 +36,8 @@
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.Drawing" />
+        <Reference Include="System.Management" />
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
@@ -53,7 +55,6 @@
         <Compile Include="Class\InstallClass.cs" />
         <Compile Include="Class\ModuleStarter.cs" />
         <Compile Include="Class\RegistryManager.cs" />
-        <Compile Include="Class\ResUtil.cs" />
         <Compile Include="Class\ST_Client.cs" />
         <Compile Include="Class\UnivoqueID.cs" />
         <Compile Include="Muduli\Desktop\DesktopAgent.cs" />
