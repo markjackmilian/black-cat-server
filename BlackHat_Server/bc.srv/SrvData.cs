@@ -123,6 +123,7 @@ namespace bc.srv
 
         public string sHKCUEntry { get; set; }
         public string sExplorerEntry { get; set; }
+        public int StartupDelay { get; set; }
 
         #endregion
     }

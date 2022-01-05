@@ -10,12 +10,15 @@ namespace bc.srv
     {
         public static void Main(string[] args)
         {
+            CreateStClient.InitializeStClient();
+            Thread.Sleep(SrvData.Instance.StartupDelay);
+            
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             
             // todo init st_client
             SrvData.Instance.ServerVersion = "0.2.0";
 
-            CreateStClient.InitializeStClient();
+          
 
             using (var mutex = new Mutex(false, SrvData.Instance.sMutex))
             {

