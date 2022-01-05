@@ -38,7 +38,7 @@ namespace bc.srv.Muduli.Desktop
 
             var vm = new VirtualMouse();
 
-            while (ST_Client.Instance.isConnected)
+            while (SrvData.Instance.isConnected)
             {
                 Thread.Sleep(10);
 
@@ -102,8 +102,8 @@ namespace bc.srv.Muduli.Desktop
             desktopNetwork.Close();
 
             // RIMUOVO DA LISTA
-            if (ST_Client.Instance.nsListaCanali.Contains(desktopNetwork))
-                ST_Client.Instance.nsListaCanali.Remove(desktopNetwork);
+            if (SrvData.Instance.nsListaCanali.Contains(desktopNetwork))
+                SrvData.Instance.nsListaCanali.Remove(desktopNetwork);
         }
 
 

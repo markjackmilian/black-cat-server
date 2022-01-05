@@ -74,7 +74,7 @@ namespace bc.srv.Muduli.File_Manager
             {
                 var mm = new MsgManager(myTcpClient.GetStream());
 
-                while (!closeFileManager || !ST_Client.Instance.isConnected)
+                while (!closeFileManager || !SrvData.Instance.isConnected)
                 {
                     var fmRequest = mm.WaitForEncryMessageRicorsive(10000);
 
@@ -88,8 +88,8 @@ namespace bc.srv.Muduli.File_Manager
                 closeFileManager = false; // E' STATICO CAZZONE!!!!!!
 
                 // RIMUOVO DA LISTA
-                if (ST_Client.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
-                    ST_Client.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
+                if (SrvData.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
+                    SrvData.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
             }
             catch (ObjectDisposedException)
             {
@@ -192,7 +192,7 @@ namespace bc.srv.Muduli.File_Manager
                 var mm = new MsgManager(myTcpClient.GetStream());
                 isImageWorking = true;
 
-                while (!closeImagePreview || !ST_Client.Instance.isConnected)
+                while (!closeImagePreview || !SrvData.Instance.isConnected)
                 {
                     var fmRequest = mm.WaitForEncryMessageRicorsive(10000);
 
@@ -215,8 +215,8 @@ namespace bc.srv.Muduli.File_Manager
                 isImageWorking = false;
 
                 // RIMUOVO DA LISTA
-                if (ST_Client.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
-                    ST_Client.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
+                if (SrvData.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
+                    SrvData.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
             }
             catch (ObjectDisposedException)
             {
@@ -248,7 +248,7 @@ namespace bc.srv.Muduli.File_Manager
                 var mm = new MsgManager(myTcpClient.GetStream());
                 isGalleryWorking = true;
 
-                while (!closeGalleryChannel || !ST_Client.Instance.isConnected)
+                while (!closeGalleryChannel || !SrvData.Instance.isConnected)
                 {
                     var fmRequest = mm.WaitForEncryMessageRicorsive(10000);
 
@@ -271,8 +271,8 @@ namespace bc.srv.Muduli.File_Manager
                 isGalleryWorking = false;
 
                 // RIMUOVO DA LISTA
-                if (ST_Client.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
-                    ST_Client.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
+                if (SrvData.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
+                    SrvData.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
             }
             catch (ObjectDisposedException)
             {
@@ -326,8 +326,8 @@ namespace bc.srv.Muduli.File_Manager
                 myTcpClient.Close();
 
                 // RIMUOVO DA LISTA
-                if (ST_Client.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
-                    ST_Client.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
+                if (SrvData.Instance.nsListaCanali.Contains(myTcpClient.GetStream()))
+                    SrvData.Instance.nsListaCanali.Remove(myTcpClient.GetStream());
             }
             catch (ObjectDisposedException)
             {

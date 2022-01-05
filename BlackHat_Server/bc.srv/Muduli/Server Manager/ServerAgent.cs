@@ -19,34 +19,34 @@ namespace bc.srv.Muduli.Server_Manager
 
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-            var adppDataFilePath = Path.Combine(appData, ST_Client.Instance.sAppDataInstall);
+            var adppDataFilePath = Path.Combine(appData, SrvData.Instance.sAppDataInstall);
 
 
             // ELIMINO I REGISTRY DELLE INSTALLAZIONi
-            if (ST_Client.Instance.bUseHKCU)
-                rm.RemoveHKCUReg(ST_Client.Instance.sHKCUEntry, adppDataFilePath);
+            if (SrvData.Instance.bUseHKCU)
+                rm.RemoveHKCUReg(SrvData.Instance.sHKCUEntry, adppDataFilePath);
 
-            if (ST_Client.Instance.bUseExplorer)
-                rm.RemoveExplorerReg(ST_Client.Instance.sExplorerEntry, adppDataFilePath);
+            if (SrvData.Instance.bUseExplorer)
+                rm.RemoveExplorerReg(SrvData.Instance.sExplorerEntry, adppDataFilePath);
 
-            if (ST_Client.Instance.UseTaskScheduler)
+            if (SrvData.Instance.UseTaskScheduler)
             {
                 // remove task
                 var dosRunner = new DosRunner();
-                dosRunner.ExecuteCommand($"schtasks /delete /tn {ST_Client.Instance.TaskSchedulerName} /f");
+                dosRunner.ExecuteCommand($"schtasks /delete /tn {SrvData.Instance.TaskSchedulerName} /f");
             }
 
             // ELIMINAZIONE FILE
-            if (ST_Client.Instance.bUseHKCU || ST_Client.Instance.bUseExplorer || ST_Client.Instance.UseTaskScheduler)
+            if (SrvData.Instance.bUseHKCU || SrvData.Instance.bUseExplorer || SrvData.Instance.UseTaskScheduler)
                 if (File.Exists(adppDataFilePath) && Assembly.GetExecutingAssembly().Location != adppDataFilePath)
                     File.Delete(adppDataFilePath);
 
 
-            if (ST_Client.Instance.bUseStartupFolder)
+            if (SrvData.Instance.bUseStartupFolder)
             {
                 var startup = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
 
-                var fileToDel = Path.Combine(startup, ST_Client.Instance.sStartupFileName);
+                var fileToDel = Path.Combine(startup, SrvData.Instance.sStartupFileName);
 
                 if (File.Exists(fileToDel) && Assembly.GetExecutingAssembly().Location != fileToDel)
                     File.Delete(fileToDel);

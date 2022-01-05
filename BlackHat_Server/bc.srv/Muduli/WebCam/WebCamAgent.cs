@@ -33,7 +33,7 @@ namespace bc.srv.Muduli.WebCam
         /// </summary>
         private void WebCamListener()
         {
-            while (ST_Client.Instance.isConnected && !stopWebCamListener)
+            while (SrvData.Instance.isConnected && !stopWebCamListener)
             {
                 Thread.Sleep(10);
 
@@ -68,8 +68,8 @@ namespace bc.srv.Muduli.WebCam
 
             // ARRIVO QUI PERCHè IL LISTENER è MORTO
 
-            if (ST_Client.Instance.nsListaCanali.Contains(webcamStream))
-                ST_Client.Instance.nsListaCanali.Remove(webcamStream);
+            if (SrvData.Instance.nsListaCanali.Contains(webcamStream))
+                SrvData.Instance.nsListaCanali.Remove(webcamStream);
 
 
             try

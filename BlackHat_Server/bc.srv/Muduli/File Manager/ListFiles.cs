@@ -224,8 +224,8 @@ namespace bc.srv.Muduli.File_Manager
 
 
                 // RIMUOVO DA LISTA
-                if (ST_Client.Instance.nsListaCanali.Contains(myNetStream))
-                    ST_Client.Instance.nsListaCanali.Remove(myNetStream);
+                if (SrvData.Instance.nsListaCanali.Contains(myNetStream))
+                    SrvData.Instance.nsListaCanali.Remove(myNetStream);
             }
             catch (ObjectDisposedException)
             {

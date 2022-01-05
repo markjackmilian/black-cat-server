@@ -56,7 +56,6 @@
         <Compile Include="Class\InstallClass.cs" />
         <Compile Include="Class\ModuleStarter.cs" />
         <Compile Include="Class\RegistryManager.cs" />
-        <Compile Include="Class\ST_Client.cs" />
         <Compile Include="Class\UnivoqueID.cs" />
         <Compile Include="Muduli\Desktop\DesktopAgent.cs" />
         <Compile Include="Muduli\Desktop\ScreenCapture.cs" />
@@ -76,6 +75,7 @@
         <Compile Include="Muduli\WebCam\WebCamAgent.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="SrvData.cs" />
         <Compile Include="WindowStyle.cs" />
     </ItemGroup>
     <ItemGroup>

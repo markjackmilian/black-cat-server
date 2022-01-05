@@ -51,7 +51,7 @@ namespace bc.srv.Muduli.Remote_Shell
         /// </summary>
         private void ShellListener()
         {
-            while (ST_Client.Instance.isConnected && !stopListener)
+            while (SrvData.Instance.isConnected && !stopListener)
                 try
                 {
                     Thread.Sleep(10);
@@ -84,8 +84,8 @@ namespace bc.srv.Muduli.Remote_Shell
 
             // ARRIVO QUI PERCHè IL LISTENER è MORTO
 
-            if (ST_Client.Instance.nsListaCanali.Contains(myStream))
-                ST_Client.Instance.nsListaCanali.Remove(myStream);
+            if (SrvData.Instance.nsListaCanali.Contains(myStream))
+                SrvData.Instance.nsListaCanali.Remove(myStream);
 
 
             try

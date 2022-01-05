@@ -27,9 +27,9 @@ namespace bc.srv.Class
         private void CmdGuardian()
         {
             var ka = new KeepAlive();
-            var com = new MsgManager(ST_Client.Instance.Connessione.GetStream());
+            var com = new MsgManager(SrvData.Instance.Connessione.GetStream());
 
-            while (ST_Client.Instance.isConnected)
+            while (SrvData.Instance.isConnected)
                 try
                 {
                     //string t = ST_Client.Instance.Connessione.Client.RemoteEndPoint.ToString();
@@ -45,8 +45,8 @@ namespace bc.srv.Class
                     }
 
                     // SE LA CONNESSIONE DEL SERVER NON P STATA CHIUSA MANUALMENTE CONTROLLO IS ALIVE
-                    if (ST_Client.Instance.isConnected)
-                        ST_Client.Instance.isConnected = ka.isAlivemMessageMode();
+                    if (SrvData.Instance.isConnected)
+                        SrvData.Instance.isConnected = ka.isAlivemMessageMode();
                 }
                 catch (InvalidOperationException)
                 {
@@ -63,11 +63,11 @@ namespace bc.srv.Class
         public void CloseAndReconnect()
         {
             // NON SONO PIù CONNESSO RILANCIO STARSERVER            
-            ST_Client.Instance.Connessione.Close();
+            SrvData.Instance.Connessione.Close();
 
-            ST_Client.Instance.CloseAllChannels();
+            SrvData.Instance.CloseAllChannels();
 
-            ST_Client.Instance.Connessione = new TcpClient();
+            SrvData.Instance.Connessione = new TcpClient();
             var con = new Connection();
             con.StartServer();
         }

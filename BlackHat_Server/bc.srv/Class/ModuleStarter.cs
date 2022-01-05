@@ -19,7 +19,7 @@ namespace bc.srv.Class
 
             var ns = con.NewSlotRequest(servizio, reqID);
 
-            ST_Client.Instance.nsListaCanali.Add(ns.GetStream());
+            SrvData.Instance.nsListaCanali.Add(ns.GetStream());
 
             if (ns != null)
                 switch (servizio)

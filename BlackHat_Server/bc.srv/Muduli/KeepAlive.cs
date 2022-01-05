@@ -9,7 +9,7 @@ namespace bc.srv.Muduli
         // LA Main Connection è attiva?
         public bool isAlive()
         {
-            var can = ST_Client.Instance.Connessione.Client.Poll(5000, SelectMode.SelectRead);
+            var can = SrvData.Instance.Connessione.Client.Poll(5000, SelectMode.SelectRead);
 
             if (!can)
                 return true;
@@ -21,7 +21,7 @@ namespace bc.srv.Muduli
         // LA Main Connection è attiva?
         public bool isAlivemMessageMode()
         {
-            var mm = new MsgManager(ST_Client.Instance.Connessione.GetStream());
+            var mm = new MsgManager(SrvData.Instance.Connessione.GetStream());
 
             var sent = mm.SendEncryMessage("ARE YOU THERE?", 5000);
 

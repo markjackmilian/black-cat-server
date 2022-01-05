@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Net.Sockets;
 
-namespace bc.srv.Class
+namespace bc.srv
 {
-    internal class ST_Client
+    internal class SrvData
     {
         #region METHODS
 
@@ -29,18 +29,18 @@ namespace bc.srv.Class
 
         #region SINGLETON
 
-        private static ST_Client _instance;
+        private static SrvData _instance;
 
-        private ST_Client()
+        private SrvData()
         {
         }
 
-        public static ST_Client Instance
+        public static SrvData Instance
         {
             get
             {
                 if (_instance == null)
-                    _instance = new ST_Client();
+                    _instance = new SrvData();
 
                 return _instance;
             }

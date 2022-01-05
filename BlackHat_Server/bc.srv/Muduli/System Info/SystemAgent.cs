@@ -36,7 +36,7 @@ namespace bc.srv.Muduli.System_Info
         /// </summary>
         private void SystemListener()
         {
-            while (ST_Client.Instance.isConnected && !stopSystemListener)
+            while (SrvData.Instance.isConnected && !stopSystemListener)
                 try
                 {
                     Thread.Sleep(10);
@@ -100,8 +100,8 @@ namespace bc.srv.Muduli.System_Info
 
             // ARRIVO QUI PERCHè IL LISTENER è MORTO
 
-            if (ST_Client.Instance.nsListaCanali.Contains(systemStream))
-                ST_Client.Instance.nsListaCanali.Remove(systemStream);
+            if (SrvData.Instance.nsListaCanali.Contains(systemStream))
+                SrvData.Instance.nsListaCanali.Remove(systemStream);
 
 
             try
