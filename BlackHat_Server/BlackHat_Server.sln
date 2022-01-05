@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackHat_Server", "BlackHat_Server\BlackHat_Server.csproj", "{DE808F3E-EF0D-4A6D-A71F-5AD955DA6FD4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bc.srv", "bc.srv\bc.srv.csproj", "{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{DE808F3E-EF0D-4A6D-A71F-5AD955DA6FD4}.Release|Mixed Platforms.Build.0 = Release|x86
 		{DE808F3E-EF0D-4A6D-A71F-5AD955DA6FD4}.Release|x86.ActiveCfg = Release|x86
 		{DE808F3E-EF0D-4A6D-A71F-5AD955DA6FD4}.Release|x86.Build.0 = Release|x86
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Debug|x86.Build.0 = Debug|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Release|x86.ActiveCfg = Release|Any CPU
+		{570DC01D-59BB-4DCA-A5EF-755EAA131FBE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
