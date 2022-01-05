@@ -1,6 +1,6 @@
-﻿using bc.srv.Class.Crypt;
+﻿using bc.srv.Classes.Crypt;
 
-namespace bc.srv.Class
+namespace bc.srv.Classes
 {
     internal class CreateStClient
     {

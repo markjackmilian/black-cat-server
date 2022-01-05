@@ -42,21 +42,21 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Class\CmdInterpreter.cs" />
-        <Compile Include="Class\Comunicator\MsgFileManager.cs" />
-        <Compile Include="Class\Comunicator\MsgManager.cs" />
-        <Compile Include="Class\Connection.cs" />
-        <Compile Include="Class\CreateStClient.cs" />
-        <Compile Include="Class\Crypt\File_Des.cs" />
-        <Compile Include="Class\Crypt\Text_Des.cs" />
-        <Compile Include="Class\DosRunner.cs" />
-        <Compile Include="Class\GetInfo.cs" />
-        <Compile Include="Class\Guardian.cs" />
-        <Compile Include="Class\Image Classes\ImageWorker.cs" />
-        <Compile Include="Class\InstallClass.cs" />
-        <Compile Include="Class\ModuleStarter.cs" />
-        <Compile Include="Class\RegistryManager.cs" />
-        <Compile Include="Class\UnivoqueID.cs" />
+        <Compile Include="Classes\CmdInterpreter.cs" />
+        <Compile Include="Classes\Comunicator\MsgFileManager.cs" />
+        <Compile Include="Classes\Comunicator\MsgManager.cs" />
+        <Compile Include="Classes\Connection.cs" />
+        <Compile Include="Classes\CreateStClient.cs" />
+        <Compile Include="Classes\Crypt\File_Des.cs" />
+        <Compile Include="Classes\Crypt\Text_Des.cs" />
+        <Compile Include="Classes\DosRunner.cs" />
+        <Compile Include="Classes\GetInfo.cs" />
+        <Compile Include="Classes\Guardian.cs" />
+        <Compile Include="Classes\Image Classes\ImageWorker.cs" />
+        <Compile Include="Classes\InstallClass.cs" />
+        <Compile Include="Classes\ModuleStarter.cs" />
+        <Compile Include="Classes\RegistryManager.cs" />
+        <Compile Include="Classes\UnivoqueID.cs" />
         <Compile Include="Muduli\Desktop\DesktopAgent.cs" />
         <Compile Include="Muduli\Desktop\ScreenCapture.cs" />
         <Compile Include="Muduli\Desktop\VirtualKeyboard.cs" />

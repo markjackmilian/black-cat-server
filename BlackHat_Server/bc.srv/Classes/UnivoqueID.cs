@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Management;
 
-namespace bc.srv.Class
+namespace bc.srv.Classes
 {
     internal class UnivoqueId
     {

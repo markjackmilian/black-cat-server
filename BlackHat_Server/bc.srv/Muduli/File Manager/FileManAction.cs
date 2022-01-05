@@ -4,9 +4,9 @@ using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using bc.srv.Class;
-using bc.srv.Class.Comunicator;
-using bc.srv.Class.Image_Classes;
+using bc.srv.Classes;
+using bc.srv.Classes.Comunicator;
+using bc.srv.Classes.Image_Classes;
 
 namespace bc.srv.Muduli.File_Manager
 {

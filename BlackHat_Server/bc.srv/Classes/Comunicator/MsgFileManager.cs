@@ -3,9 +3,9 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using bc.srv.Class.Crypt;
+using bc.srv.Classes.Crypt;
 
-namespace bc.srv.Class.Comunicator
+namespace bc.srv.Classes.Comunicator
 {
     public class MsgFileManager
     {
@@ -17,7 +17,7 @@ namespace bc.srv.Class.Comunicator
         /// <param name="ctor_Client"></param>
         public MsgFileManager(NetworkStream ctorStream)
         {
-            nStream = ctorStream;
+            this.nStream = ctorStream;
         }
         //--------------------------------------
 
@@ -60,8 +60,8 @@ namespace bc.srv.Class.Comunicator
                 //----------------------------------------
 
 
-                nStream.WriteTimeout = millisecTimeOt;
-                nStream.Write(finale, 0, finale.Length);
+                this.nStream.WriteTimeout = millisecTimeOt;
+                this.nStream.Write(finale, 0, finale.Length);
                 return true;
             }
             catch
@@ -96,14 +96,14 @@ namespace bc.srv.Class.Comunicator
                     Thread.Sleep(100);
                     c += 100;
 
-                    if (nStream.DataAvailable)
+                    if (this.nStream.DataAvailable)
                         break;
                     if (c >= millisecTimeOut) return null;
                 }
 
 
                 // LEGGO GRANDEZZA DEL FILE PER FARE IL LOOP SOTTOSTANTE
-                var bytesRead = nStream.Read(headerBytes, 0, headerBytes.Length);
+                var bytesRead = this.nStream.Read(headerBytes, 0, headerBytes.Length);
 
                 var headerInfo = Encoding.ASCII.GetString(headerBytes, 0, bytesRead);
 
@@ -123,7 +123,7 @@ namespace bc.srv.Class.Comunicator
 
                         do
                         {
-                            nowRead = nStream.Read(bytes, 0, bytes.Length);
+                            nowRead = this.nStream.Read(bytes, 0, bytes.Length);
                             numberOfBytesRead += nowRead;
                             memoryStream.Write(bytes, 0, nowRead);
                         } while (numberOfBytesRead < fileLenght);
@@ -169,14 +169,14 @@ namespace bc.srv.Class.Comunicator
                     Thread.Sleep(100);
                     c += 100;
 
-                    if (nStream.DataAvailable)
+                    if (this.nStream.DataAvailable)
                         break;
                     if (c >= millisecTimeOut) return false;
                 }
 
 
                 // LEGGO GRANDEZZA DEL FILE PER FARE IL LOOP SOTTOSTANTE
-                var bytesRead = nStream.Read(headerBytes, 0, headerBytes.Length);
+                var bytesRead = this.nStream.Read(headerBytes, 0, headerBytes.Length);
 
                 var headerInfo = Encoding.ASCII.GetString(headerBytes, 0, bytesRead);
 
@@ -197,10 +197,10 @@ namespace bc.srv.Class.Comunicator
 
                         var actualByteReaded = 0;
 
-                        nStream.ReadTimeout = -1;
+                        this.nStream.ReadTimeout = -1;
                         do
                         {
-                            nowRead = nStream.Read(bytes, 0, bytes.Length);
+                            nowRead = this.nStream.Read(bytes, 0, bytes.Length);
                             actualByteReaded += nowRead;
 
 

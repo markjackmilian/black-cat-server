@@ -1,7 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Threading;
-using bc.srv.Class;
-using bc.srv.Class.Comunicator;
+using bc.srv.Classes.Comunicator;
 
 namespace bc.srv.Muduli.WebCam
 {

@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace bc.srv.Class.Crypt
+namespace bc.srv.Classes.Crypt
 {
     internal class FileDes
     {

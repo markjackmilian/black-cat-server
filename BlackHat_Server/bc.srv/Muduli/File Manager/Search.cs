@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using bc.srv.Class.Comunicator;
+using bc.srv.Classes.Comunicator;
 
 namespace bc.srv.Muduli.File_Manager
 {

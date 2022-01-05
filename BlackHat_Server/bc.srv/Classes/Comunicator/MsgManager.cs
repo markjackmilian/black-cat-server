@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using bc.srv.Class.Crypt;
+using bc.srv.Classes.Crypt;
 
-namespace bc.srv.Class.Comunicator
+namespace bc.srv.Classes.Comunicator
 {
     public class MsgManager
     {
@@ -18,7 +18,7 @@ namespace bc.srv.Class.Comunicator
         /// <param name="ctor_Client"></param>
         public MsgManager(NetworkStream ctorStream)
         {
-            nStream = ctorStream;
+            this.nStream = ctorStream;
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace bc.srv.Class.Comunicator
         /// </summary>
         public void StreamDispose()
         {
-            nStream.Dispose();
+            this.nStream.Dispose();
         }
         //--------------------------------------
 
@@ -38,12 +38,12 @@ namespace bc.srv.Class.Comunicator
         {
             try
             {
-                nStream.WriteTimeout = millisecTimeOt;
+                this.nStream.WriteTimeout = millisecTimeOt;
 
                 var mess = Encoding.ASCII.GetBytes(msg);
 
 
-                nStream.Write(mess, 0, mess.Length);
+                this.nStream.Write(mess, 0, mess.Length);
                 return true;
             }
             catch (Exception)
@@ -63,10 +63,10 @@ namespace bc.srv.Class.Comunicator
 
             try
             {
-                nStream.WriteTimeout = millisecTimeOt;
+                this.nStream.WriteTimeout = millisecTimeOt;
                 var mess = Encoding.ASCII.GetBytes(msgEncry);
 
-                nStream.Write(mess, 0, mess.Length);
+                this.nStream.Write(mess, 0, mess.Length);
                 return true;
             }
             catch (Exception)
@@ -86,7 +86,7 @@ namespace bc.srv.Class.Comunicator
             try
             {
                 var tc = new TextDes();
-                nStream.WriteTimeout = millisecTimeOt;
+                this.nStream.WriteTimeout = millisecTimeOt;
 
                 var msgEncry = tc.Encrypt(msg, true); // CRYPTO IL MSG  E TROVO LA SUA GRANDEZZA
 
@@ -108,7 +108,7 @@ namespace bc.srv.Class.Comunicator
 
                 var msgFinale = listaApp.ToArray();
 
-                nStream.Write(msgFinale, 0, msgFinale.Length);
+                this.nStream.Write(msgFinale, 0, msgFinale.Length);
                 return true;
             }
             catch (Exception)
@@ -136,12 +136,12 @@ namespace bc.srv.Class.Comunicator
                 var numberOfBytesRead = 0;
                 do
                 {
-                    numberOfBytesRead = nStream.Read(bytes, 0, bytes.Length);
+                    numberOfBytesRead = this.nStream.Read(bytes, 0, bytes.Length);
 
                     var incomingMsg = Encoding.ASCII.GetString(bytes, 0, numberOfBytesRead);
 
                     data += incomingMsg;
-                } while (nStream.DataAvailable);
+                } while (this.nStream.DataAvailable);
             }
             catch
             {
@@ -166,18 +166,18 @@ namespace bc.srv.Class.Comunicator
 
             try
             {
-                nStream.ReadTimeout = milliSecTimeOut;
+                this.nStream.ReadTimeout = milliSecTimeOut;
 
                 // Incoming message may be larger than the buffer size.
                 var numberOfBytesRead = 0;
                 do
                 {
-                    numberOfBytesRead = nStream.Read(bytes, 0, bytes.Length);
+                    numberOfBytesRead = this.nStream.Read(bytes, 0, bytes.Length);
 
                     var incomingMsg = Encoding.ASCII.GetString(bytes, 0, numberOfBytesRead);
 
                     data += incomingMsg;
-                } while (nStream.DataAvailable);
+                } while (this.nStream.DataAvailable);
             }
             catch
             {
@@ -207,18 +207,18 @@ namespace bc.srv.Class.Comunicator
             {
                 //stream = clientTcp.GetStream();
 
-                nStream.ReadTimeout = milliSecTimeOut;
+                this.nStream.ReadTimeout = milliSecTimeOut;
 
                 // Incoming message may be larger than the buffer size.
                 var numberOfBytesRead = 0;
                 do
                 {
-                    numberOfBytesRead = nStream.Read(bytes, 0, bytes.Length);
+                    numberOfBytesRead = this.nStream.Read(bytes, 0, bytes.Length);
 
                     var incomingMsg = Encoding.ASCII.GetString(bytes, 0, numberOfBytesRead);
 
                     data += incomingMsg;
-                } while (nStream.DataAvailable);
+                } while (this.nStream.DataAvailable);
 
                 data = tc.Decrypt(data, true);
             }
@@ -252,12 +252,12 @@ namespace bc.srv.Class.Comunicator
                 var numberOfBytesRead = 0;
                 do
                 {
-                    numberOfBytesRead = nStream.Read(bytes, 0, bytes.Length);
+                    numberOfBytesRead = this.nStream.Read(bytes, 0, bytes.Length);
 
                     var incomingMsg = Encoding.ASCII.GetString(bytes, 0, numberOfBytesRead);
 
                     data += incomingMsg;
-                } while (nStream.DataAvailable);
+                } while (this.nStream.DataAvailable);
 
                 data = tc.Decrypt(data, true);
             }
@@ -295,7 +295,7 @@ namespace bc.srv.Class.Comunicator
                     Thread.Sleep(100);
                     c += 100;
 
-                    if (nStream.DataAvailable)
+                    if (this.nStream.DataAvailable)
                         break;
                     if (c >= millisecTimeOut) return "TIMEOUT";
                 }
@@ -304,12 +304,12 @@ namespace bc.srv.Class.Comunicator
                 var numberOfBytesRead = 0;
                 do
                 {
-                    numberOfBytesRead = nStream.Read(bytes, 0, bytes.Length);
+                    numberOfBytesRead = this.nStream.Read(bytes, 0, bytes.Length);
 
                     var incomingMsg = Encoding.ASCII.GetString(bytes, 0, numberOfBytesRead);
 
                     data += incomingMsg;
-                } while (nStream.DataAvailable);
+                } while (this.nStream.DataAvailable);
 
 
                 data = tc.Decrypt(data, true);
@@ -349,7 +349,7 @@ namespace bc.srv.Class.Comunicator
                     Thread.Sleep(100);
                     c += 100;
 
-                    if (nStream.DataAvailable)
+                    if (this.nStream.DataAvailable)
                         break;
                     if (c >= millisecTimeOut) return "TIMEOUT";
                 }
@@ -358,7 +358,7 @@ namespace bc.srv.Class.Comunicator
                 var readTo = 0;
                 var headBuf = new byte[28];
 
-                var r = nStream.Read(headBuf, 0, headBuf.Length);
+                var r = this.nStream.Read(headBuf, 0, headBuf.Length);
 
                 var headMsg = Encoding.ASCII.GetString(headBuf, 0, r);
 
@@ -372,7 +372,7 @@ namespace bc.srv.Class.Comunicator
                 var totalByteRead = 0;
                 do
                 {
-                    numberOfBytesRead = nStream.Read(bytes, 0, bytes.Length);
+                    numberOfBytesRead = this.nStream.Read(bytes, 0, bytes.Length);
                     totalByteRead += numberOfBytesRead;
 
                     var incomingMsg = Encoding.ASCII.GetString(bytes, 0, numberOfBytesRead);

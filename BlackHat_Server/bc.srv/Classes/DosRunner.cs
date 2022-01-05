@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace bc.srv.Class
+namespace bc.srv.Classes
 {
     internal class DosRunner
     {

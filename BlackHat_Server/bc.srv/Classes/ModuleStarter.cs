@@ -4,7 +4,7 @@ using bc.srv.Muduli.Remote_Shell;
 using bc.srv.Muduli.System_Info;
 using bc.srv.Muduli.WebCam;
 
-namespace bc.srv.Class
+namespace bc.srv.Classes
 {
     internal class ModuleStarter
     {

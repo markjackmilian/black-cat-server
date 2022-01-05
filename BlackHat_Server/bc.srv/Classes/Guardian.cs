@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading;
-using bc.srv.Class.Comunicator;
+using bc.srv.Classes.Comunicator;
 using bc.srv.Muduli;
 
-namespace bc.srv.Class
+namespace bc.srv.Classes
 {
     // OGGETTO GUARDIAN ASPETTA UN MESSAGGIO E PASSA IL MESSAGGIO A CMDINTERPRETER
     internal class Guardian
@@ -14,7 +14,7 @@ namespace bc.srv.Class
         /// </summary>
         public void StartGuardian()
         {
-            var t = new Thread(CmdGuardian);
+            var t = new Thread(this.CmdGuardian);
             t.IsBackground = true;
             t.Start();
         }
@@ -53,7 +53,7 @@ namespace bc.srv.Class
                     break;
                 }
 
-            CloseAndReconnect();
+            this.CloseAndReconnect();
         }
         //---------------------------------------
 

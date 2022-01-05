@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using bc.srv.Class.Image_Classes;
+using bc.srv.Classes.Image_Classes;
 
 namespace bc.srv.Muduli.WebCam
 {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Threading;
-using bc.srv.Class;
+using bc.srv.Classes;
 
 namespace bc.srv.Muduli.Server_Manager
 {

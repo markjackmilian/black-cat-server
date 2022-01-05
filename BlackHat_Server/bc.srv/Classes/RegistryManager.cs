@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Win32;
 
-namespace bc.srv.Class
+namespace bc.srv.Classes
 {
     internal class RegistryManager
     {

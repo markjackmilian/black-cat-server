@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using bc.srv.Muduli.Desktop;
 
-namespace bc.srv.Class.Image_Classes
+namespace bc.srv.Classes.Image_Classes
 {
     internal class ImageWorker
     {
@@ -107,9 +107,9 @@ namespace bc.srv.Class.Image_Classes
             {
                 var sz = new Size(width, height);
 
-                dkResized = ResizeImage(dk, sz);
+                dkResized = this.ResizeImage(dk, sz);
 
-                var res = ImgToJpg(dkResized, qual);
+                var res = this.ImgToJpg(dkResized, qual);
 
 
                 dk.Dispose();
@@ -145,9 +145,9 @@ namespace bc.srv.Class.Image_Classes
                 {
                     var sz = new Size(width, height);
 
-                    imResized = ResizeImage(immagine, sz);
+                    imResized = this.ResizeImage(immagine, sz);
 
-                    var res = ImgToJpg(imResized, qual);
+                    var res = this.ImgToJpg(imResized, qual);
 
 
                     immagine.Dispose();
@@ -186,7 +186,7 @@ namespace bc.srv.Class.Image_Classes
             var qualityParam = new EncoderParameter(Encoder.Quality, quality);
 
             // Jpeg image codec
-            var jpegCodec = GetEncoderInfo("image/jpeg");
+            var jpegCodec = this.GetEncoderInfo("image/jpeg");
             if (jpegCodec == null)
                 return null;
 

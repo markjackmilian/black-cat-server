@@ -1,6 +1,5 @@
 ﻿using System.Net.Sockets;
-using bc.srv.Class;
-using bc.srv.Class.Comunicator;
+using bc.srv.Classes.Comunicator;
 
 namespace bc.srv.Muduli
 {

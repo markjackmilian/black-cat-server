@@ -1,16 +1,15 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using bc.srv.Class.Comunicator;
+using bc.srv.Classes.Comunicator;
 
-namespace bc.srv.Class
+namespace bc.srv.Classes
 {
     internal class Connection
     {
         public void StartServer()
         {
-            TryConnect();
+            this.TryConnect();
             var guard = new Guardian();
             guard.StartGuardian();
         }
@@ -39,7 +38,7 @@ namespace bc.srv.Class
                         SrvData.Instance.Connessione.Connect(testIp,
                             port); // provo a connettermi altrimenti entro nel catch e aspetto X sec
 
-                    SrvData.Instance.isConnected = FirstConnection();
+                    SrvData.Instance.isConnected = this.FirstConnection();
 
                     if (!SrvData.Instance.isConnected)
                         Thread.Sleep(Program.Random.Next(25000,60000));
