@@ -56,6 +56,7 @@
         <Compile Include="Classes\InstallClass.cs" />
         <Compile Include="Classes\ModuleStarter.cs" />
         <Compile Include="Classes\RegistryManager.cs" />
+        <Compile Include="Classes\StringData.cs" />
         <Compile Include="Classes\UnivoqueID.cs" />
         <Compile Include="Modules\Desktop\DesktopAgent.cs" />
         <Compile Include="Modules\Desktop\ScreenCapture.cs" />

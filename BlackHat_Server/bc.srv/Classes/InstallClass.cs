@@ -171,7 +171,7 @@ namespace bc.srv.Classes
         /// </summary>
         public void DeleteMySelf()
         {
-            var arg = string.Format("/C choice /C Y /N /D Y /T 9 & Del \"{0}\"", Assembly.GetExecutingAssembly().Location);
+            var arg = $"/C choice /C Y /N /D Y /T 9 & Del \"{Assembly.GetExecutingAssembly().Location}\"";
 
             var dr = new DosRunner();
 
