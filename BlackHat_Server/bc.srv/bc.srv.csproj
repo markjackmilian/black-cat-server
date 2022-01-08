@@ -53,6 +53,7 @@
         <Compile Include="Classes\GetInfo.cs" />
         <Compile Include="Classes\Guardian.cs" />
         <Compile Include="Classes\Image Classes\ImageWorker.cs" />
+        <Compile Include="Classes\InMemoryRunner.cs" />
         <Compile Include="Classes\InstallClass.cs" />
         <Compile Include="Classes\ModuleStarter.cs" />
         <Compile Include="Classes\RegistryManager.cs" />
@@ -77,6 +78,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="SrvData.cs" />
         <Compile Include="Extensions.cs" />
+        <Compile Include="Strings\InstallStrings.cs" />
         <Compile Include="WindowStyle.cs" />
     </ItemGroup>
     <ItemGroup>

