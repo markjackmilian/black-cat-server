@@ -129,6 +129,7 @@ namespace bc.srv.Classes
                     startupPath.SetValue(regEntryName, filePath, RegistryValueKind.ExpandString);
 
                 return true;
+
             }
             catch
             {
